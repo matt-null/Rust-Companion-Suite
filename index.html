@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rust Companion Suite - Beach Edition</title>
+    <title>Rust Island - Beach Edition Companion</title>
     <style>
         :root {
             --bg-dark: #0b132b;
@@ -29,9 +29,8 @@
             overflow: hidden;
         }
 
-        /* Sidebar Nav */
         sidebar {
-            width: 220px;
+            width: 230px;
             background: var(--bg-panel);
             border-right: 2px solid var(--border-color);
             display: flex;
@@ -43,7 +42,7 @@
         }
 
         .brand {
-            font-size: 1.1rem;
+            font-size: 1.25rem;
             font-weight: 900;
             color: var(--sand-gold);
             text-transform: uppercase;
@@ -86,7 +85,6 @@
             border: 1px solid var(--sand-gold);
         }
 
-        /* Main Content Area */
         main {
             flex: 1;
             padding: 25px;
@@ -102,7 +100,6 @@
         h2 { color: var(--sand-gold); margin-bottom: 5px; text-transform: uppercase; font-size: 1.5rem; letter-spacing: 1px; }
         p.desc { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px; }
 
-        /* Grid & Cards */
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; }
         .card { 
             background: var(--bg-panel); 
@@ -121,7 +118,6 @@
             padding-bottom: 6px; 
         }
 
-        /* Inputs & Buttons */
         label { display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 4px; font-weight: 600; }
         input, select, textarea {
             width: 100%; background: var(--bg-dark); border: 1px solid var(--border-color);
@@ -138,18 +134,15 @@
         }
         .btn-action:hover { background: var(--sand-gold); color: #0f172a; transform: translateY(-1px); }
 
-        /* Stat Outputs */
         .stat-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px dashed var(--border-color); font-size: 0.9rem; }
         .stat-val { font-weight: 700; color: var(--beach-cyan); }
 
-        /* List Manager */
         .list-item { display: flex; justify-content: space-between; align-items: center; background: var(--bg-dark); padding: 8px 12px; border-radius: 6px; margin-bottom: 6px; border: 1px solid var(--border-color); }
         .btn-del { background: #ef4444; color: #fff; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 0.8rem; font-weight: bold; }
         .btn-del:hover { background: #dc2626; }
 
-        .timer-display { font-size: 3rem; font-weight: 900; text-align: center; color: var(--sand-gold); margin: 15px 0; letter-spacing: 2px; text-shadow: 0 0 10px rgba(245, 158, 11, 0.2); }
+        .timer-display { font-size: 3.5rem; font-weight: 900; text-align: center; color: var(--sand-gold); margin: 15px 0; letter-spacing: 2px; text-shadow: 0 0 10px rgba(245, 158, 11, 0.2); }
 
-        /* --- FLAPPY BIRD SPECIFIC STYLES --- */
         #flappy-container {
             position: relative;
             width: 320px;
@@ -199,7 +192,7 @@
 <body>
 
     <sidebar>
-        <div class="brand">🏝️ Rust Beach</div>
+        <div class="brand">🏝️ Rust Island</div>
         <button class="nav-btn active" data-tab="raid">💥 Raid Calculator</button>
         <button class="nav-btn" data-tab="recycler">♻️ Recycler & TC</button>
         <button class="nav-btn" data-tab="timers">⏱️ Crate Timers</button>
@@ -211,7 +204,6 @@
     </sidebar>
 
     <main>
-        <!-- 1. RAID CALCULATOR -->
         <div id="raid" class="tab-content active">
             <h2>💥 Raid & Explosives Calculator</h2>
             <p class="desc">Select target structures to calculate required explosives and raw craft materials.</p>
@@ -242,7 +234,6 @@
             </div>
         </div>
 
-        <!-- 2. RECYCLER & TC -->
         <div id="recycler" class="tab-content">
             <h2>♻️ Component Recycler Yield</h2>
             <p class="desc">Calculate resource returns from components.</p>
@@ -266,7 +257,6 @@
             </div>
         </div>
 
-        <!-- 3. MONUMENT TIMERS -->
         <div id="timers" class="tab-content">
             <h2>⏱️ Monument & Crate Timers</h2>
             <p class="desc">Track locked crate hack countdowns with audible alerts.</p>
@@ -281,7 +271,6 @@
             </div>
         </div>
 
-        <!-- 4. GENE COMBINER -->
         <div id="genes" class="tab-content">
             <h2>🌱 Hemp & Tea Gene Calculator</h2>
             <p class="desc">Cross-breed plant genetics to calculate the dominant outcome.</p>
@@ -298,7 +287,6 @@
             </div>
         </div>
 
-        <!-- 5. TEAM & CODES -->
         <div id="team" class="tab-content">
             <h2>📋 Team & Base Manager</h2>
             <p class="desc">Keep track of code lock combinations and base notes. Auto-saved locally.</p>
@@ -319,7 +307,6 @@
             </div>
         </div>
 
-        <!-- 6. FLAPPY BIRD EXTRA -->
         <div id="flappy" class="tab-content" style="text-align: center;">
             <h2>🐤 Flappy Bird Mini-Game</h2>
             <p class="desc">Kill time while waiting for crafting queues or nighttime!</p>
@@ -350,7 +337,6 @@
     </main>
 
     <script>
-        // --- TAB SWITCHING LOGIC ---
         const navBtns = document.querySelectorAll('.nav-btn');
         const tabContents = document.querySelectorAll('.tab-content');
 
@@ -364,8 +350,7 @@
             });
         });
 
-        // --- PERSISTENT LOCAL STORAGE ENGINE ---
-        const STORAGE_KEY = 'rust_suite_data_v1';
+        const STORAGE_KEY = 'rust_island_data_v1';
         
         function loadSavedData() {
             const raw = localStorage.getItem(STORAGE_KEY);
@@ -379,7 +364,6 @@
 
         let appData = loadSavedData();
 
-        // --- 1. RAID CALCULATOR LOGIC ---
         const raidInputs = ['wood-door', 'sheet-door', 'garage-door', 'armored-door', 'stone-wall', 'metal-wall'];
         
         function calcRaid() {
@@ -413,7 +397,6 @@
             document.getElementById(`target-${id}`).addEventListener('input', calcRaid);
         });
 
-        // --- 2. RECYCLER LOGIC ---
         const recInputs = document.querySelectorAll('.rec-in');
         function calcRecycler() {
             let scrap = 0, hqm = 0, frags = 0;
@@ -433,7 +416,6 @@
         }
         recInputs.forEach(i => i.addEventListener('input', calcRecycler));
 
-        // --- 3. TIMERS & AUDIO NOTIFICATION ---
         let timerInterval = null;
         let timeLeft = 900; 
 
@@ -481,7 +463,6 @@
             updateTimerUI();
         });
 
-        // --- 4. GENE COMBINER LOGIC ---
         document.getElementById('btn-calc-genes').addEventListener('click', () => {
             const g1 = document.getElementById('gene1').value.replace(/-/g, '').toUpperCase();
             const g2 = document.getElementById('gene2').value.replace(/-/g, '').toUpperCase();
@@ -508,7 +489,6 @@
             document.getElementById('gene-result').innerText = result;
         });
 
-        // --- 5. TEAM MANAGER ---
         const codeLabel = document.getElementById('code-label');
         const codeVal = document.getElementById('code-val');
         const codeList = document.getElementById('code-list');
@@ -549,7 +529,6 @@
 
         renderCodes();
 
-        // --- 6. FLAPPY BIRD ENGINE (PROCEDURAL & DISCORD SAFE) ---
         const fCanvas = document.getElementById('flappy-canvas');
         const fCtx = fCanvas.getContext('2d');
         const fLiveScore = document.getElementById('flappy-live-score');
