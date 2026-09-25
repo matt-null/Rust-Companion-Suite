@@ -3,210 +3,409 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rust Island - Beach Edition Companion</title>
+    <title>Rust Island - Beach Companion Suite</title>
+    <!-- Google Fonts for Modern Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-dark: #0b132b;
-            --bg-panel: #1c2541;
-            --bg-card: #2f3e46;
-            --beach-cyan: #06b6d4;
-            --beach-cyan-hover: #0891b2;
+            --bg-base: #060e1a;
+            --panel-glass: rgba(15, 23, 42, 0.65);
+            --panel-glass-border: rgba(255, 255, 255, 0.08);
+            --card-glass: rgba(30, 41, 59, 0.5);
+            --card-hover-border: rgba(6, 182, 212, 0.4);
+            
+            --cyan-accent: #06b6d4;
+            --cyan-glow: rgba(6, 182, 212, 0.25);
             --sand-gold: #f59e0b;
-            --sand-light: #fef3c7;
+            --sand-glow: rgba(245, 158, 11, 0.2);
+            
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
-            --border-color: #334155;
-            --border-highlight: #f59e0b;
+            --border-subtle: rgba(255, 255, 255, 0.06);
+            --radius-lg: 16px;
+            --radius-md: 12px;
+            --radius-sm: 8px;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; user-select: none; }
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif; 
+            user-select: none; 
+        }
+
+        /* Custom Modern Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-base); }
+        ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.12); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--cyan-accent); }
 
         body {
-            background-color: var(--bg-dark);
+            background-color: var(--bg-base);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(6, 182, 212, 0.12) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(245, 158, 11, 0.08) 0px, transparent 50%);
             color: var(--text-main);
             display: flex;
             height: 100vh;
             overflow: hidden;
         }
 
+        /* Modern Glass Sidebar */
         sidebar {
-            width: 230px;
-            background: var(--bg-panel);
-            border-right: 2px solid var(--border-color);
+            width: 250px;
+            background: var(--panel-glass);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-right: 1px solid var(--panel-glass-border);
             display: flex;
             flex-direction: column;
-            padding: 15px 10px;
-            gap: 8px;
+            padding: 24px 16px;
+            gap: 10px;
             flex-shrink: 0;
-            box-shadow: 4px 0 15px rgba(0, 0, 0, 0.3);
+            z-index: 10;
         }
 
         .brand {
-            font-size: 1.25rem;
-            font-weight: 900;
-            color: var(--sand-gold);
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            padding: 10px;
-            margin-bottom: 10px;
-            border-bottom: 2px dashed var(--beach-cyan);
+            padding: 8px 12px;
+            margin-bottom: 16px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 12px;
+        }
+
+        .brand-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--sand-gold), var(--cyan-accent));
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 12px var(--sand-glow);
+        }
+
+        .brand-title {
+            font-size: 1.25rem;
+            font-weight: 800;
+            background: linear-gradient(to right, #fff, var(--text-muted));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
         }
 
         .nav-btn {
             background: transparent;
             border: 1px solid transparent;
             color: var(--text-muted);
-            padding: 12px 14px;
-            border-radius: 8px;
+            padding: 12px 16px;
+            border-radius: var(--radius-md);
             text-align: left;
             font-weight: 600;
             font-size: 0.9rem;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
 
-        .nav-btn:hover { background: rgba(6, 182, 212, 0.15); color: var(--text-main); border-color: var(--beach-cyan); }
-        .nav-btn.active { background: var(--beach-cyan); color: #0f172a; font-weight: 800; border-color: var(--sand-gold); }
+        .nav-btn:hover { 
+            background: rgba(255, 255, 255, 0.04); 
+            color: var(--text-main); 
+            transform: translateX(3px);
+        }
+
+        .nav-btn.active { 
+            background: linear-gradient(135deg, rgba(6, 182, 212, 0.2), rgba(6, 182, 212, 0.05)); 
+            color: var(--cyan-accent); 
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            font-weight: 700;
+            box-shadow: 0 4px 20px var(--cyan-glow);
+        }
 
         .save-badge {
             margin-top: auto;
             font-size: 0.75rem;
-            color: var(--sand-light);
+            font-weight: 600;
+            color: var(--sand-gold);
             text-align: center;
-            padding: 8px;
-            background: rgba(245, 158, 11, 0.15);
-            border-radius: 6px;
-            border: 1px solid var(--sand-gold);
+            padding: 10px;
+            background: var(--sand-glow);
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
         }
 
+        /* Main Workspace */
         main {
             flex: 1;
-            padding: 25px;
+            padding: 32px 40px;
             overflow-y: auto;
             display: flex;
             justify-content: center;
-            background: linear-gradient(180deg, var(--bg-dark) 0%, #0f172a 100%);
         }
 
-        .tab-content { display: none; width: 100%; max-width: 900px; margin: 0 auto; }
+        .tab-content { 
+            display: none; 
+            width: 100%; 
+            max-width: 960px; 
+            animation: fadeIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
         .tab-content.active { display: block; }
 
-        h2 { color: var(--sand-gold); margin-bottom: 5px; text-transform: uppercase; font-size: 1.5rem; letter-spacing: 1px; }
-        p.desc { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px; }
-
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; }
-        .card { 
-            background: var(--bg-panel); 
-            border: 1px solid var(--border-color); 
-            border-top: 3px solid var(--beach-cyan);
-            border-radius: 10px; 
-            padding: 18px; 
-            box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
         }
+
+        h2 { 
+            font-size: 1.75rem; 
+            font-weight: 800; 
+            letter-spacing: -0.5px;
+            margin-bottom: 6px;
+            background: linear-gradient(to right, #ffffff, #cbd5e1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        p.desc { 
+            color: var(--text-muted); 
+            font-size: 0.95rem; 
+            margin-bottom: 28px; 
+            font-weight: 400;
+        }
+
+        /* Glassmorphic Cards & Grid */
+        .grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); 
+            gap: 20px; 
+        }
+
+        .card { 
+            background: var(--card-glass); 
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--panel-glass-border); 
+            border-radius: var(--radius-lg); 
+            padding: 24px; 
+            transition: border-color 0.2s, transform 0.2s;
+        }
+
+        .card:hover {
+            border-color: var(--card-hover-border);
+        }
+
         .card-header { 
             font-weight: 700; 
             color: var(--sand-gold); 
-            margin-bottom: 12px; 
+            margin-bottom: 18px; 
             font-size: 1rem; 
-            border-bottom: 1px solid var(--border-color); 
-            padding-bottom: 6px; 
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
 
-        label { display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 4px; font-weight: 600; }
+        /* Modern Form Controls */
+        label { 
+            display: block; 
+            font-size: 0.8rem; 
+            color: var(--text-muted); 
+            margin-bottom: 6px; 
+            font-weight: 600; 
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
         input, select, textarea {
-            width: 100%; background: var(--bg-dark); border: 1px solid var(--border-color);
-            color: var(--text-main); padding: 8px 12px; border-radius: 6px; margin-bottom: 12px; font-size: 0.9rem;
+            width: 100%; 
+            background: rgba(15, 23, 42, 0.6); 
+            border: 1px solid var(--panel-glass-border);
+            color: var(--text-main); 
+            padding: 10px 14px; 
+            border-radius: var(--radius-md); 
+            margin-bottom: 14px; 
+            font-size: 0.9rem;
             user-select: text;
-            transition: border-color 0.2s;
+            transition: all 0.2s;
         }
-        input:focus, select:focus, textarea:focus { outline: none; border-color: var(--sand-gold); }
 
+        input:focus, select:focus, textarea:focus { 
+            outline: none; 
+            border-color: var(--cyan-accent); 
+            box-shadow: 0 0 0 3px var(--cyan-glow);
+        }
+
+        /* Modern Action Buttons */
         .btn-action {
-            background: var(--beach-cyan); color: #0f172a; border: none; padding: 10px 16px;
-            border-radius: 6px; font-weight: 800; cursor: pointer; transition: all 0.15s ease;
-            box-shadow: 0 2px 8px rgba(6, 182, 212, 0.3);
+            background: linear-gradient(135deg, var(--cyan-accent), #0891b2); 
+            color: #0b132b; 
+            border: none; 
+            padding: 12px 20px;
+            border-radius: var(--radius-md); 
+            font-weight: 700; 
+            cursor: pointer; 
+            transition: all 0.2s;
+            box-shadow: 0 4px 14px var(--cyan-glow);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
-        .btn-action:hover { background: var(--sand-gold); color: #0f172a; transform: translateY(-1px); }
 
-        .stat-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px dashed var(--border-color); font-size: 0.9rem; }
-        .stat-val { font-weight: 700; color: var(--beach-cyan); }
+        .btn-action:hover { 
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(6, 182, 212, 0.4);
+        }
 
-        .list-item { display: flex; justify-content: space-between; align-items: center; background: var(--bg-dark); padding: 8px 12px; border-radius: 6px; margin-bottom: 6px; border: 1px solid var(--border-color); }
-        .btn-del { background: #ef4444; color: #fff; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 0.8rem; font-weight: bold; }
-        .btn-del:hover { background: #dc2626; }
+        .btn-action:active { transform: translateY(0); }
 
-        .timer-display { font-size: 3.5rem; font-weight: 900; text-align: center; color: var(--sand-gold); margin: 15px 0; letter-spacing: 2px; text-shadow: 0 0 10px rgba(245, 158, 11, 0.2); }
+        /* Modern Stat Displays */
+        .stat-row { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            padding: 10px 0; 
+            border-bottom: 1px solid var(--border-subtle); 
+            font-size: 0.9rem; 
+        }
 
+        .stat-val { 
+            font-weight: 700; 
+            color: var(--cyan-accent); 
+            font-size: 1rem;
+        }
+
+        /* Dynamic Item List */
+        .list-item { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            background: rgba(15, 23, 42, 0.4); 
+            padding: 10px 14px; 
+            border-radius: var(--radius-md); 
+            margin-bottom: 8px; 
+            border: 1px solid var(--border-subtle); 
+        }
+
+        .btn-del { 
+            background: rgba(239, 68, 68, 0.15); 
+            color: #ef4444; 
+            border: 1px solid rgba(239, 68, 68, 0.3); 
+            padding: 4px 10px; 
+            border-radius: var(--radius-sm); 
+            cursor: pointer; 
+            font-size: 0.8rem; 
+            font-weight: 700; 
+            transition: all 0.2s;
+        }
+
+        .btn-del:hover { 
+            background: #ef4444; 
+            color: #fff; 
+        }
+
+        /* Glassmorphic Crate Timer */
+        .timer-display { 
+            font-size: 3.5rem; 
+            font-weight: 800; 
+            text-align: center; 
+            color: var(--sand-gold); 
+            margin: 20px 0; 
+            letter-spacing: -1px; 
+            text-shadow: 0 0 20px var(--sand-glow);
+        }
+
+        /* --- FLAPPY BIRD GAME FRAME --- */
         #flappy-container {
             position: relative;
             width: 320px;
             height: 568px;
-            background: #4ec0ca;
-            box-shadow: 0 0 25px rgba(6, 182, 212, 0.3);
-            border: 4px solid var(--sand-gold);
-            border-radius: 12px;
+            background: #38bdf8;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--panel-glass-border);
+            border-radius: var(--radius-lg);
             overflow: hidden;
             margin: 0 auto;
             cursor: pointer;
         }
+
         #flappy-canvas {
             display: block; width: 100%; height: 100%;
             object-fit: cover; image-rendering: pixelated;
         }
+
         .flappy-ui {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            z-index: 10; background: rgba(15, 23, 42, 0.4);
+            z-index: 10; background: rgba(6, 14, 26, 0.6);
+            backdrop-filter: blur(4px);
         }
+
         .hidden { display: none !important; }
+
         #flappy-live-score {
-            position: absolute; top: 12%; left: 50%; transform: translateX(-50%);
+            position: absolute; top: 10%; left: 50%; transform: translateX(-50%);
             font-size: 3.5rem; color: white;
             text-shadow: -3px -3px 0 #0b132b, 3px -3px 0 #0b132b, -3px 3px 0 #0b132b, 3px 3px 0 #0b132b;
-            z-index: 5; font-weight: bold; pointer-events: none;
+            z-index: 5; font-weight: 800; pointer-events: none;
         }
+
         .flappy-panel {
-            background: #fef3c7; border: 4px solid #0b132b;
-            border-radius: 12px; padding: 15px; width: 85%;
-            text-align: center; box-shadow: 0 6px 0 #0b132b;
-            margin-bottom: 15px; pointer-events: auto;
+            background: var(--sand-gold); border: 3px solid #0b132b;
+            border-radius: var(--radius-md); padding: 18px; width: 80%;
+            text-align: center; box-shadow: 0 8px 0 #0b132b;
+            margin-bottom: 20px; pointer-events: auto;
         }
-        .flappy-panel h1 { color: #06b6d4; font-size: 2rem; text-shadow: 2px 2px 0 #fff; margin-bottom: 5px; }
-        .flappy-panel p { font-size: 1.1rem; color: #0b132b; font-weight: bold; }
+
+        .flappy-panel h1 { color: #fff; font-size: 1.8rem; text-shadow: 2px 2px 0 #0b132b; margin-bottom: 4px; font-weight: 800; }
+        .flappy-panel p { font-size: 1rem; color: #0b132b; font-weight: 700; }
+
         .flappy-btn {
-            background: #f59e0b; border: 3px solid #fff; color: #0b132b;
-            padding: 12px 30px; font-size: 1.2rem; font-weight: 900;
-            border-radius: 8px; cursor: pointer; box-shadow: 0 5px 0 #0b132b;
+            background: var(--cyan-accent); border: 3px solid #0b132b; color: #0b132b;
+            padding: 12px 28px; font-size: 1.1rem; font-weight: 800;
+            border-radius: var(--radius-md); cursor: pointer; box-shadow: 0 5px 0 #0b132b;
             text-transform: uppercase; outline: none; pointer-events: auto;
+            transition: transform 0.1s;
         }
-        .flappy-btn:hover { background: #d97706; }
+
+        .flappy-btn:hover { background: #67e8f9; }
         .flappy-btn:active { transform: translateY(4px); box-shadow: 0 1px 0 #0b132b; }
     </style>
 </head>
 <body>
 
     <sidebar>
-        <div class="brand">🏝️ Rust Island</div>
+        <div class="brand">
+            <div class="brand-icon">🏖️</div>
+            <div class="brand-title">Rust Island</div>
+        </div>
+
         <button class="nav-btn active" data-tab="raid">💥 Raid Calculator</button>
-        <button class="nav-btn" data-tab="recycler">♻️ Recycler & TC</button>
+        <button class="nav-btn" data-tab="recycler">♻️ Recycler Yield</button>
         <button class="nav-btn" data-tab="timers">⏱️ Crate Timers</button>
         <button class="nav-btn" data-tab="genes">🌱 Gene Combiner</button>
         <button class="nav-btn" data-tab="team">📋 Team & Codes</button>
         <button class="nav-btn" data-tab="flappy">🐤 Flappy Bird</button>
         
-        <div class="save-badge">🌊 Auto-Save Active</div>
+        <div class="save-badge">
+            <span>⚡</span> Local Auto-Save Active
+        </div>
     </sidebar>
 
     <main>
+        <!-- 1. RAID CALCULATOR -->
         <div id="raid" class="tab-content active">
             <h2>💥 Raid & Explosives Calculator</h2>
-            <p class="desc">Select target structures to calculate required explosives and raw craft materials.</p>
+            <p class="desc">Select target structures to calculate required explosives and raw materials.</p>
 
             <div class="grid">
                 <div class="card">
@@ -220,23 +419,24 @@
                 </div>
 
                 <div class="card">
-                    <div class="card-header">Optimal Cost (C4 / Rockets)</div>
-                    <div class="stat-row"><span>C4 Needed:</span> <span class="stat-val" id="res-c4">0</span></div>
-                    <div class="stat-row"><span>Rockets Needed:</span> <span class="stat-val" id="res-rockets">0</span></div>
-                    <div class="stat-row"><span>Satchels Needed:</span> <span class="stat-val" id="res-satchels">0</span></div>
+                    <div class="card-header">Optimal Explosives</div>
+                    <div class="stat-row"><span>C4 Needed</span> <span class="stat-val" id="res-c4">0</span></div>
+                    <div class="stat-row"><span>Rockets Needed</span> <span class="stat-val" id="res-rockets">0</span></div>
+                    <div class="stat-row"><span>Satchels Needed</span> <span class="stat-val" id="res-satchels">0</span></div>
                     
-                    <div class="card-header" style="margin-top:20px;">Raw Material Totals</div>
-                    <div class="stat-row"><span>Sulfur:</span> <span class="stat-val" id="raw-sulfur">0</span></div>
-                    <div class="stat-row"><span>Charcoal:</span> <span class="stat-val" id="raw-charcoal">0</span></div>
-                    <div class="stat-row"><span>Metal Frags:</span> <span class="stat-val" id="raw-metal">0</span></div>
-                    <div class="stat-row"><span>Low Grade Fuel:</span> <span class="stat-val" id="raw-lgf">0</span></div>
+                    <div class="card-header" style="margin-top:24px;">Raw Material Breakdown</div>
+                    <div class="stat-row"><span>Sulfur</span> <span class="stat-val" id="raw-sulfur">0</span></div>
+                    <div class="stat-row"><span>Charcoal</span> <span class="stat-val" id="raw-charcoal">0</span></div>
+                    <div class="stat-row"><span>Metal Frags</span> <span class="stat-val" id="raw-metal">0</span></div>
+                    <div class="stat-row"><span>Low Grade Fuel</span> <span class="stat-val" id="raw-lgf">0</span></div>
                 </div>
             </div>
         </div>
 
+        <!-- 2. RECYCLER -->
         <div id="recycler" class="tab-content">
             <h2>♻️ Component Recycler Yield</h2>
-            <p class="desc">Calculate resource returns from components.</p>
+            <p class="desc">Calculate resource output yields from recycled components.</p>
 
             <div class="grid">
                 <div class="card">
@@ -249,67 +449,73 @@
                 </div>
 
                 <div class="card">
-                    <div class="card-header">Recycled Yield</div>
-                    <div class="stat-row"><span>Scrap:</span> <span class="stat-val" id="yield-scrap">0</span></div>
-                    <div class="stat-row"><span>High Quality Metal (HQM):</span> <span class="stat-val" id="yield-hqm">0</span></div>
-                    <div class="stat-row"><span>Metal Frags:</span> <span class="stat-val" id="yield-frags">0</span></div>
+                    <div class="card-header">Estimated Recycled Yield</div>
+                    <div class="stat-row"><span>Scrap</span> <span class="stat-val" id="yield-scrap">0</span></div>
+                    <div class="stat-row"><span>High Quality Metal (HQM)</span> <span class="stat-val" id="yield-hqm">0</span></div>
+                    <div class="stat-row"><span>Metal Fragments</span> <span class="stat-val" id="yield-frags">0</span></div>
                 </div>
             </div>
         </div>
 
+        <!-- 3. MONUMENT TIMERS -->
         <div id="timers" class="tab-content">
             <h2>⏱️ Monument & Crate Timers</h2>
-            <p class="desc">Track locked crate hack countdowns with audible alerts.</p>
+            <p class="desc">Track oil rig and cargo ship locked crate countdowns with audio cues.</p>
 
             <div class="grid">
                 <div class="card" style="text-align: center;">
-                    <div class="card-header">Oil Rig / Cargo Locked Crate</div>
+                    <div class="card-header" style="justify-content: center;">Locked Crate Hack Timer</div>
                     <div class="timer-display" id="crate-timer">15:00</div>
-                    <button class="btn-action" id="btn-timer-start">Start Hack</button>
-                    <button class="btn-action" id="btn-timer-reset" style="background:#475569; color:#fff;">Reset</button>
+                    <div style="display: flex; gap: 10px; justify-content: center;">
+                        <button class="btn-action" id="btn-timer-start">Start Hack</button>
+                        <button class="btn-action" id="btn-timer-reset" style="background: rgba(255,255,255,0.1); color: #fff; box-shadow: none;">Reset</button>
+                    </div>
                 </div>
             </div>
         </div>
 
+        <!-- 4. GENE COMBINER -->
         <div id="genes" class="tab-content">
-            <h2>🌱 Hemp & Tea Gene Calculator</h2>
-            <p class="desc">Cross-breed plant genetics to calculate the dominant outcome.</p>
+            <h2>🌱 Plant Gene Combiner</h2>
+            <p class="desc">Cross-breed plant seeds to predict the resulting gene sequence.</p>
 
             <div class="card">
-                <div class="card-header">Enter Cross-Breeding Seeds (5 Genes each)</div>
+                <div class="card-header">Input Genetics (5 Genes Each)</div>
                 <label>Seed 1</label><input type="text" id="gene1" value="G-Y-G-H-W" maxlength="9">
                 <label>Seed 2</label><input type="text" id="gene2" value="G-Y-Y-H-X" maxlength="9">
                 <label>Seed 3</label><input type="text" id="gene3" value="G-G-Y-H-G" maxlength="9">
-                <button class="btn-action" id="btn-calc-genes">Combine Genetics</button>
+                <button class="btn-action" id="btn-calc-genes" style="margin-top: 8px;">Combine Genetics</button>
 
-                <div class="card-header" style="margin-top: 20px;">Resulting Child Gene</div>
-                <div class="stat-row"><span style="font-size:1.2rem;">Predicted Outcome:</span> <span class="stat-val" id="gene-result" style="font-size:1.2rem;">???</span></div>
+                <div class="card-header" style="margin-top: 24px;">Predicted Child Gene</div>
+                <div class="stat-row"><span style="font-size:1.1rem;">Dominant Outcome</span> <span class="stat-val" id="gene-result" style="font-size:1.2rem;">???</span></div>
             </div>
         </div>
 
+        <!-- 5. TEAM & CODES -->
         <div id="team" class="tab-content">
-            <h2>📋 Team & Base Manager</h2>
-            <p class="desc">Keep track of code lock combinations and base notes. Auto-saved locally.</p>
+            <h2>📋 Team Base Manager</h2>
+            <p class="desc">Store team code lock pins and wishlist notes. Automatically saved.</p>
 
             <div class="grid">
                 <div class="card">
                     <div class="card-header">Code Lock Registry</div>
-                    <input type="text" id="code-label" placeholder="Door / Gate Name (e.g., Main Airlock)">
+                    <input type="text" id="code-label" placeholder="Door / Gate (e.g., Outer Airlock)">
                     <input type="text" id="code-val" placeholder="Code (e.g., 4921)">
-                    <button class="btn-action" id="btn-add-code">Add Lock Code</button>
-                    <div id="code-list" style="margin-top:15px;"></div>
+                    <button class="btn-action" id="btn-add-code">Save Code</button>
+                    <div id="code-list" style="margin-top:16px;"></div>
                 </div>
 
                 <div class="card">
                     <div class="card-header">Team Notes & Wishlist</div>
-                    <textarea id="team-notes" rows="10" placeholder="Type raid targets, upkeep schedules, or base goals here..."></textarea>
+                    <textarea id="team-notes" rows="10" placeholder="Type raid target notes, upkeep status, or wishlist items..."></textarea>
                 </div>
             </div>
         </div>
 
+        <!-- 6. FLAPPY BIRD BONUS -->
         <div id="flappy" class="tab-content" style="text-align: center;">
-            <h2>🐤 Flappy Bird Mini-Game</h2>
-            <p class="desc">Kill time while waiting for crafting queues or nighttime!</p>
+            <h2>🐤 Bonus Mini-Game</h2>
+            <p class="desc">Pass the time during night cycles or crafting queues!</p>
 
             <div id="flappy-container">
                 <div id="flappy-live-score" class="hidden">0</div>
@@ -317,7 +523,7 @@
                 <div id="flappy-start-screen" class="flappy-ui">
                     <div class="flappy-panel">
                         <h1>FLAPPY BIRD</h1>
-                        <p>Click or Space to Flap!</p>
+                        <p>Press Space or Click to Flap</p>
                     </div>
                     <button id="flappy-play-btn" class="flappy-btn">PLAY</button>
                 </div>
@@ -328,7 +534,7 @@
                         <p>SCORE: <span id="flappy-final-score">0</span></p>
                         <p>BEST: <span id="flappy-best-score">0</span></p>
                     </div>
-                    <button id="flappy-restart-btn" class="flappy-btn">OK</button>
+                    <button id="flappy-restart-btn" class="flappy-btn">TRY AGAIN</button>
                 </div>
 
                 <canvas id="flappy-canvas" width="288" height="512"></canvas>
@@ -337,6 +543,7 @@
     </main>
 
     <script>
+        // Tab Router Logic
         const navBtns = document.querySelectorAll('.nav-btn');
         const tabContents = document.querySelectorAll('.tab-content');
 
@@ -350,22 +557,19 @@
             });
         });
 
-        const STORAGE_KEY = 'rust_island_data_v1';
-        
+        // Local Storage State Management
+        const STORAGE_KEY = 'rust_island_data_v2';
         function loadSavedData() {
             const raw = localStorage.getItem(STORAGE_KEY);
             if (!raw) return { codes: [], notes: "" };
             try { return JSON.parse(raw); } catch(e) { return { codes: [], notes: "" }; }
         }
-
-        function saveData(data) {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-        }
+        function saveData(data) { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }
 
         let appData = loadSavedData();
 
+        // 1. Raid Calculator
         const raidInputs = ['wood-door', 'sheet-door', 'garage-door', 'armored-door', 'stone-wall', 'metal-wall'];
-        
         function calcRaid() {
             let woodDoors = parseInt(document.getElementById('target-wood-door').value) || 0;
             let sheetDoors = parseInt(document.getElementById('target-sheet-door').value) || 0;
@@ -392,11 +596,9 @@
             document.getElementById('raw-metal').innerText = metal.toLocaleString();
             document.getElementById('raw-lgf').innerText = lgf.toLocaleString();
         }
+        raidInputs.forEach(id => document.getElementById(`target-${id}`).addEventListener('input', calcRaid));
 
-        raidInputs.forEach(id => {
-            document.getElementById(`target-${id}`).addEventListener('input', calcRaid);
-        });
-
+        // 2. Recycler
         const recInputs = document.querySelectorAll('.rec-in');
         function calcRecycler() {
             let scrap = 0, hqm = 0, frags = 0;
@@ -409,16 +611,15 @@
                 if (type === 'rifle') { scrap += qty * 15; hqm += qty * 2; }
                 if (type === 'sign') { scrap += qty * 5; hqm += qty * 1; }
             });
-
             document.getElementById('yield-scrap').innerText = scrap;
             document.getElementById('yield-hqm').innerText = hqm;
             document.getElementById('yield-frags').innerText = frags;
         }
         recInputs.forEach(i => i.addEventListener('input', calcRecycler));
 
+        // 3. Timers
         let timerInterval = null;
         let timeLeft = 900; 
-
         const timerDisplay = document.getElementById('crate-timer');
         const btnTimerStart = document.getElementById('btn-timer-start');
         const btnTimerReset = document.getElementById('btn-timer-reset');
@@ -451,7 +652,7 @@
                     clearInterval(timerInterval);
                     timerInterval = null;
                     playBeep();
-                    alert('Crate unlocked!');
+                    alert('Crate Unlocked!');
                 }
             }, 1000);
         });
@@ -463,6 +664,7 @@
             updateTimerUI();
         });
 
+        // 4. Gene Calculator
         document.getElementById('btn-calc-genes').addEventListener('click', () => {
             const g1 = document.getElementById('gene1').value.replace(/-/g, '').toUpperCase();
             const g2 = document.getElementById('gene2').value.replace(/-/g, '').toUpperCase();
@@ -489,6 +691,7 @@
             document.getElementById('gene-result').innerText = result;
         });
 
+        // 5. Team Code Manager
         const codeLabel = document.getElementById('code-label');
         const codeVal = document.getElementById('code-val');
         const codeList = document.getElementById('code-list');
@@ -501,7 +704,7 @@
                 div.className = 'list-item';
                 div.innerHTML = `
                     <span><strong>${item.label}:</strong> <span style="color:var(--sand-gold);">${item.val}</span></span>
-                    <button class="btn-del" onclick="deleteCode(${index})">X</button>
+                    <button class="btn-del" onclick="deleteCode(${index})">Remove</button>
                 `;
                 codeList.appendChild(div);
             });
@@ -529,6 +732,7 @@
 
         renderCodes();
 
+        // 6. Flappy Bird Mini-Game Engine
         const fCanvas = document.getElementById('flappy-canvas');
         const fCtx = fCanvas.getContext('2d');
         const fLiveScore = document.getElementById('flappy-live-score');
