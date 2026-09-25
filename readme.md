@@ -1,51 +1,30 @@
-# 🐤 Flappy Bird - Discord Activity & Web App
+# ☢️ Rust Companion Suite & Discord Bot
 
-A clean, responsive, single-file Flappy Bird clone styled after the classic 2013 arcade hit. Built with vanilla HTML5 Canvas, CSS, and Web Audio API—zero external dependencies required!
-
-Designed specifically to run seamlessly as a **Discord Embedded Activity** or hosted as a standalone web app via **GitHub Pages**.
+A powerful, all-in-one utility suite designed for Rust gaming communities and Discord servers. Manage raid costs, calculate recycler yields, track monument timers, cross-breed genetics, and organize team codes—all in one place.
 
 ---
 
-## 🎮 Play Live
-- **Web Link:** `https://matt-null.github.io/flappy-bird/`
+## 🌟 Key Features
+
+* 💥 **Raid Cost Calculator:** Instant raw material breakdowns (Sulfur, Charcoal, Metal, LGF) for C4, Rockets, and Satchels needed for any target structure.
+* ♻️ **Recycler Yield Calculator:** Calculate exact Scrap, HQM, and Metal Fragment returns from recycled components.
+* ⏱️ **Monument & Locked Crate Timers:** Audio-assisted 15-minute countdown timers for Oil Rig and Cargo Ship locked crates.
+* 🌱 **Hemp & Tea Gene Combiner:** Predict child genetics for optimal plant breeding setups.
+* 📋 **Team & Code Lock Registry:** Securely track base door codes, airlocks, and raid wishlist notes with automatic local persistence.
+* 🐤 **BONUS: Built-in Flappy Bird Mini-Game:** Integrated procedural mini-game to pass the time during night cycles, crafting queues, or long raid defenses!
 
 ---
 
-## ✨ Features
-- **Authentic Pixel Art Style:** Classic green capped pipes, scrolling city/hills background, animated ground strip, and flapping bird animations.
-- **Synthesized Web Audio:** Retro flap, point, and hit sound effects generated live in the browser without missing asset errors.
-- **Discord Activity Ready:** Automatically scales to fit Discord's Embedded App viewport without awkward scrollbars or off-center canvas issues.
-- **Touch & Keyboard Controls:** Supports Tap/Click and Spacebar inputs.
+## 🚀 Quick Setup & Installation
 
----
+### Option 1: Standalone Web Interface / Discord Webview
+1. Download the `index.html` file from this repository.
+2. Open `index.html` in any web browser, or host it via GitHub Pages / Netlify to embed directly as a Discord Activity or Webview.
+3. All team data and high scores auto-save to your browser's local storage.
 
-## 🚀 How to Host Your Own on GitHub Pages
+### Option 2: Discord Bot Deployment
 
-1. **Fork or Create a Repository:**
-   - Create a new public repository on GitHub named `flappy-bird`.
-2. **Upload `index.html`:**
-   - Upload the `index.html` file into the main root directory of your repository.
-3. **Enable GitHub Pages:**
-   - Go to **Settings** $\rightarrow$ **Pages**.
-   - Under **Build and deployment**, set **Branch** to `main` (or `master`) and click **Save**.
-   - Your site will be live at `https://<your-username>.github.io/flappy-bird/` in a couple of minutes!
-
----
-
-## 🤖 Configuring as a Discord Activity
-
-To launch this game directly inside Discord Voice/Text Channels:
-
-1. Open the [Discord Developer Portal](https://discord.com/developers/applications) and choose your Application.
-2. Go to **Activities** $\rightarrow$ **Settings** on the left menu.
-3. Toggle **Enable Activities** to **ON**.
-4. Add a rule under **URL Mappings**:
-   - **Prefix:** `/`
-   - **Target:** `<your-username>.github.io/flappy-bird` *(Do NOT include `https://`)*
-5. Go to **OAuth2** $\rightarrow$ Add `https://127.0.0.1` as a Redirect URL.
-6. Open Discord, join a Voice Channel, and launch your bot from the **Rocket Launcher (Activity Shelf)**!
-
----
-
-## 📜 License
-This project is open-source and free to use under the [MIT License](LICENSE).
+1. **Clone the repository:**
+   ```bash
+   git clone [https://github.com/your-repo/rust-companion-suite.git](https://github.com/your-repo/rust-companion-suite.git)
+   cd rust-companion-suite
