@@ -25,7 +25,7 @@
             height: 100%;
             max-width: 432px;
             max-height: 768px;
-            background: #4ec0ca; /* Fallback sky blue */
+            background: #4ec0ca; 
             box-shadow: 0 0 20px rgba(0,0,0,0.8);
         }
         canvas {
@@ -35,7 +35,7 @@
             object-fit: cover;
             image-rendering: pixelated;
         }
-        #score-display, #loading-text {
+        #score-display {
             position: absolute;
             top: 15%;
             left: 50%;
@@ -48,13 +48,11 @@
             pointer-events: none;
             text-align: center;
         }
-        #loading-text { font-size: 1.5rem; top: 45%; }
     </style>
 </head>
 <body>
 
     <div id="game-container">
-        <div id="loading-text">LOADING ASSETS...</div>
         <div id="score-display"></div>
         <canvas id="canvas" width="288" height="512"></canvas>
     </div>
@@ -63,48 +61,51 @@
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
         const scoreDisplay = document.getElementById('score-display');
-        const loadingText = document.getElementById('loading-text');
 
-        // --- ASSET LOADER (WITH DISCORD CORS FIX) ---
+        // --- ASSET LOADER (USING JSDELIVR CDN FOR DISCORD CORS BYPASS) ---
+        let assetsLoaded = 0;
+        const totalAssets = 7;
+
         function loadImg(src) {
             const img = new Image();
-            img.crossOrigin = "Anonymous"; // Crucial for Discord Activities
+            img.crossOrigin = "Anonymous"; 
+            img.onload = () => assetsLoaded++;
             img.src = src;
             return img;
         }
 
-        const baseURL = 'https://raw.githubusercontent.com/samuelcust/flappy-bird-assets/master/sprites/';
+        const baseImgURL = 'https://cdn.jsdelivr.net/gh/samuelcust/flappy-bird-assets@master/sprites/';
+        const baseAudioURL = 'https://cdn.jsdelivr.net/gh/samuelcust/flappy-bird-assets@master/audio/';
+
         const sprites = {
-            bg: loadImg(baseURL + 'background-day.png'),
-            ground: loadImg(baseURL + 'base.png'),
+            bg: loadImg(baseImgURL + 'background-day.png'),
+            ground: loadImg(baseImgURL + 'base.png'),
             bird: [
-                loadImg(baseURL + 'yellowbird-upflap.png'),
-                loadImg(baseURL + 'yellowbird-midflap.png'),
-                loadImg(baseURL + 'yellowbird-downflap.png')
+                loadImg(baseImgURL + 'yellowbird-upflap.png'),
+                loadImg(baseImgURL + 'yellowbird-midflap.png'),
+                loadImg(baseImgURL + 'yellowbird-downflap.png')
             ],
-            pipeTop: loadImg(baseURL + 'pipe-green.png'),
-            pipeBottom: loadImg(baseURL + 'pipe-green.png'),
-            getReady: loadImg(baseURL + 'message.png'),
-            gameOver: loadImg(baseURL + 'gameover.png')
+            pipeTop: loadImg(baseImgURL + 'pipe-green.png'),
+            pipeBottom: loadImg(baseImgURL + 'pipe-green.png'),
+            getReady: loadImg(baseImgURL + 'message.png'),
+            gameOver: loadImg(baseImgURL + 'gameover.png')
         };
 
         const audio = {
-            wing: new Audio('https://raw.githubusercontent.com/samuelcust/flappy-bird-assets/master/audio/wing.wav'),
-            point: new Audio('https://raw.githubusercontent.com/samuelcust/flappy-bird-assets/master/audio/point.wav'),
-            hit: new Audio('https://raw.githubusercontent.com/samuelcust/flappy-bird-assets/master/audio/hit.wav'),
-            die: new Audio('https://raw.githubusercontent.com/samuelcust/flappy-bird-assets/master/audio/die.wav'),
-            swoosh: new Audio('https://raw.githubusercontent.com/samuelcust/flappy-bird-assets/master/audio/swoosh.wav')
+            wing: new Audio(baseAudioURL + 'wing.wav'),
+            point: new Audio(baseAudioURL + 'point.wav'),
+            hit: new Audio(baseAudioURL + 'hit.wav'),
+            die: new Audio(baseAudioURL + 'die.wav'),
+            swoosh: new Audio(baseAudioURL + 'swoosh.wav')
         };
 
-        // Fix Audio CORS 
         Object.values(audio).forEach(snd => snd.crossOrigin = "Anonymous");
 
         function playSfx(snd) {
             snd.currentTime = 0;
-            snd.play().catch(e => console.log("Audio play blocked by browser policy"));
+            snd.play().catch(e => console.log("Audio blocked"));
         }
 
-        // Safe Draw to prevent canvas crashing if image is still downloading
         function drawImg(img, x, y, w, h) {
             if (img.complete && img.naturalWidth > 0) {
                 ctx.drawImage(img, x, y, w, h);
@@ -114,7 +115,6 @@
         // --- GAME VARIABLES ---
         let frames = 0;
         const RAD = Math.PI / 180;
-        
         const state = { current: 0, getReady: 0, game: 1, over: 2 };
         let score = { best: localStorage.getItem('flappy_best') || 0, value: 0 };
 
@@ -144,7 +144,6 @@
         const bird = {
             animation: [0, 1, 2, 1], frame: 0, x: 50, y: 150, w: 34, h: 24, radius: 12,
             gravity: 0.25, jump: -4.6, speed: 0, rotation: 0,
-            
             draw() {
                 let birdRef = sprites.bird[this.animation[this.frame]];
                 ctx.save();
@@ -279,16 +278,24 @@
             ctx.fillStyle = '#4ec0ca';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             
-            bg.draw();
-            pipes.draw();
-            ground.draw();
-            bird.draw();
-            ui.draw();
+            // Wait for at least the background and bird to load before rendering game
+            if (assetsLoaded < 3) {
+                ctx.fillStyle = 'white';
+                ctx.font = '20px "FlappyFont", monospace';
+                ctx.textAlign = 'center';
+                ctx.fillText('LOADING IMAGES...', canvas.width/2, canvas.height/2);
+            } else {
+                bg.draw();
+                pipes.draw();
+                ground.draw();
+                bird.draw();
+                ui.draw();
 
-            bg.update();
-            pipes.update();
-            ground.update();
-            bird.update();
+                bg.update();
+                pipes.update();
+                ground.update();
+                bird.update();
+            }
 
             frames++;
             requestAnimationFrame(loop);
@@ -297,6 +304,8 @@
         // --- CONTROLS ---
         function handleInput(e) {
             if(e.type === 'keydown' && e.code !== 'Space') return;
+            if(assetsLoaded < 3) return; // Prevent clicking while loading
+
             switch(state.current) {
                 case state.getReady:
                     state.current = state.game;
@@ -320,8 +329,6 @@
         window.addEventListener('keydown', handleInput);
         canvas.addEventListener('pointerdown', handleInput);
 
-        // Start immediately. The Safe-Draw function will pop the images in as soon as they bypass Discord's security.
-        loadingText.style.display = 'none';
         loop();
     </script>
 </body>
