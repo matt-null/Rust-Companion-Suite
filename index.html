@@ -5,21 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Flappy Bird Original</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            user-select: none;
-            touch-action: none;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; user-select: none; touch-action: none; }
         @font-face {
             font-family: 'FlappyFont';
             src: url('https://fonts.cdnfonts.com/s/17380/04B_19.woff') format('woff');
         }
-
         body {
-            background-color: #313338; /* Discord dark theme */
+            background-color: #313338;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -27,17 +19,15 @@
             height: 100vh;
             overflow: hidden;
         }
-
         #game-container {
             position: relative;
             width: 100%;
             height: 100%;
-            max-width: 432px; /* 288 * 1.5 */
-            max-height: 768px; /* 512 * 1.5 */
-            background: #000;
+            max-width: 432px;
+            max-height: 768px;
+            background: #4ec0ca; /* Fallback sky blue */
             box-shadow: 0 0 20px rgba(0,0,0,0.8);
         }
-
         canvas {
             display: block;
             width: 100%;
@@ -45,8 +35,7 @@
             object-fit: cover;
             image-rendering: pixelated;
         }
-
-        #score-display {
+        #score-display, #loading-text {
             position: absolute;
             top: 15%;
             left: 50%;
@@ -54,18 +43,18 @@
             font-family: 'FlappyFont', monospace;
             font-size: 3.5rem;
             color: white;
-            text-shadow: 
-                -3px -3px 0 #000, 3px -3px 0 #000,
-                -3px 3px 0 #000, 3px 3px 0 #000,
-                4px 4px 0 rgba(0,0,0,0.5);
+            text-shadow: -3px -3px 0 #000, 3px -3px 0 #000, -3px 3px 0 #000, 3px 3px 0 #000;
             z-index: 10;
             pointer-events: none;
+            text-align: center;
         }
+        #loading-text { font-size: 1.5rem; top: 45%; }
     </style>
 </head>
 <body>
 
     <div id="game-container">
+        <div id="loading-text">LOADING ASSETS...</div>
         <div id="score-display"></div>
         <canvas id="canvas" width="288" height="512"></canvas>
     </div>
@@ -74,16 +63,29 @@
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
         const scoreDisplay = document.getElementById('score-display');
+        const loadingText = document.getElementById('loading-text');
 
-        // --- ASSET LOADER ---
+        // --- ASSET LOADER (WITH DISCORD CORS FIX) ---
+        function loadImg(src) {
+            const img = new Image();
+            img.crossOrigin = "Anonymous"; // Crucial for Discord Activities
+            img.src = src;
+            return img;
+        }
+
+        const baseURL = 'https://raw.githubusercontent.com/samuelcust/flappy-bird-assets/master/sprites/';
         const sprites = {
-            bg: new Image(),
-            ground: new Image(),
-            bird: [new Image(), new Image(), new Image()],
-            pipeTop: new Image(),
-            pipeBottom: new Image(),
-            getReady: new Image(),
-            gameOver: new Image()
+            bg: loadImg(baseURL + 'background-day.png'),
+            ground: loadImg(baseURL + 'base.png'),
+            bird: [
+                loadImg(baseURL + 'yellowbird-upflap.png'),
+                loadImg(baseURL + 'yellowbird-midflap.png'),
+                loadImg(baseURL + 'yellowbird-downflap.png')
+            ],
+            pipeTop: loadImg(baseURL + 'pipe-green.png'),
+            pipeBottom: loadImg(baseURL + 'pipe-green.png'),
+            getReady: loadImg(baseURL + 'message.png'),
+            gameOver: loadImg(baseURL + 'gameover.png')
         };
 
         const audio = {
@@ -94,80 +96,63 @@
             swoosh: new Audio('https://raw.githubusercontent.com/samuelcust/flappy-bird-assets/master/audio/swoosh.wav')
         };
 
-        // Load original sprite assets
-        const baseURL = 'https://raw.githubusercontent.com/samuelcust/flappy-bird-assets/master/sprites/';
-        sprites.bg.src = baseURL + 'background-day.png';
-        sprites.ground.src = baseURL + 'base.png';
-        sprites.bird[0].src = baseURL + 'yellowbird-upflap.png';
-        sprites.bird[1].src = baseURL + 'yellowbird-midflap.png';
-        sprites.bird[2].src = baseURL + 'yellowbird-downflap.png';
-        sprites.pipeTop.src = baseURL + 'pipe-green.png'; // We will flip this in canvas
-        sprites.pipeBottom.src = baseURL + 'pipe-green.png';
-        sprites.getReady.src = baseURL + 'message.png';
-        sprites.gameOver.src = baseURL + 'gameover.png';
+        // Fix Audio CORS 
+        Object.values(audio).forEach(snd => snd.crossOrigin = "Anonymous");
 
-        // Play sound function (handles overlapping audio)
         function playSfx(snd) {
             snd.currentTime = 0;
-            snd.play().catch(e => {});
+            snd.play().catch(e => console.log("Audio play blocked by browser policy"));
+        }
+
+        // Safe Draw to prevent canvas crashing if image is still downloading
+        function drawImg(img, x, y, w, h) {
+            if (img.complete && img.naturalWidth > 0) {
+                ctx.drawImage(img, x, y, w, h);
+            }
         }
 
         // --- GAME VARIABLES ---
         let frames = 0;
         const RAD = Math.PI / 180;
         
-        const state = {
-            current: 0,
-            getReady: 0,
-            game: 1,
-            over: 2
-        };
-
-        let score = {
-            best: localStorage.getItem('flappy_best') || 0,
-            value: 0
-        };
+        const state = { current: 0, getReady: 0, game: 1, over: 2 };
+        let score = { best: localStorage.getItem('flappy_best') || 0, value: 0 };
 
         // --- GAME OBJECTS ---
         const bg = {
             sX: 0, sY: 0, w: 288, h: 512, x: 0, y: 0,
             draw() {
-                ctx.drawImage(sprites.bg, this.x, this.y, this.w, this.h);
-                ctx.drawImage(sprites.bg, this.x + this.w, this.y, this.w, this.h);
+                drawImg(sprites.bg, this.x, this.y, this.w, this.h);
+                drawImg(sprites.bg, this.x + this.w, this.y, this.w, this.h);
             },
             update() {
-                if(state.current === state.game) {
-                    this.x = (this.x - 0.5) % (this.w / 2);
-                }
+                if(state.current === state.game) this.x = (this.x - 0.5) % (this.w / 2);
             }
         };
 
         const ground = {
             w: 336, h: 112, x: 0, y: canvas.height - 112,
             draw() {
-                ctx.drawImage(sprites.ground, this.x, this.y, this.w, this.h);
-                ctx.drawImage(sprites.ground, this.x + this.w, this.y, this.w, this.h);
+                drawImg(sprites.ground, this.x, this.y, this.w, this.h);
+                drawImg(sprites.ground, this.x + this.w, this.y, this.w, this.h);
             },
             update() {
-                if(state.current !== state.over) {
-                    this.x = (this.x - 2) % (this.w / 2);
-                }
+                if(state.current !== state.over) this.x = (this.x - 2) % (this.w / 2);
             }
         };
 
         const bird = {
-            animation: [0, 1, 2, 1],
-            frame: 0,
-            x: 50, y: 150, w: 34, h: 24,
-            radius: 12,
+            animation: [0, 1, 2, 1], frame: 0, x: 50, y: 150, w: 34, h: 24, radius: 12,
             gravity: 0.25, jump: -4.6, speed: 0, rotation: 0,
             
             draw() {
-                let birdRef = this.animation[this.frame];
+                let birdRef = sprites.bird[this.animation[this.frame]];
                 ctx.save();
                 ctx.translate(this.x, this.y);
                 ctx.rotate(this.rotation);
-                ctx.drawImage(sprites.bird[birdRef], -this.w/2, -this.h/2, this.w, this.h);
+                if (birdRef.complete && birdRef.naturalWidth > 0) {
+                    ctx.drawImage(birdRef, -this.w/2, -this.h/2, this.w, this.h);
+                }
                 ctx.restore();
             },
             update() {
@@ -182,7 +167,6 @@
                     this.speed += this.gravity;
                     this.y += this.speed;
 
-                    // Hit the floor
                     if(this.y + this.h/2 >= canvas.height - 112) {
                         this.y = canvas.height - 112 - this.h/2;
                         if(state.current === state.game) {
@@ -191,18 +175,14 @@
                             setTimeout(() => playSfx(audio.die), 300);
                         }
                     }
-                    // Hit the ceiling
                     if(this.y - this.h/2 <= 0) {
                         this.y = this.h/2;
                         this.speed = 0;
                     }
 
-                    // Original Physics Rotation
                     if(this.speed >= this.jump) {
                         this.rotation = Math.min(Math.PI / 2, this.rotation + 4 * RAD);
-                        if(this.rotation === Math.PI / 2) {
-                            this.frame = 1; // Stop flapping when diving
-                        }
+                        if(this.rotation === Math.PI / 2) this.frame = 1;
                     } else {
                         this.rotation = -25 * RAD;
                     }
@@ -212,57 +192,35 @@
                 this.speed = this.jump;
                 playSfx(audio.wing);
             },
-            reset() {
-                this.y = 150;
-                this.speed = 0;
-                this.rotation = 0;
-                this.frame = 0;
-            }
+            reset() { this.y = 150; this.speed = 0; this.rotation = 0; this.frame = 0; }
         };
 
         const pipes = {
             position: [], w: 52, h: 320, gap: 100, dx: 2,
-            
             draw() {
-                for(let i  = 0; i < this.position.length; i++) {
+                for(let i=0; i<this.position.length; i++) {
                     let p = this.position[i];
-                    let topYPos = p.y;
-                    let bottomYPos = p.y + this.h + this.gap;
-                    
-                    // Top pipe (flipped)
                     ctx.save();
-                    ctx.translate(p.x + this.w/2, topYPos + this.h/2);
+                    ctx.translate(p.x + this.w/2, p.y + this.h/2);
                     ctx.scale(1, -1);
-                    ctx.drawImage(sprites.pipeTop, -this.w/2, -this.h/2, this.w, this.h);
+                    if (sprites.pipeTop.complete && sprites.pipeTop.naturalWidth > 0) {
+                        ctx.drawImage(sprites.pipeTop, -this.w/2, -this.h/2, this.w, this.h);
+                    }
                     ctx.restore();
-
-                    // Bottom pipe
-                    ctx.drawImage(sprites.pipeBottom, p.x, bottomYPos, this.w, this.h);
+                    drawImg(sprites.pipeBottom, p.x, p.y + this.h + this.gap, this.w, this.h);
                 }
             },
             update() {
                 if(state.current !== state.game) return;
-
                 if(frames % 100 === 0) {
-                    this.position.push({
-                        x: canvas.width,
-                        y: this.h * (Math.random() - 1) + 50,
-                        passed: false
-                    });
+                    this.position.push({ x: canvas.width, y: this.h * (Math.random() - 1) + 50, passed: false });
                 }
-
-                for(let i = 0; i < this.position.length; i++) {
+                for(let i=0; i<this.position.length; i++) {
                     let p = this.position[i];
                     p.x -= this.dx;
-
-                    // Collision Detection
                     let bottomPipeYPos = p.y + this.h + this.gap;
-                    
-                    // Left, Right, Top, Bottom of bird (tightened hitbox)
-                    let bx = bird.x - bird.radius + 2;
-                    let br = bird.x + bird.radius - 2;
-                    let by = bird.y - bird.radius + 2;
-                    let bb = bird.y + bird.radius - 2;
+                    let bx = bird.x - bird.radius + 2, br = bird.x + bird.radius - 2;
+                    let by = bird.y - bird.radius + 2, bb = bird.y + bird.radius - 2;
 
                     if(br > p.x && bx < p.x + this.w) {
                         if(by < p.y + this.h || bb > bottomPipeYPos) {
@@ -271,8 +229,6 @@
                             setTimeout(() => playSfx(audio.die), 300);
                         }
                     }
-
-                    // Score Update
                     if(p.x + this.w < bird.x - bird.radius && !p.passed) {
                         score.value += 1;
                         p.passed = true;
@@ -281,36 +237,29 @@
                         score.best = Math.max(score.value, score.best);
                         localStorage.setItem('flappy_best', score.best);
                     }
-
-                    // Remove off-screen pipes
                     if(p.x + this.w <= 0) {
                         this.position.shift();
                         i--;
                     }
                 }
             },
-            reset() {
-                this.position = [];
-            }
+            reset() { this.position = []; }
         };
 
         const ui = {
             draw() {
                 if(state.current === state.getReady) {
-                    ctx.drawImage(sprites.getReady, canvas.width/2 - 184/2, canvas.height/2 - 267/2 - 50, 184, 267);
+                    drawImg(sprites.getReady, canvas.width/2 - 184/2, canvas.height/2 - 267/2 - 50, 184, 267);
                     scoreDisplay.innerText = "";
                 }
                 if(state.current === state.over) {
-                    ctx.drawImage(sprites.gameOver, canvas.width/2 - 192/2, 100, 192, 42);
+                    drawImg(sprites.gameOver, canvas.width/2 - 192/2, 100, 192, 42);
                     scoreDisplay.innerText = "";
-                    
-                    // Scoreboard Mockup
                     ctx.fillStyle = '#ded895';
                     ctx.fillRect(canvas.width/2 - 110, 160, 220, 110);
                     ctx.strokeStyle = '#543847';
                     ctx.lineWidth = 4;
                     ctx.strokeRect(canvas.width/2 - 110, 160, 220, 110);
-
                     ctx.fillStyle = '#f48024';
                     ctx.font = '20px "FlappyFont", monospace';
                     ctx.textAlign = 'right';
@@ -327,7 +276,7 @@
 
         // --- MAIN LOOP ---
         function loop() {
-            ctx.fillStyle = '#70c5ce';
+            ctx.fillStyle = '#4ec0ca';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             
             bg.draw();
@@ -348,7 +297,6 @@
         // --- CONTROLS ---
         function handleInput(e) {
             if(e.type === 'keydown' && e.code !== 'Space') return;
-            
             switch(state.current) {
                 case state.getReady:
                     state.current = state.game;
@@ -360,7 +308,6 @@
                     bird.flap();
                     break;
                 case state.over:
-                    let rect = canvas.getBoundingClientRect();
                     bird.reset();
                     pipes.reset();
                     score.value = 0;
@@ -373,8 +320,9 @@
         window.addEventListener('keydown', handleInput);
         canvas.addEventListener('pointerdown', handleInput);
 
-        // Wait for sprite sheet to load before starting
-        sprites.bg.onload = () => loop();
+        // Start immediately. The Safe-Draw function will pop the images in as soon as they bypass Discord's security.
+        loadingText.style.display = 'none';
+        loop();
     </script>
 </body>
 </html>
