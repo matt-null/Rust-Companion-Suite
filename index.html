@@ -2,100 +2,541 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Flappy Bird Original - Fixed Controls</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rust Companion Suite + Flappy Bird</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; user-select: none; }
-        body {
-            background-color: #313338;
-            display: flex; justify-content: center; align-items: center;
-            width: 100vw; height: 100vh; overflow: hidden;
-            font-family: 'Courier New', Courier, monospace;
+        :root {
+            --bg-dark: #121214;
+            --bg-panel: #1e1e24;
+            --bg-card: #282830;
+            --rust-orange: #cd522a;
+            --rust-orange-hover: #e0633b;
+            --rust-yellow: #f4a261;
+            --text-main: #f0f0f0;
+            --text-muted: #a0a0ab;
+            --border-color: #383842;
         }
-        #game-container {
-            position: relative; width: 100%; height: 100%;
-            max-width: 432px; max-height: 768px;
-            background: #4ec0ca; 
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; user-select: none; }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Sidebar Nav */
+        sidebar {
+            width: 220px;
+            background: var(--bg-panel);
+            border-right: 2px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            padding: 15px 10px;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        .brand {
+            font-size: 1.1rem;
+            font-weight: 900;
+            color: var(--rust-orange);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 12px 14px;
+            border-radius: 6px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-btn:hover { background: var(--bg-card); color: var(--text-main); }
+        .nav-btn.active { background: var(--rust-orange); color: #fff; }
+
+        .save-badge {
+            margin-top: auto;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-align: center;
+            padding: 8px;
+            background: var(--bg-card);
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+        }
+
+        /* Main Content Area */
+        main {
+            flex: 1;
+            padding: 25px;
+            overflow-y: auto;
+            display: flex;
+            justify-content: center;
+        }
+
+        .tab-content { display: none; width: 100%; max-width: 900px; margin: 0 auto; }
+        .tab-content.active { display: block; }
+
+        h2 { color: var(--rust-yellow); margin-bottom: 5px; text-transform: uppercase; font-size: 1.5rem; }
+        p.desc { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px; }
+
+        /* Grid & Cards */
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; }
+        .card { background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: 8px; padding: 18px; }
+        .card-header { font-weight: 700; color: var(--rust-orange); margin-bottom: 12px; font-size: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 6px; }
+
+        /* Inputs & Buttons */
+        label { display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 4px; font-weight: 600; }
+        input, select, textarea {
+            width: 100%; background: var(--bg-dark); border: 1px solid var(--border-color);
+            color: var(--text-main); padding: 8px 12px; border-radius: 4px; margin-bottom: 12px; font-size: 0.9rem;
+            user-select: text;
+        }
+        input:focus, select:focus, textarea:focus { outline: 1px solid var(--rust-orange); }
+
+        .btn-action {
+            background: var(--rust-orange); color: #fff; border: none; padding: 10px 16px;
+            border-radius: 4px; font-weight: 700; cursor: pointer; transition: background 0.15s;
+        }
+        .btn-action:hover { background: var(--rust-orange-hover); }
+
+        /* Stat Outputs */
+        .stat-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px dashed var(--border-color); font-size: 0.9rem; }
+        .stat-val { font-weight: 700; color: var(--rust-yellow); }
+
+        /* List Manager */
+        .list-item { display: flex; justify-content: space-between; align-items: center; background: var(--bg-dark); padding: 8px 12px; border-radius: 4px; margin-bottom: 6px; border: 1px solid var(--border-color); }
+        .btn-del { background: #d90429; color: #fff; border: none; padding: 2px 8px; border-radius: 3px; cursor: pointer; font-size: 0.8rem; }
+
+        .timer-display { font-size: 3rem; font-weight: 900; text-align: center; color: var(--rust-yellow); margin: 15px 0; letter-spacing: 2px; }
+
+        /* --- FLAPPY BIRD SPECIFIC STYLES --- */
+        #flappy-container {
+            position: relative;
+            width: 320px;
+            height: 568px;
+            background: #4ec0ca;
             box-shadow: 0 0 20px rgba(0,0,0,0.8);
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 0 auto;
             cursor: pointer;
         }
-        canvas {
+        #flappy-canvas {
             display: block; width: 100%; height: 100%;
             object-fit: cover; image-rendering: pixelated;
         }
-        
-        /* UI Overlays */
-        .ui-overlay {
+        .flappy-ui {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            z-index: 10;
-            background: rgba(0, 0, 0, 0.15);
+            z-index: 10; background: rgba(0, 0, 0, 0.2);
         }
         .hidden { display: none !important; }
-        
-        #live-score {
-            position: absolute; top: 15%; left: 50%; transform: translateX(-50%);
-            font-size: 4rem; color: white;
+        #flappy-live-score {
+            position: absolute; top: 12%; left: 50%; transform: translateX(-50%);
+            font-size: 3.5rem; color: white;
             text-shadow: -3px -3px 0 #543847, 3px -3px 0 #543847, -3px 3px 0 #543847, 3px 3px 0 #543847;
             z-index: 5; font-weight: bold; pointer-events: none;
         }
-
-        .panel {
+        .flappy-panel {
             background: #ded895; border: 4px solid #543847;
-            border-radius: 10px; padding: 20px; width: 80%;
-            text-align: center; box-shadow: 0 8px 0 #543847;
-            margin-bottom: 20px; pointer-events: auto;
+            border-radius: 10px; padding: 15px; width: 85%;
+            text-align: center; box-shadow: 0 6px 0 #543847;
+            margin-bottom: 15px; pointer-events: auto;
         }
-        .panel h1 { color: #f48024; font-size: 2.5rem; text-shadow: 2px 2px 0 #fff; margin-bottom: 10px; }
-        .panel p { font-size: 1.5rem; color: #543847; font-weight: bold; }
-        
-        .btn {
-            background: #f48024; border: 4px solid #fff; color: #fff;
-            padding: 15px 40px; font-size: 1.5rem; font-weight: bold;
-            border-radius: 8px; cursor: pointer; box-shadow: 0 6px 0 #543847;
+        .flappy-panel h1 { color: #f48024; font-size: 2rem; text-shadow: 2px 2px 0 #fff; margin-bottom: 5px; }
+        .flappy-panel p { font-size: 1.1rem; color: #543847; font-weight: bold; }
+        .flappy-btn {
+            background: #f48024; border: 3px solid #fff; color: #fff;
+            padding: 12px 30px; font-size: 1.2rem; font-weight: bold;
+            border-radius: 8px; cursor: pointer; box-shadow: 0 5px 0 #543847;
             text-transform: uppercase; outline: none; pointer-events: auto;
-            transition: background 0.1s;
         }
-        .btn:hover { background: #e07018; }
-        .btn:active { transform: translateY(4px); box-shadow: 0 2px 0 #543847; }
+        .flappy-btn:hover { background: #e07018; }
+        .flappy-btn:active { transform: translateY(4px); box-shadow: 0 1px 0 #543847; }
     </style>
 </head>
 <body>
 
-    <div id="game-container">
-        <div id="live-score" class="hidden">0</div>
+    <sidebar>
+        <div class="brand">☢️ Rust Suite</div>
+        <button class="nav-btn active" data-tab="raid">💥 Raid Calculator</button>
+        <button class="nav-btn" data-tab="recycler">♻️ Recycler & TC</button>
+        <button class="nav-btn" data-tab="timers">⏱️ Crate Timers</button>
+        <button class="nav-btn" data-tab="genes">🌱 Gene Combiner</button>
+        <button class="nav-btn" data-tab="team">📋 Team & Codes</button>
+        <button class="nav-btn" data-tab="flappy">🐤 Flappy Bird</button>
         
-        <div id="start-screen" class="ui-overlay">
-            <div class="panel">
-                <h1>FLAPPY BIRD</h1>
-                <p>Click anywhere or Space to Flap!</p>
+        <div class="save-badge">💾 Auto-Save Active</div>
+    </sidebar>
+
+    <main>
+        <!-- 1. RAID CALCULATOR -->
+        <div id="raid" class="tab-content active">
+            <h2>Raid & Explosives Calculator</h2>
+            <p class="desc">Select target structures to calculate required explosives and raw craft materials.</p>
+
+            <div class="grid">
+                <div class="card">
+                    <div class="card-header">Target Structures</div>
+                    <label>Wooden Door</label><input type="number" id="target-wood-door" min="0" value="0">
+                    <label>Sheet Metal Door</label><input type="number" id="target-sheet-door" min="0" value="0">
+                    <label>Garage Door</label><input type="number" id="target-garage-door" min="0" value="0">
+                    <label>Armored Door</label><input type="number" id="target-armored-door" min="0" value="0">
+                    <label>Stone Wall</label><input type="number" id="target-stone-wall" min="0" value="0">
+                    <label>Sheet Metal Wall</label><input type="number" id="target-metal-wall" min="0" value="0">
+                </div>
+
+                <div class="card">
+                    <div class="card-header">Optimal Cost (C4 / Rockets)</div>
+                    <div class="stat-row"><span>C4 Needed:</span> <span class="stat-val" id="res-c4">0</span></div>
+                    <div class="stat-row"><span>Rockets Needed:</span> <span class="stat-val" id="res-rockets">0</span></div>
+                    <div class="stat-row"><span>Satchels Needed:</span> <span class="stat-val" id="res-satchels">0</span></div>
+                    
+                    <div class="card-header" style="margin-top:20px;">Raw Material Totals</div>
+                    <div class="stat-row"><span>Sulfur:</span> <span class="stat-val" id="raw-sulfur">0</span></div>
+                    <div class="stat-row"><span>Charcoal:</span> <span class="stat-val" id="raw-charcoal">0</span></div>
+                    <div class="stat-row"><span>Metal Frags:</span> <span class="stat-val" id="raw-metal">0</span></div>
+                    <div class="stat-row"><span>Low Grade Fuel:</span> <span class="stat-val" id="raw-lgf">0</span></div>
+                </div>
             </div>
-            <button id="play-btn" class="btn">PLAY</button>
         </div>
 
-        <div id="game-over-screen" class="ui-overlay hidden">
-            <div class="panel">
-                <h1>GAME OVER</h1>
-                <p>SCORE: <span id="final-score">0</span></p>
-                <p>BEST:  <span id="best-score">0</span></p>
+        <!-- 2. RECYCLER & TC -->
+        <div id="recycler" class="tab-content">
+            <h2>Component Recycler Yield</h2>
+            <p class="desc">Calculate resource returns from components.</p>
+
+            <div class="grid">
+                <div class="card">
+                    <div class="card-header">Recycler Input</div>
+                    <label>Gears</label><input type="number" class="rec-in" data-type="gear" value="0">
+                    <label>Metal Pipes</label><input type="number" class="rec-in" data-type="pipe" value="0">
+                    <label>Tech Trash</label><input type="number" class="rec-in" data-type="tech" value="0">
+                    <label>Rifle Bodies</label><input type="number" class="rec-in" data-type="rifle" value="0">
+                    <label>Road Signs</label><input type="number" class="rec-in" data-type="sign" value="0">
+                </div>
+
+                <div class="card">
+                    <div class="card-header">Recycled Yield</div>
+                    <div class="stat-row"><span>Scrap:</span> <span class="stat-val" id="yield-scrap">0</span></div>
+                    <div class="stat-row"><span>High Quality Metal (HQM):</span> <span class="stat-val" id="yield-hqm">0</span></div>
+                    <div class="stat-row"><span>Metal Frags:</span> <span class="stat-val" id="yield-frags">0</span></div>
+                </div>
             </div>
-            <button id="restart-btn" class="btn">OK</button>
         </div>
 
-        <canvas id="canvas" width="288" height="512"></canvas>
-    </div>
+        <!-- 3. MONUMENT TIMERS -->
+        <div id="timers" class="tab-content">
+            <h2>Monument & Crate Timers</h2>
+            <p class="desc">Track locked crate hack countdowns with audible alerts.</p>
+
+            <div class="grid">
+                <div class="card" style="text-align: center;">
+                    <div class="card-header">Oil Rig / Cargo Locked Crate</div>
+                    <div class="timer-display" id="crate-timer">15:00</div>
+                    <button class="btn-action" id="btn-timer-start">Start Hack</button>
+                    <button class="btn-action" id="btn-timer-reset" style="background:#4a4a52;">Reset</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. GENE COMBINER -->
+        <div id="genes" class="tab-content">
+            <h2>Hemp & Tea Gene Calculator</h2>
+            <p class="desc">Cross-breed plant genetics to calculate the dominant outcome.</p>
+
+            <div class="card">
+                <div class="card-header">Enter Cross-Breeding Seeds (5 Genes each)</div>
+                <label>Seed 1</label><input type="text" id="gene1" value="G-Y-G-H-W" maxlength="9">
+                <label>Seed 2</label><input type="text" id="gene2" value="G-Y-Y-H-X" maxlength="9">
+                <label>Seed 3</label><input type="text" id="gene3" value="G-G-Y-H-G" maxlength="9">
+                <button class="btn-action" id="btn-calc-genes">Combine Genetics</button>
+
+                <div class="card-header" style="margin-top: 20px;">Resulting Child Gene</div>
+                <div class="stat-row"><span style="font-size:1.2rem;">Predicted Outcome:</span> <span class="stat-val" id="gene-result" style="font-size:1.2rem;">???</span></div>
+            </div>
+        </div>
+
+        <!-- 5. TEAM & CODES -->
+        <div id="team" class="tab-content">
+            <h2>Team & Base Manager</h2>
+            <p class="desc">Keep track of code lock combinations and base notes. Auto-saved locally.</p>
+
+            <div class="grid">
+                <div class="card">
+                    <div class="card-header">Code Lock Registry</div>
+                    <input type="text" id="code-label" placeholder="Door / Gate Name (e.g., Main Airlock)">
+                    <input type="text" id="code-val" placeholder="Code (e.g., 4921)">
+                    <button class="btn-action" id="btn-add-code">Add Lock Code</button>
+                    <div id="code-list" style="margin-top:15px;"></div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">Team Notes & Wishlist</div>
+                    <textarea id="team-notes" rows="10" placeholder="Type raid targets, upkeep schedules, or base goals here..."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- 6. FLAPPY BIRD EXTRA -->
+        <div id="flappy" class="tab-content" style="text-align: center;">
+            <h2>Flappy Bird Mini-Game</h2>
+            <p class="desc">Kill time while waiting for crafting queues or nighttime!</p>
+
+            <div id="flappy-container">
+                <div id="flappy-live-score" class="hidden">0</div>
+                
+                <div id="flappy-start-screen" class="flappy-ui">
+                    <div class="flappy-panel">
+                        <h1>FLAPPY BIRD</h1>
+                        <p>Click or Space to Flap!</p>
+                    </div>
+                    <button id="flappy-play-btn" class="flappy-btn">PLAY</button>
+                </div>
+
+                <div id="flappy-over-screen" class="flappy-ui hidden">
+                    <div class="flappy-panel">
+                        <h1>GAME OVER</h1>
+                        <p>SCORE: <span id="flappy-final-score">0</span></p>
+                        <p>BEST: <span id="flappy-best-score">0</span></p>
+                    </div>
+                    <button id="flappy-restart-btn" class="flappy-btn">OK</button>
+                </div>
+
+                <canvas id="flappy-canvas" width="288" height="512"></canvas>
+            </div>
+        </div>
+    </main>
 
     <script>
-        const canvas = document.getElementById('canvas');
-        const ctx = canvas.getContext('2d');
-        const liveScore = document.getElementById('live-score');
-        const startScreen = document.getElementById('start-screen');
-        const gameOverScreen = document.getElementById('game-over-screen');
-        const playBtn = document.getElementById('play-btn');
-        const restartBtn = document.getElementById('restart-btn');
-        const container = document.getElementById('game-container');
+        // --- TAB SWITCHING LOGIC ---
+        const navBtns = document.querySelectorAll('.nav-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
 
-        // --- 1. PROCEDURAL PIXEL ART ENGINE ---
+        navBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                navBtns.forEach(b => b.classList.remove('active'));
+                tabContents.forEach(c => c.classList.remove('active'));
+                
+                btn.classList.add('active');
+                document.getElementById(btn.dataset.tab).classList.add('active');
+            });
+        });
+
+        // --- PERSISTENT LOCAL STORAGE ENGINE ---
+        const STORAGE_KEY = 'rust_suite_data_v1';
+        
+        function loadSavedData() {
+            const raw = localStorage.getItem(STORAGE_KEY);
+            if (!raw) return { codes: [], notes: "" };
+            try { return JSON.parse(raw); } catch(e) { return { codes: [], notes: "" }; }
+        }
+
+        function saveData(data) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        }
+
+        let appData = loadSavedData();
+
+        // --- 1. RAID CALCULATOR LOGIC ---
+        const raidInputs = ['wood-door', 'sheet-door', 'garage-door', 'armored-door', 'stone-wall', 'metal-wall'];
+        
+        function calcRaid() {
+            let woodDoors = parseInt(document.getElementById('target-wood-door').value) || 0;
+            let sheetDoors = parseInt(document.getElementById('target-sheet-door').value) || 0;
+            let garageDoors = parseInt(document.getElementById('target-garage-door').value) || 0;
+            let armoredDoors = parseInt(document.getElementById('target-armored-door').value) || 0;
+            let stoneWalls = parseInt(document.getElementById('target-stone-wall').value) || 0;
+            let metalWalls = parseInt(document.getElementById('target-metal-wall').value) || 0;
+
+            let c4 = (armoredDoors * 2) + (metalWalls * 3);
+            let rockets = (garageDoors * 3) + (stoneWalls * 4);
+            let satchels = (woodDoors * 2) + (sheetDoors * 4);
+
+            let sulfur = (c4 * 2200) + (rockets * 1400) + (satchels * 480);
+            let charcoal = (c4 * 3000) + (rockets * 1950) + (satchels * 720);
+            let metal = (c4 * 200) + (rockets * 100) + (satchels * 80);
+            let lgf = (c4 * 60) + (rockets * 30);
+
+            document.getElementById('res-c4').innerText = c4;
+            document.getElementById('res-rockets').innerText = rockets;
+            document.getElementById('res-satchels').innerText = satchels;
+
+            document.getElementById('raw-sulfur').innerText = sulfur.toLocaleString();
+            document.getElementById('raw-charcoal').innerText = charcoal.toLocaleString();
+            document.getElementById('raw-metal').innerText = metal.toLocaleString();
+            document.getElementById('raw-lgf').innerText = lgf.toLocaleString();
+        }
+
+        raidInputs.forEach(id => {
+            document.getElementById(`target-${id}`).addEventListener('input', calcRaid);
+        });
+
+        // --- 2. RECYCLER LOGIC ---
+        const recInputs = document.querySelectorAll('.rec-in');
+        function calcRecycler() {
+            let scrap = 0, hqm = 0, frags = 0;
+            recInputs.forEach(i => {
+                let qty = parseInt(i.value) || 0;
+                let type = i.dataset.type;
+                if (type === 'gear') { scrap += qty * 10; frags += qty * 13; }
+                if (type === 'pipe') { scrap += qty * 5; hqm += qty * 1; }
+                if (type === 'tech') { scrap += qty * 20; hqm += qty * 1; }
+                if (type === 'rifle') { scrap += qty * 15; hqm += qty * 2; }
+                if (type === 'sign') { scrap += qty * 5; hqm += qty * 1; }
+            });
+
+            document.getElementById('yield-scrap').innerText = scrap;
+            document.getElementById('yield-hqm').innerText = hqm;
+            document.getElementById('yield-frags').innerText = frags;
+        }
+        recInputs.forEach(i => i.addEventListener('input', calcRecycler));
+
+        // --- 3. TIMERS & AUDIO NOTIFICATION ---
+        let timerInterval = null;
+        let timeLeft = 900; 
+
+        const timerDisplay = document.getElementById('crate-timer');
+        const btnTimerStart = document.getElementById('btn-timer-start');
+        const btnTimerReset = document.getElementById('btn-timer-reset');
+
+        function playBeep() {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                osc.type = 'square';
+                osc.frequency.setValueAtTime(800, ctx.currentTime);
+                osc.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.5);
+            } catch(e) {}
+        }
+
+        function updateTimerUI() {
+            let m = Math.floor(timeLeft / 60);
+            let s = timeLeft % 60;
+            timerDisplay.innerText = `${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
+        }
+
+        btnTimerStart.addEventListener('click', () => {
+            if (timerInterval) return;
+            timerInterval = setInterval(() => {
+                if (timeLeft > 0) {
+                    timeLeft--;
+                    updateTimerUI();
+                } else {
+                    clearInterval(timerInterval);
+                    timerInterval = null;
+                    playBeep();
+                    alert('Crate unlocked!');
+                }
+            }, 1000);
+        });
+
+        btnTimerReset.addEventListener('click', () => {
+            clearInterval(timerInterval);
+            timerInterval = null;
+            timeLeft = 900;
+            updateTimerUI();
+        });
+
+        // --- 4. GENE COMBINER LOGIC ---
+        document.getElementById('btn-calc-genes').addEventListener('click', () => {
+            const g1 = document.getElementById('gene1').value.replace(/-/g, '').toUpperCase();
+            const g2 = document.getElementById('gene2').value.replace(/-/g, '').toUpperCase();
+            const g3 = document.getElementById('gene3').value.replace(/-/g, '').toUpperCase();
+
+            if (g1.length < 5 || g2.length < 5 || g3.length < 5) {
+                document.getElementById('gene-result').innerText = "Invalid Gene Length";
+                return;
+            }
+
+            let result = "";
+            for (let i = 0; i < 5; i++) {
+                let pool = [g1[i], g2[i], g3[i]];
+                let counts = {};
+                pool.forEach(x => counts[x] = (counts[x] || 0) + 1);
+                
+                let winner = pool[0];
+                let max = 0;
+                for (let k in counts) {
+                    if (counts[k] > max) { max = counts[k]; winner = k; }
+                }
+                result += winner + (i < 4 ? "-" : "");
+            }
+            document.getElementById('gene-result').innerText = result;
+        });
+
+        // --- 5. TEAM MANAGER ---
+        const codeLabel = document.getElementById('code-label');
+        const codeVal = document.getElementById('code-val');
+        const codeList = document.getElementById('code-list');
+        const teamNotes = document.getElementById('team-notes');
+
+        function renderCodes() {
+            codeList.innerHTML = '';
+            appData.codes.forEach((item, index) => {
+                let div = document.createElement('div');
+                div.className = 'list-item';
+                div.innerHTML = `
+                    <span><strong>${item.label}:</strong> <span style="color:var(--rust-yellow);">${item.val}</span></span>
+                    <button class="btn-del" onclick="deleteCode(${index})">X</button>
+                `;
+                codeList.appendChild(div);
+            });
+        }
+
+        document.getElementById('btn-add-code').addEventListener('click', () => {
+            if (!codeLabel.value || !codeVal.value) return;
+            appData.codes.push({ label: codeLabel.value, val: codeVal.value });
+            codeLabel.value = ''; codeVal.value = '';
+            saveData(appData);
+            renderCodes();
+        });
+
+        window.deleteCode = function(index) {
+            appData.codes.splice(index, 1);
+            saveData(appData);
+            renderCodes();
+        };
+
+        teamNotes.value = appData.notes || '';
+        teamNotes.addEventListener('input', () => {
+            appData.notes = teamNotes.value;
+            saveData(appData);
+        });
+
+        renderCodes();
+
+        // --- 6. FLAPPY BIRD ENGINE (PROCEDURAL & DISCORD SAFE) ---
+        const fCanvas = document.getElementById('flappy-canvas');
+        const fCtx = fCanvas.getContext('2d');
+        const fLiveScore = document.getElementById('flappy-live-score');
+        const fStartScreen = document.getElementById('flappy-start-screen');
+        const fOverScreen = document.getElementById('flappy-over-screen');
+        const fPlayBtn = document.getElementById('flappy-play-btn');
+        const fRestartBtn = document.getElementById('flappy-restart-btn');
+        const fContainer = document.getElementById('flappy-container');
+
         function buildBird(artData) {
             const scale = 2.5; 
             const c = document.createElement('canvas');
@@ -116,92 +557,71 @@
             return c;
         }
 
-        const birdUp = [
-            "     111111      ", "   113333331     ", "  13333333331    ", " 133333333333111 ",
-            " 1333333333312221", " 1333333333312121", " 1333333333312221", " 133333333331111 ",
-            "  133311111155551", " 1111166661444441", " 166666661444441 ", "  1111111111111  "
-        ];
-        const birdMid = [
-            "     111111      ", "   113333331     ", "  13333333331    ", " 133333333333111 ",
-            " 1333333333312221", " 1331113333312121", " 1166661333312221", " 166666613331111 ",
-            "  111111333155551", "   13333331444441", "    111111444441 ", "          11111  "
-        ];
-        const birdDown = [
-            "     111111      ", "   113333331     ", "  13333333331    ", " 133333333333111 ",
-            " 1333333333312221", " 1333333333312121", " 1111133333312221", " 166661333331111 ",
-            "  166661333155551", "   11113331444441", "    111111444441 ", "          11111  "
-        ];
+        const birdUp = ["     111111      ", "   113333331     ", "  13333333331    ", " 133333333333111 ", " 1333333333312221", " 1333333333312121", " 1333333333312221", " 133333333331111 ", "  133311111155551", " 1111166661444441", " 166666661444441 ", "  1111111111111  "];
+        const birdMid = ["     111111      ", "   113333331     ", "  13333333331    ", " 133333333333111 ", " 1333333333312221", " 1331113333312121", " 1166661333312221", " 166666613331111 ", "  111111333155551", "   13333331444441", "    111111444441 ", "          11111  "];
+        const birdDown = ["     111111      ", "   113333331     ", "  13333333331    ", " 133333333333111 ", " 1333333333312221", " 1333333333312121", " 1111133333312221", " 166661333331111 ", "  166661333155551", "   11113331444441", "    111111444441 ", "          11111  "];
 
-        const birdSprites = [buildBird(birdUp), buildBird(birdMid), buildBird(birdDown)];
+        const fBirdSprites = [buildBird(birdUp), buildBird(birdMid), buildBird(birdDown)];
 
-        // --- 2. SYNTHESIZED RETRO AUDIO ENGINE ---
-        let audioCtx = null;
-        function playSfx(type) {
+        let fAudioCtx = null;
+        function playFlappySound(type) {
             try {
-                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                if (audioCtx.state === 'suspended') audioCtx.resume();
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.connect(gain); gain.connect(audioCtx.destination);
-
-                const t = audioCtx.currentTime;
+                if (!fAudioCtx) fAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                if (fAudioCtx.state === 'suspended') fAudioCtx.resume();
+                const osc = fAudioCtx.createOscillator();
+                const gain = fAudioCtx.createGain();
+                osc.connect(gain); gain.connect(fAudioCtx.destination);
+                const t = fAudioCtx.currentTime;
                 if (type === 'flap') {
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(300, t); osc.frequency.exponentialRampToValueAtTime(600, t + 0.1);
+                    osc.type = 'sine'; osc.frequency.setValueAtTime(300, t); osc.frequency.exponentialRampToValueAtTime(600, t + 0.1);
                     gain.gain.setValueAtTime(0.1, t); gain.gain.exponentialRampToValueAtTime(0.01, t + 0.1);
                     osc.start(t); osc.stop(t + 0.1);
                 } else if (type === 'score') {
-                    osc.type = 'square';
-                    osc.frequency.setValueAtTime(800, t); osc.frequency.setValueAtTime(1200, t + 0.1);
+                    osc.type = 'square'; osc.frequency.setValueAtTime(800, t); osc.frequency.setValueAtTime(1200, t + 0.1);
                     gain.gain.setValueAtTime(0.05, t); gain.gain.linearRampToValueAtTime(0, t + 0.3);
                     osc.start(t); osc.stop(t + 0.3);
                 } else if (type === 'hit') {
-                    osc.type = 'sawtooth';
-                    osc.frequency.setValueAtTime(150, t); osc.frequency.exponentialRampToValueAtTime(40, t + 0.2);
+                    osc.type = 'sawtooth'; osc.frequency.setValueAtTime(150, t); osc.frequency.exponentialRampToValueAtTime(40, t + 0.2);
                     gain.gain.setValueAtTime(0.2, t); gain.gain.linearRampToValueAtTime(0.01, t + 0.2);
                     osc.start(t); osc.stop(t + 0.2);
                 }
             } catch(e) {}
         }
 
-        // --- 3. GAME VARIABLES ---
         const RAD = Math.PI / 180;
-        const state = { current: 0, getReady: 0, game: 1, over: 2 };
-        let score = { best: localStorage.getItem('fb_best') || 0, value: 0 };
-        let frames = 0; let groundX = 0;
+        const fState = { current: 0, getReady: 0, game: 1, over: 2 };
+        let fScore = { best: localStorage.getItem('fb_best') || 0, value: 0 };
+        let fFrames = 0; let fGroundX = 0;
 
-        // --- 4. GAME OBJECTS ---
-        const bird = {
+        const fBird = {
             frame: 0, x: 60, y: 150, w: 34, h: 24, radius: 12,
             gravity: 0.25, jump: -4.6, speed: 0, rotation: 0,
             draw() {
-                let s = birdSprites[this.frame];
-                ctx.save();
-                ctx.translate(this.x, this.y);
-                ctx.rotate(this.rotation);
-                ctx.drawImage(s, -s.width/2, -s.height/2);
-                ctx.restore();
+                let s = fBirdSprites[this.frame];
+                fCtx.save();
+                fCtx.translate(this.x, this.y);
+                fCtx.rotate(this.rotation);
+                fCtx.drawImage(s, -s.width/2, -s.height/2);
+                fCtx.restore();
             },
             update() {
-                if(state.current === state.getReady) {
-                    this.y = 150 + Math.cos(frames * 0.1) * 5; 
-                    this.frame = (frames % 20 < 10) ? 0 : 1;
+                if(fState.current === fState.getReady) {
+                    this.y = 150 + Math.cos(fFrames * 0.1) * 5; 
+                    this.frame = (fFrames % 20 < 10) ? 0 : 1;
                 } else {
-                    this.frame += frames % 5 === 0 ? 1 : 0;
-                    this.frame %= birdSprites.length;
+                    this.frame += fFrames % 5 === 0 ? 1 : 0;
+                    this.frame %= fBirdSprites.length;
                     
                     this.speed += this.gravity;
                     this.y += this.speed;
 
-                    // Floor Hit
-                    if(this.y + this.h/2 >= canvas.height - 112) {
-                        this.y = canvas.height - 112 - this.h/2;
-                        if(state.current === state.game) {
-                            state.current = state.over;
-                            playSfx('hit'); triggerGameOver();
+                    if(this.y + this.h/2 >= fCanvas.height - 112) {
+                        this.y = fCanvas.height - 112 - this.h/2;
+                        if(fState.current === fState.game) {
+                            fState.current = fState.over;
+                            playFlappySound('hit'); triggerFlappyOver();
                         }
                     }
-                    // Ceiling Hit
                     if(this.y - this.h/2 <= 0) { this.y = this.h/2; this.speed = 0; }
 
                     if(this.speed >= this.jump) {
@@ -212,149 +632,147 @@
                     }
                 }
             },
-            flap() { this.speed = this.jump; playSfx('flap'); }
+            flap() { this.speed = this.jump; playFlappySound('flap'); }
         };
 
-        const pipes = {
+        const fPipes = {
             items: [], w: 60, gap: 120, dx: 2,
             draw() {
                 for(let p of this.items) {
                     let bY = p.top + this.gap;
-                    let bH = canvas.height - 112 - bY;
+                    let bH = fCanvas.height - 112 - bY;
 
-                    ctx.fillStyle = '#75c044'; ctx.strokeStyle = '#543847'; ctx.lineWidth = 4;
-                    // Top
-                    ctx.fillRect(p.x, 0, this.w, p.top); ctx.strokeRect(p.x, 0, this.w, p.top);
-                    ctx.fillRect(p.x - 4, p.top - 24, this.w + 8, 24); ctx.strokeRect(p.x - 4, p.top - 24, this.w + 8, 24);
-                    // Bottom
-                    ctx.fillRect(p.x, bY, this.w, bH); ctx.strokeRect(p.x, bY, this.w, bH);
-                    ctx.fillRect(p.x - 4, bY, this.w + 8, 24); ctx.strokeRect(p.x - 4, bY, this.w + 8, 24);
+                    fCtx.fillStyle = '#75c044'; fCtx.strokeStyle = '#543847'; fCtx.lineWidth = 4;
+                    fCtx.fillRect(p.x, 0, this.w, p.top); fCtx.strokeRect(p.x, 0, this.w, p.top);
+                    fCtx.fillRect(p.x - 4, p.top - 24, this.w + 8, 24); fCtx.strokeRect(p.x - 4, p.top - 24, this.w + 8, 24);
                     
-                    // Light Highlights
-                    ctx.fillStyle = '#9ce659';
-                    ctx.fillRect(p.x + 4, 0, 4, p.top - 24); ctx.fillRect(p.x, p.top - 20, 4, 16); 
-                    ctx.fillRect(p.x + 4, bY + 24, 4, bH - 24); ctx.fillRect(p.x, bY + 4, 4, 16); 
+                    fCtx.fillRect(p.x, bY, this.w, bH); fCtx.strokeRect(p.x, bY, this.w, bH);
+                    fCtx.fillRect(p.x - 4, bY, this.w + 8, 24); fCtx.strokeRect(p.x - 4, bY, this.w + 8, 24);
+                    
+                    fCtx.fillStyle = '#9ce659';
+                    fCtx.fillRect(p.x + 4, 0, 4, p.top - 24); fCtx.fillRect(p.x, p.top - 20, 4, 16); 
+                    fCtx.fillRect(p.x + 4, bY + 24, 4, bH - 24); fCtx.fillRect(p.x, bY + 4, 4, 16); 
                 }
             },
             update() {
-                if(state.current !== state.game) return;
-                if(frames % 100 === 0) {
-                    this.items.push({ x: canvas.width, top: Math.random()*(canvas.height - 112 - this.gap - 100) + 50, passed: false });
+                if(fState.current !== fState.game) return;
+                if(fFrames % 100 === 0) {
+                    this.items.push({ x: fCanvas.width, top: Math.random()*(fCanvas.height - 112 - this.gap - 100) + 50, passed: false });
                 }
                 for(let i=0; i<this.items.length; i++) {
                     let p = this.items[i];
                     p.x -= this.dx;
 
                     let bY = p.top + this.gap;
-                    let bx = bird.x - bird.radius + 2, br = bird.x + bird.radius - 2;
-                    let by = bird.y - bird.radius + 2, bb = bird.y + bird.radius - 2;
+                    let bx = fBird.x - fBird.radius + 2, br = fBird.x + fBird.radius - 2;
+                    let by = fBird.y - fBird.radius + 2, bb = fBird.y + fBird.radius - 2;
 
                     if(br > p.x && bx < p.x + this.w) {
                         if(by < p.top || bb > bY) {
-                            state.current = state.over;
-                            playSfx('hit'); triggerGameOver();
+                            fState.current = fState.over;
+                            playFlappySound('hit'); triggerFlappyOver();
                         }
                     }
 
-                    if(p.x + this.w < bird.x - bird.radius && !p.passed) {
-                        score.value += 1; p.passed = true;
-                        playSfx('score');
-                        liveScore.innerText = score.value;
+                    if(p.x + this.w < fBird.x - fBird.radius && !p.passed) {
+                        fScore.value += 1; p.passed = true;
+                        playFlappySound('score');
+                        fLiveScore.innerText = fScore.value;
                     }
                     if(p.x + this.w <= 0) { this.items.shift(); i--; }
                 }
             }
         };
 
-        function drawBackground() {
-            ctx.fillStyle = '#4ec0ca'; ctx.fillRect(0, 0, canvas.width, canvas.height);
-            let y = canvas.height - 112;
+        function drawFlappyBg() {
+            fCtx.fillStyle = '#4ec0ca'; fCtx.fillRect(0, 0, fCanvas.width, fCanvas.height);
+            let y = fCanvas.height - 112;
             
-            // Skyline
-            ctx.fillStyle = '#b2dfa6';
-            let bgX = (groundX * 0.3) % 200;
-            for(let i=0; i<4; i++) { ctx.fillRect(bgX + i*160, y - 80, 40, 80); }
+            fCtx.fillStyle = '#b2dfa6';
+            let bgX = (fGroundX * 0.3) % 200;
+            for(let i=0; i<4; i++) { fCtx.fillRect(bgX + i*160, y - 80, 40, 80); }
             
-            ctx.fillStyle = '#d2f3c7';
-            let bgX2 = (groundX * 0.5) % 200;
+            fCtx.fillStyle = '#d2f3c7';
+            let bgX2 = (fGroundX * 0.5) % 200;
             for(let i=0; i<4; i++) {
-                ctx.fillRect(bgX2 + i*150 - 40, y - 60, 50, 60);
-                ctx.fillRect(bgX2 + i*150, y - 40, 40, 40);
+                fCtx.fillRect(bgX2 + i*150 - 40, y - 60, 50, 60);
+                fCtx.fillRect(bgX2 + i*150, y - 40, 40, 40);
             }
 
-            // Ground
-            ctx.fillStyle = '#ded895'; ctx.fillRect(0, y, canvas.width, 112);
-            ctx.fillStyle = '#73c23e'; ctx.fillRect(0, y, canvas.width, 24);
-            ctx.strokeStyle = '#543847'; ctx.lineWidth = 4; ctx.strokeRect(0, y, canvas.width, 24);
+            fCtx.fillStyle = '#ded895'; fCtx.fillRect(0, y, fCanvas.width, 112);
+            fCtx.fillStyle = '#73c23e'; fCtx.fillRect(0, y, fCanvas.width, 24);
+            fCtx.strokeStyle = '#543847'; fCtx.lineWidth = 4; fCtx.strokeRect(0, y, fCanvas.width, 24);
             
-            ctx.strokeStyle = '#4f9421'; ctx.lineWidth = 3;
+            fCtx.strokeStyle = '#4f9421'; fCtx.lineWidth = 3;
             for(let i = 0; i < 30; i++) {
-                let lx = (groundX + i * 20) % (canvas.width + 40) - 20;
-                ctx.beginPath(); ctx.moveTo(lx, y + 4); ctx.lineTo(lx - 12, y + 20); ctx.stroke();
+                let lx = (fGroundX + i * 20) % (fCanvas.width + 40) - 20;
+                fCtx.beginPath(); fCtx.moveTo(lx, y + 4); fCtx.lineTo(lx - 12, y + 20); fCtx.stroke();
             }
         }
 
-        // --- 5. LOGIC & EVENT LISTENERS ---
-        function startGame() {
-            if(state.current === state.game) return;
-            state.current = state.game;
-            startScreen.classList.add('hidden');
-            liveScore.classList.remove('hidden');
-            bird.flap();
+        function startFlappyGame() {
+            if(fState.current === fState.game) return;
+            fState.current = fState.game;
+            fStartScreen.classList.add('hidden');
+            fLiveScore.classList.remove('hidden');
+            fBird.flap();
         }
 
-        function triggerGameOver() {
-            liveScore.classList.add('hidden');
-            score.best = Math.max(score.value, score.best);
-            localStorage.setItem('fb_best', score.best);
-            document.getElementById('final-score').innerText = score.value;
-            document.getElementById('best-score').innerText = score.best;
-            gameOverScreen.classList.remove('hidden');
+        function triggerFlappyOver() {
+            fLiveScore.classList.add('hidden');
+            fScore.best = Math.max(fScore.value, fScore.best);
+            localStorage.setItem('fb_best', fScore.best);
+            document.getElementById('flappy-final-score').innerText = fScore.value;
+            document.getElementById('flappy-best-score').innerText = fScore.best;
+            fOverScreen.classList.remove('hidden');
         }
 
-        function resetGame() {
-            bird.y = 150; bird.speed = 0; bird.rotation = 0; pipes.items = []; score.value = 0;
-            liveScore.innerText = 0;
-            gameOverScreen.classList.add('hidden');
-            startScreen.classList.remove('hidden');
-            state.current = state.getReady;
+        function resetFlappyGame() {
+            fBird.y = 150; fBird.speed = 0; fBird.rotation = 0; fPipes.items = []; fScore.value = 0;
+            fLiveScore.innerText = 0;
+            fOverScreen.classList.add('hidden');
+            fStartScreen.classList.remove('hidden');
+            fState.current = fState.getReady;
         }
 
-        // Direct Event Listeners for Discord Sandbox Compatibility
-        playBtn.addEventListener('click', (e) => { e.stopPropagation(); startGame(); });
-        playBtn.addEventListener('pointerdown', (e) => e.stopPropagation());
+        fPlayBtn.addEventListener('click', (e) => { e.stopPropagation(); startFlappyGame(); });
+        fPlayBtn.addEventListener('pointerdown', (e) => e.stopPropagation());
 
-        restartBtn.addEventListener('click', (e) => { e.stopPropagation(); resetGame(); });
-        restartBtn.addEventListener('pointerdown', (e) => e.stopPropagation());
+        fRestartBtn.addEventListener('click', (e) => { e.stopPropagation(); resetFlappyGame(); });
+        fRestartBtn.addEventListener('pointerdown', (e) => e.stopPropagation());
 
-        container.addEventListener('pointerdown', (e) => {
-            if (state.current === state.getReady) startGame();
-            else if (state.current === state.game) bird.flap();
+        fContainer.addEventListener('pointerdown', (e) => {
+            if (fState.current === fState.getReady) startFlappyGame();
+            else if (fState.current === fState.game) fBird.flap();
         });
 
         window.addEventListener('keydown', (e) => {
-            if (e.code === 'Space') {
+            // Only trigger space flap if Flappy tab is active AND not typing in textboxes
+            const isFlappyActive = document.getElementById('flappy').classList.contains('active');
+            const isTyping = ['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName);
+
+            if (e.code === 'Space' && isFlappyActive && !isTyping) {
                 e.preventDefault();
-                if (state.current === state.getReady) startGame();
-                else if (state.current === state.game) bird.flap();
-                else if (state.current === state.over) resetGame();
+                if (fState.current === fState.getReady) startFlappyGame();
+                else if (fState.current === fState.game) fBird.flap();
+                else if (fState.current === fState.over) resetFlappyGame();
             }
         });
 
-        function loop() {
-            drawBackground();
-            pipes.draw();
-            bird.draw();
+        function flappyLoop() {
+            drawFlappyBg();
+            fPipes.draw();
+            fBird.draw();
 
-            if(state.current !== state.over) groundX -= 2;
-            bird.update();
-            pipes.update();
+            if(fState.current !== fState.over) fGroundX -= 2;
+            fBird.update();
+            fPipes.update();
 
-            frames++;
-            requestAnimationFrame(loop);
+            fFrames++;
+            requestAnimationFrame(flappyLoop);
         }
 
-        loop();
+        flappyLoop();
     </script>
 </body>
 </html>
