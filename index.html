@@ -3,27 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rust Island - Beach Companion Suite</title>
-    <!-- SF Pro / Apple-style Typography -->
+    <title>Rust Island - Ultimate Companion Suite</title>
+    <!-- Google Fonts: Plus Jakarta Sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* Default Apple Liquid Glass Light Theme */
+            /* Default Apple/Rust Light Theme */
             --bg-base: #f5f5f7;
             --glass-panel: rgba(255, 255, 255, 0.75);
             --glass-border: rgba(255, 255, 255, 0.6);
             --glass-shadow: 0 10px 30px 0 rgba(0, 0, 0, 0.05);
-            --glass-dropdown: rgba(255, 255, 255, 0.85);
+            --glass-dropdown: rgba(255, 255, 255, 0.9);
             
-            --apple-blue: #0071e3;
-            --apple-blue-hover: #0077ed;
-            --apple-orange: #f56300;
-            --apple-orange-glow: rgba(245, 99, 0, 0.15);
+            --rust-orange: #d97706;
+            --rust-orange-hover: #b45309;
+            --rust-orange-glow: rgba(217, 119, 6, 0.15);
+            --apple-blue: #0284c7;
             
             --text-main: #1d1d1f;
-            --text-muted: #86868b;
+            --text-muted: #6b7280;
             --border-subtle: rgba(0, 0, 0, 0.08);
             --input-bg: rgba(255, 255, 255, 0.6);
             --input-focus-bg: #ffffff;
@@ -36,26 +36,26 @@
             --radius-sm: 8px;
         }
 
-        /* Dark Theme Apple Variables */
+        /* Post-Apocalyptic Rust Dark Theme */
         [data-theme="dark"] {
-            --bg-base: #000000;
-            --glass-panel: rgba(30, 30, 32, 0.75);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --glass-shadow: 0 10px 30px 0 rgba(0, 0, 0, 0.3);
-            --glass-dropdown: rgba(35, 35, 38, 0.85);
+            --bg-base: #121214;
+            --glass-panel: rgba(24, 24, 27, 0.8);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-shadow: 0 10px 30px 0 rgba(0, 0, 0, 0.4);
+            --glass-dropdown: rgba(30, 30, 35, 0.95);
             
-            --apple-blue: #0a84ff;
-            --apple-blue-hover: #409cff;
-            --apple-orange: #ff9f0a;
-            --apple-orange-glow: rgba(255, 159, 10, 0.15);
+            --rust-orange: #f59e0b;
+            --rust-orange-hover: #d97706;
+            --rust-orange-glow: rgba(245, 158, 11, 0.2);
+            --apple-blue: #38bdf8;
             
-            --text-main: #f5f5f7;
-            --text-muted: #a1a1a6;
-            --border-subtle: rgba(255, 255, 255, 0.12);
-            --input-bg: rgba(255, 255, 255, 0.06);
-            --input-focus-bg: rgba(255, 255, 255, 0.1);
-            --list-item-bg: rgba(255, 255, 255, 0.04);
-            --topbar-bg: rgba(20, 20, 22, 0.8);
+            --text-main: #f4f4f5;
+            --text-muted: #a1a1aa;
+            --border-subtle: rgba(255, 255, 255, 0.1);
+            --input-bg: rgba(255, 255, 255, 0.05);
+            --input-focus-bg: rgba(255, 255, 255, 0.09);
+            --list-item-bg: rgba(255, 255, 255, 0.03);
+            --topbar-bg: rgba(18, 18, 20, 0.85);
         }
 
         * {
@@ -70,14 +70,14 @@
         /* Smooth Custom Scrollbar */
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(128, 128, 128, 0.25); border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: rgba(128, 128, 128, 0.4); }
+        ::-webkit-scrollbar-thumb { background: rgba(128, 128, 128, 0.3); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(128, 128, 128, 0.5); }
 
         body {
             background-color: var(--bg-base);
             background-image: 
-                radial-gradient(at 10% 10%, rgba(0, 113, 227, 0.08) 0px, transparent 50%),
-                radial-gradient(at 90% 90%, rgba(245, 158, 11, 0.06) 0px, transparent 50%);
+                radial-gradient(at 10% 10%, rgba(217, 119, 6, 0.07) 0px, transparent 50%),
+                radial-gradient(at 90% 90%, rgba(2, 132, 199, 0.05) 0px, transparent 50%);
             color: var(--text-main);
             height: 100vh;
             display: flex;
@@ -85,15 +85,9 @@
             overflow: hidden;
         }
 
-        [data-theme="dark"] body {
-            background-image: 
-                radial-gradient(at 10% 10%, rgba(10, 132, 255, 0.12) 0px, transparent 50%),
-                radial-gradient(at 90% 90%, rgba(255, 159, 10, 0.08) 0px, transparent 50%);
-        }
-
-        /* --- APPLE TOP MENUBAR --- */
+        /* --- TOP MENUBAR --- */
         header.top-bar {
-            height: 48px;
+            height: 52px;
             background: var(--topbar-bg);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
@@ -101,7 +95,7 @@
             display: flex;
             align-items: center;
             padding: 0 20px;
-            gap: 24px;
+            gap: 20px;
             position: relative;
             z-index: 100;
         }
@@ -111,7 +105,7 @@
             align-items: center;
             gap: 8px;
             font-weight: 700;
-            font-size: 0.95rem;
+            font-size: 1rem;
             color: var(--text-main);
             cursor: pointer;
         }
@@ -125,6 +119,7 @@
             align-items: center;
             gap: 4px;
             height: 100%;
+            overflow-x: auto;
         }
 
         .menu-item {
@@ -138,34 +133,36 @@
             background: transparent;
             border: none;
             padding: 0 12px;
-            height: 32px;
+            height: 36px;
             border-radius: var(--radius-sm);
             font-size: 0.85rem;
-            font-weight: 500;
+            font-weight: 600;
             color: var(--text-main);
             cursor: pointer;
-            transition: background 0.15s;
+            transition: background 0.15s, color 0.15s;
             display: flex;
             align-items: center;
             gap: 4px;
+            white-space: nowrap;
         }
 
         .menu-btn:hover, .menu-btn.active {
-            background: rgba(128, 128, 128, 0.15);
+            background: var(--rust-orange-glow);
+            color: var(--rust-orange);
         }
 
-        /* Dropdown Menu Container */
+        /* Dropdown Menu */
         .dropdown {
             position: absolute;
-            top: 42px;
+            top: 46px;
             left: 0;
             background: var(--glass-dropdown);
             backdrop-filter: blur(25px);
             -webkit-backdrop-filter: blur(25px);
             border: 1px solid var(--border-subtle);
             border-radius: var(--radius-md);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-            min-width: 180px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            min-width: 200px;
             padding: 6px;
             display: none;
             flex-direction: column;
@@ -186,7 +183,7 @@
         .dropdown-item {
             background: transparent;
             border: none;
-            padding: 8px 12px;
+            padding: 9px 12px;
             border-radius: 6px;
             text-align: left;
             font-size: 0.85rem;
@@ -197,7 +194,7 @@
         }
 
         .dropdown-item:hover {
-            background: var(--apple-blue);
+            background: var(--rust-orange);
             color: #ffffff;
         }
 
@@ -212,28 +209,29 @@
             background: var(--input-bg);
             border: 1px solid var(--border-subtle);
             color: var(--text-main);
-            width: 32px;
-            height: 32px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            font-size: 0.95rem;
+            font-size: 1rem;
             transition: all 0.2s;
         }
 
         .theme-toggle-btn:hover {
-            background: rgba(128, 128, 128, 0.2);
+            background: var(--rust-orange-glow);
+            border-color: var(--rust-orange);
             transform: scale(1.05);
         }
 
         .status-pill {
             font-size: 0.75rem;
-            font-weight: 500;
-            color: #34c759;
-            background: rgba(52, 199, 89, 0.12);
-            padding: 4px 10px;
+            font-weight: 600;
+            color: #10b981;
+            background: rgba(16, 185, 129, 0.12);
+            padding: 5px 12px;
             border-radius: 20px;
             display: flex;
             align-items: center;
@@ -243,14 +241,15 @@
         .status-dot {
             width: 6px;
             height: 6px;
-            background-color: #34c759;
+            background-color: #10b981;
             border-radius: 50%;
+            box-shadow: 0 0 8px #10b981;
         }
 
         /* --- MAIN CONTENT AREA --- */
         main {
             flex: 1;
-            padding: 32px 40px;
+            padding: 28px 36px;
             overflow-y: auto;
             display: flex;
             justify-content: center;
@@ -259,7 +258,7 @@
         .tab-content {
             display: none;
             width: 100%;
-            max-width: 960px;
+            max-width: 1050px;
             animation: fadeIn 0.25s ease-out;
         }
 
@@ -300,30 +299,30 @@
             border-radius: var(--radius-xl);
             padding: 24px;
             box-shadow: var(--glass-shadow);
-            transition: transform 0.2s, box-shadow 0.2s, background 0.3s;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
 
         .card:hover {
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
         }
 
         .card-header {
-            font-weight: 600;
+            font-weight: 700;
             color: var(--text-main);
             margin-bottom: 16px;
-            font-size: 1rem;
+            font-size: 1.05rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
         }
 
-        /* Modern Apple Form Fields */
+        /* Form Elements */
         label {
             display: block;
             font-size: 0.75rem;
             color: var(--text-muted);
             margin-bottom: 6px;
-            font-weight: 600;
+            font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
@@ -343,23 +342,23 @@
 
         input:focus, select:focus, textarea:focus {
             outline: none;
-            border-color: var(--apple-blue);
+            border-color: var(--rust-orange);
             background: var(--input-focus-bg);
-            box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.2);
+            box-shadow: 0 0 0 4px var(--rust-orange-glow);
         }
 
-        /* Apple Style Buttons */
+        /* Action Buttons */
         .btn-action {
-            background: var(--apple-blue);
+            background: var(--rust-orange);
             color: #ffffff;
             border: none;
             padding: 10px 20px;
             border-radius: var(--radius-md);
-            font-weight: 600;
+            font-weight: 700;
             font-size: 0.9rem;
             cursor: pointer;
             transition: all 0.2s;
-            box-shadow: 0 4px 12px rgba(0, 113, 227, 0.25);
+            box-shadow: 0 4px 12px rgba(217, 119, 6, 0.3);
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -367,9 +366,9 @@
         }
 
         .btn-action:hover {
-            background: var(--apple-blue-hover);
+            background: var(--rust-orange-hover);
             transform: translateY(-1px);
-            box-shadow: 0 6px 16px rgba(0, 113, 227, 0.35);
+            box-shadow: 0 6px 16px rgba(217, 119, 6, 0.4);
         }
 
         .btn-action:active { transform: translateY(0); }
@@ -385,8 +384,8 @@
         }
 
         .stat-val {
-            font-weight: 600;
-            color: var(--apple-blue);
+            font-weight: 700;
+            color: var(--rust-orange);
             font-size: 1rem;
         }
 
@@ -403,23 +402,22 @@
         }
 
         .btn-del {
-            background: rgba(255, 59, 48, 0.15);
-            color: #ff3b30;
-            border: 1px solid rgba(255, 59, 48, 0.3);
+            background: rgba(239, 68, 68, 0.15);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.3);
             padding: 4px 10px;
             border-radius: var(--radius-sm);
             cursor: pointer;
             font-size: 0.75rem;
-            font-weight: 600;
+            font-weight: 700;
             transition: all 0.2s;
         }
 
         .btn-del:hover {
-            background: #ff3b30;
+            background: #ef4444;
             color: #fff;
         }
 
-        /* Timer Display */
         .timer-display {
             font-size: 3.5rem;
             font-weight: 700;
@@ -429,88 +427,103 @@
             letter-spacing: -1px;
         }
 
+        /* --- FEATURE 1: TEA & FARM CALCULATOR --- */
+        .tea-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        .berry-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 4px 10px; border-radius: 6px; font-weight: 600; font-size: 0.85rem;
+            margin: 2px;
+        }
+        .berry-red { background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); }
+        .berry-green { background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .berry-blue { background: rgba(59, 130, 246, 0.15); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.3); }
+        .berry-yellow { background: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); }
+        .berry-white { background: rgba(255, 255, 255, 0.15); color: var(--text-main); border: 1px solid var(--border-subtle); }
+
+        /* --- FEATURE 2: MODULAR CAR & BOAT CONFIGURATOR --- */
+        .vehicle-preview-box {
+            background: rgba(0,0,0,0.15); border-radius: var(--radius-lg);
+            padding: 20px; text-align: center; margin-top: 15px; border: 1px solid var(--border-subtle);
+        }
+
+        /* --- FEATURE 4: MONUMENT PUZZLE FLOWCHARTS --- */
+        .monument-tabs {
+            display: flex; gap: 8px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 4px;
+        }
+        .monument-tab {
+            background: var(--input-bg); border: 1px solid var(--border-subtle);
+            padding: 8px 16px; border-radius: var(--radius-md); cursor: pointer;
+            font-weight: 600; font-size: 0.85rem; color: var(--text-main); white-space: nowrap;
+        }
+        .monument-tab.active { background: var(--rust-orange); color: white; border-color: var(--rust-orange); }
+        
+        .checklist-item {
+            display: flex; align-items: center; gap: 12px;
+            background: var(--list-item-bg); padding: 12px 16px;
+            border-radius: var(--radius-md); margin-bottom: 10px;
+            border: 1px solid var(--border-subtle); cursor: pointer;
+        }
+        .checklist-item input[type="checkbox"] {
+            width: 20px; height: 20px; accent-color: var(--rust-orange); cursor: pointer;
+            margin-bottom: 0;
+        }
+        .checklist-item.checked span { text-decoration: line-through; opacity: 0.6; }
+
         /* --- FLAPPY BIRD MINI-GAME CONTAINER --- */
         #flappy-container {
-            position: relative;
-            width: 320px;
-            height: 568px;
-            background: #e0f2fe;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--radius-xl);
-            overflow: hidden;
-            margin: 0 auto;
-            cursor: pointer;
+            position: relative; width: 320px; height: 568px;
+            background: #e0f2fe; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--glass-border); border-radius: var(--radius-xl);
+            overflow: hidden; margin: 0 auto; cursor: pointer;
         }
-
-        [data-theme="dark"] #flappy-container {
-            background: #021526;
-        }
-
-        #flappy-canvas {
-            display: block; width: 100%; height: 100%;
-            object-fit: cover; image-rendering: pixelated;
-        }
-
+        [data-theme="dark"] #flappy-container { background: #021526; }
+        #flappy-canvas { display: block; width: 100%; height: 100%; object-fit: cover; image-rendering: pixelated; }
         .flappy-ui {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            z-index: 10; background: rgba(255, 255, 255, 0.4);
-            backdrop-filter: blur(10px);
+            z-index: 10; background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(10px);
         }
-
-        [data-theme="dark"] .flappy-ui {
-            background: rgba(0, 0, 0, 0.5);
-        }
-
+        [data-theme="dark"] .flappy-ui { background: rgba(0, 0, 0, 0.5); }
         .hidden { display: none !important; }
-
         #flappy-live-score {
             position: absolute; top: 10%; left: 50%; transform: translateX(-50%);
-            font-size: 3.5rem; color: #1d1d1f;
-            text-shadow: 0 2px 10px rgba(255,255,255,0.8);
+            font-size: 3.5rem; color: #1d1d1f; text-shadow: 0 2px 10px rgba(255,255,255,0.8);
             z-index: 5; font-weight: 700; pointer-events: none;
         }
-
-        [data-theme="dark"] #flappy-live-score {
-            color: #ffffff;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.8);
-        }
-
+        [data-theme="dark"] #flappy-live-score { color: #ffffff; text-shadow: 0 2px 10px rgba(0,0,0,0.8); }
         .flappy-panel {
             background: var(--glass-dropdown); border: 1px solid var(--border-subtle);
             border-radius: var(--radius-lg); padding: 20px; width: 80%;
-            text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            margin-bottom: 20px; pointer-events: auto;
-            backdrop-filter: blur(20px);
+            text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            margin-bottom: 20px; pointer-events: auto; backdrop-filter: blur(20px);
         }
-
         .flappy-panel h1 { color: var(--text-main); font-size: 1.6rem; margin-bottom: 4px; font-weight: 700; }
         .flappy-panel p { font-size: 0.9rem; color: var(--text-muted); font-weight: 600; }
-
         .flappy-btn {
-            background: var(--apple-blue); border: none; color: #ffffff;
-            padding: 12px 28px; font-size: 1rem; font-weight: 600;
-            border-radius: var(--radius-md); cursor: pointer; box-shadow: 0 4px 12px rgba(0, 113, 227, 0.3);
-            text-transform: uppercase; outline: none; pointer-events: auto;
-            transition: transform 0.1s;
+            background: var(--rust-orange); border: none; color: #ffffff;
+            padding: 12px 28px; font-size: 1rem; font-weight: 700;
+            border-radius: var(--radius-md); cursor: pointer; box-shadow: 0 4px 12px rgba(217, 119, 6, 0.4);
+            text-transform: uppercase; outline: none; pointer-events: auto; transition: transform 0.1s;
         }
-
-        .flappy-btn:hover { background: var(--apple-blue-hover); }
+        .flappy-btn:hover { background: var(--rust-orange-hover); }
         .flappy-btn:active { transform: scale(0.97); }
     </style>
 </head>
 <body data-theme="light">
 
-    <!-- Apple Style Menu Bar with Dropdowns -->
+    <!-- Top Navigation Bar -->
     <header class="top-bar">
         <div class="brand-logo" onclick="switchTab('raid')">
-            <span>🏝️</span> Rust Island
+            <span>🏝️</span> Rust Island Suite
         </div>
 
         <nav class="menu-items">
-            <!-- Combat Dropdown -->
-            <div class="menu-item" data-dropdown="combat">
+            <!-- Combat & Raid -->
+            <div class="menu-item">
                 <button class="menu-btn">Combat & Raiding ▾</button>
                 <div class="dropdown">
                     <button class="dropdown-item" onclick="switchTab('raid')">💥 Raid Calculator</button>
@@ -518,18 +531,28 @@
                 </div>
             </div>
 
-            <!-- Operations Dropdown -->
-            <div class="menu-item" data-dropdown="ops">
-                <button class="menu-btn">Base & Operations ▾</button>
+            <!-- Vehicles & Farm -->
+            <div class="menu-item">
+                <button class="menu-btn">Farming & Vehicles ▾</button>
                 <div class="dropdown">
+                    <button class="dropdown-item" onclick="switchTab('tea')">🌿 Tea & Farm Planner</button>
+                    <button class="dropdown-item" onclick="switchTab('vehicles')">🚗 Car & Boat Configurator</button>
+                </div>
+            </div>
+
+            <!-- Operations & Monuments -->
+            <div class="menu-item">
+                <button class="menu-btn">Base & Monuments ▾</button>
+                <div class="dropdown">
+                    <button class="dropdown-item" onclick="switchTab('monuments')">🗺️ Monument Keycard Guides</button>
                     <button class="dropdown-item" onclick="switchTab('timers')">⏱️ Crate Timers</button>
                     <button class="dropdown-item" onclick="switchTab('genes')">🌱 Gene Combiner</button>
                     <button class="dropdown-item" onclick="switchTab('team')">📋 Team & Codes</button>
                 </div>
             </div>
 
-            <!-- Arcade Dropdown -->
-            <div class="menu-item" data-dropdown="arcade">
+            <!-- Arcade -->
+            <div class="menu-item">
                 <button class="menu-btn">Arcade ▾</button>
                 <div class="dropdown">
                     <button class="dropdown-item" onclick="switchTab('flappy')">🐤 Flappy Bird</button>
@@ -539,7 +562,7 @@
 
         <div class="topbar-right">
             <div class="status-pill">
-                <div class="status-dot"></div> Auto-Saving Active
+                <div class="status-dot"></div> Live Sync
             </div>
             <button class="theme-toggle-btn" id="theme-toggle" title="Toggle Dark/Light Mode">🌙</button>
         </div>
@@ -601,7 +624,164 @@
             </div>
         </div>
 
-        <!-- 3. TIMERS -->
+        <!-- 3. TEA & FARM YIELD CALCULATOR -->
+        <div id="tea" class="tab-content">
+            <h2>Tea & Farm Yield Calculator</h2>
+            <p class="desc">Plan mixing table recipes and compute exact berry requirements per harvest cycle.</p>
+
+            <div class="tea-grid">
+                <div class="card">
+                    <div class="card-header">Mixing Table Order</div>
+                    <label>Select Tea Type</label>
+                    <select id="tea-type">
+                        <option value="scrap">Scrap Tea (+50% / +100% / +200%)</option>
+                        <option value="ore">Ore Yield Tea (+20% / +40% / +50%)</option>
+                        <option value="wood">Wood Yield Tea (+20% / +40% / +50%)</option>
+                        <option value="maxhp">Max Health Tea (+20 / +30 / +50 HP)</option>
+                        <option value="antirad">Anti-Radiation Tea (+15% / +25% / +50%)</option>
+                    </select>
+
+                    <label>Select Quality Tier</label>
+                    <select id="tea-tier">
+                        <option value="basic">Basic (10 Berries)</option>
+                        <option value="advanced">Advanced (50 Berries)</option>
+                        <option value="pure" selected>Pure (100 Berries)</option>
+                    </select>
+
+                    <label>Number of Batches</label>
+                    <input type="number" id="tea-batches" min="1" value="1">
+                </div>
+
+                <div class="card">
+                    <div class="card-header">Required Ingredients</div>
+                    <div style="margin-bottom: 16px;" id="berry-ingredients-list">
+                        <!-- Populated by JS -->
+                    </div>
+                    <div class="stat-row"><span>Total Berries Needed</span> <span class="stat-val" id="total-berries">0</span></div>
+                    <div class="stat-row"><span>Low Grade Fuel Needed</span> <span class="stat-val" id="total-tea-lgf">0</span></div>
+                    <div class="stat-row"><span>Water Required</span> <span class="stat-val" id="total-water">0 mL</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. MODULAR CAR & BOAT CONFIGURATOR -->
+        <div id="vehicles" class="tab-content">
+            <h2>Modular Car & Boat Configurator</h2>
+            <p class="desc">Snap vehicle modules together to calculate top speeds, armor rating, seating, and fuel burn.</p>
+
+            <div class="grid">
+                <div class="card">
+                    <div class="card-header">Vehicle Selection & Chassis</div>
+                    <label>Vehicle Type</label>
+                    <select id="veh-type" onchange="updateVehicleConfigUI()">
+                        <option value="car">Modular Car (Land)</option>
+                        <option value="boat">RHIB / Rowboat (Water)</option>
+                    </select>
+
+                    <div id="car-chassis-box">
+                        <label>Chassis Size (Sockets)</label>
+                        <select id="veh-sockets">
+                            <option value="2">2-Socket Chassis</option>
+                            <option value="3" selected>3-Socket Chassis</option>
+                            <option value="4">4-Socket Chassis</option>
+                        </select>
+                        <label>Module 1</label>
+                        <select class="veh-mod" data-slot="0">
+                            <option value="engine">Engine Module</option>
+                            <option value="cockpit" selected>Cockpit (Driver + Passenger)</option>
+                            <option value="storage">Large Storage</option>
+                            <option value="fuel">Fuel Tank</option>
+                            <option value="passenger">Passenger Module</option>
+                        </select>
+                        <label>Module 2</label>
+                        <select class="veh-mod" data-slot="1">
+                            <option value="engine" selected>Engine Module</option>
+                            <option value="cockpit">Cockpit</option>
+                            <option value="storage">Large Storage</option>
+                            <option value="fuel">Fuel Tank</option>
+                            <option value="passenger">Passenger Module</option>
+                        </select>
+                        <label>Module 3</label>
+                        <select class="veh-mod" data-slot="2">
+                            <option value="storage" selected>Large Storage</option>
+                            <option value="engine">Engine Module</option>
+                            <option value="cockpit">Cockpit</option>
+                            <option value="fuel">Fuel Tank</option>
+                            <option value="passenger">Passenger Module</option>
+                        </select>
+                    </div>
+
+                    <div id="boat-chassis-box" style="display: none;">
+                        <label>Boat Type</label>
+                        <select id="boat-model">
+                            <option value="rhib">RHIB (Fast, 6 Seats)</option>
+                            <option value="rowboat">Rowboat (Slow, 4 Seats)</option>
+                        </select>
+                    </div>
+
+                    <button class="btn-action" id="btn-calc-veh" style="margin-top: 12px;">Calculate Stats</button>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">Performance & Statistics</div>
+                    <div class="stat-row"><span>Estimated Top Speed</span> <span class="stat-val" id="veh-speed">45 km/h</span></div>
+                    <div class="stat-row"><span>Vehicle Health / Armor</span> <span class="stat-val" id="veh-hp">850 HP (Medium)</span></div>
+                    <div class="stat-row"><span>Total Seating Capacity</span> <span class="stat-val" id="veh-seats">4 Seats</span></div>
+                    <div class="stat-row"><span>Fuel Consumption (LGF/min)</span> <span class="stat-val" id="veh-fuel">1.2 LGF/min</span></div>
+                    
+                    <div class="vehicle-preview-box">
+                        <span style="font-size: 2.5rem;" id="veh-icon">🚙</span>
+                        <div style="font-weight: 700; margin-top: 8px; color: var(--text-main);" id="veh-desc">Configured 3-Socket Cruiser</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. MONUMENT PUZZLE FLOWCHARTS & KEYCARD GUIDE -->
+        <div id="monuments" class="tab-content">
+            <h2>Monument Puzzle & Keycard Guide</h2>
+            <p class="desc">Step-by-step interactive puzzle solvers and keycard checklist for high-tier monuments.</p>
+
+            <div class="monument-tabs">
+                <button class="monument-tab active" onclick="switchMonument('launch')">🚀 Launch Site</button>
+                <button class="monument-tab" onclick="switchMonument('water')">🏭 Water Treatment</button>
+                <button class="monument-tab" onclick="switchMonument('airfield')">✈️ Airfield</button>
+                <button class="monument-tab" onclick="switchMonument('power')">⚡ Power Plant</button>
+                <button class="monument-tab" onclick="switchMonument('train')">🚂 Train Yard</button>
+                <button class="monument-tab" onclick="switchMonument('sewer')">🕳️ Sewer Branch</button>
+            </div>
+
+            <div class="grid">
+                <div class="card">
+                    <div class="card-header"><span id="monument-title">Launch Site Guide</span></div>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 16px;" id="monument-desc">Requires high radiation protection, fuses, green, blue, and red keycards to loot elite crates.</p>
+                    
+                    <div id="monument-requirements" style="margin-bottom: 16px; display: flex; gap: 8px; flex-wrap: wrap;">
+                        <!-- Requirements badges populated by JS -->
+                    </div>
+
+                    <div class="card-header" style="font-size: 0.95rem;">Puzzle Checklist & Steps</div>
+                    <div id="monument-checklist">
+                        <!-- Checklist items populated by JS -->
+                    </div>
+                </div>
+
+                <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
+                    <div>
+                        <div class="card-header">Tactical Tips & Loot Expected</div>
+                        <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6;" id="monument-tips">
+                            Watch out for heavy scientists roaming the perimeter. Bring at least 30% radiation protection (hazmat suit recommended) and multiple medical syringes.
+                        </p>
+                    </div>
+                    <div style="background: rgba(217, 119, 6, 0.1); border: 1px solid var(--rust-orange); border-radius: var(--radius-md); padding: 16px; margin-top: 20px;">
+                        <div style="font-weight: 700; color: var(--rust-orange); margin-bottom: 4px;">⚠️ PVP Warning</div>
+                        <div style="font-size: 0.850rem; color: var(--text-main);">Monuments are high-traffic zones for counter-raiders and snipers. Always secure your minicopter or scrap heli before entering.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 6. TIMERS -->
         <div id="timers" class="tab-content">
             <h2>Monument & Crate Timers</h2>
             <p class="desc">Track oil rig and cargo ship locked crate countdowns with audio alert.</p>
@@ -618,7 +798,7 @@
             </div>
         </div>
 
-        <!-- 4. GENE COMBINER -->
+        <!-- 7. GENE COMBINER -->
         <div id="genes" class="tab-content">
             <h2>Plant Gene Combiner</h2>
             <p class="desc">Crossbreed seed strings to evaluate dominant genetic offspring.</p>
@@ -635,7 +815,7 @@
             </div>
         </div>
 
-        <!-- 5. TEAM & CODES -->
+        <!-- 8. TEAM & CODES -->
         <div id="team" class="tab-content">
             <h2>Team Base Registry</h2>
             <p class="desc">Securely store code lock pinouts and tactical wishlist notes locally.</p>
@@ -656,7 +836,7 @@
             </div>
         </div>
 
-        <!-- 6. FLAPPY BIRD -->
+        <!-- 9. FLAPPY BIRD -->
         <div id="flappy" class="tab-content" style="text-align: center;">
             <h2>Arcade Mini-Game</h2>
             <p class="desc">Pass the time during night cycles or crafting queues!</p>
@@ -687,7 +867,6 @@
     </main>
 
     <script>
-        // Theme Toggle Logic
         const themeToggleBtn = document.getElementById('theme-toggle');
         const bodyEl = document.body;
 
@@ -707,7 +886,6 @@
 
         // Dropdown Menu Logic
         const menuItems = document.querySelectorAll('.menu-item');
-        
         menuItems.forEach(item => {
             const btn = item.querySelector('.menu-btn');
             btn.addEventListener('click', (e) => {
@@ -722,25 +900,21 @@
             menuItems.forEach(i => i.classList.remove('open'));
         });
 
-        // Tab Switcher Router
         function switchTab(tabId) {
             menuItems.forEach(i => i.classList.remove('open'));
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
         }
 
-        // Local Storage State Management
-        const STORAGE_KEY = 'rust_island_apple_v1';
+        const STORAGE_KEY = 'rust_island_suite_v2';
         function loadSavedData() {
             const raw = localStorage.getItem(STORAGE_KEY);
             if (!raw) return { codes: [], notes: "" };
             try { return JSON.parse(raw); } catch(e) { return { codes: [], notes: "" }; }
         }
         function saveData(data) { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }
-
         let appData = loadSavedData();
 
-        // 1. Raid Calculator
         const raidInputs = ['wood-door', 'sheet-door', 'garage-door', 'armored-door', 'stone-wall', 'metal-wall'];
         function calcRaid() {
             let woodDoors = parseInt(document.getElementById('target-wood-door').value) || 0;
@@ -762,7 +936,6 @@
             document.getElementById('res-c4').innerText = c4;
             document.getElementById('res-rockets').innerText = rockets;
             document.getElementById('res-satchels').innerText = satchels;
-
             document.getElementById('raw-sulfur').innerText = sulfur.toLocaleString();
             document.getElementById('raw-charcoal').innerText = charcoal.toLocaleString();
             document.getElementById('raw-metal').innerText = metal.toLocaleString();
@@ -770,7 +943,6 @@
         }
         raidInputs.forEach(id => document.getElementById(`target-${id}`).addEventListener('input', calcRaid));
 
-        // 2. Recycler
         const recInputs = document.querySelectorAll('.rec-in');
         function calcRecycler() {
             let scrap = 0, hqm = 0, frags = 0;
@@ -789,9 +961,222 @@
         }
         recInputs.forEach(i => i.addEventListener('input', calcRecycler));
 
-        // 3. Timers
+        const teaTypeEl = document.getElementById('tea-type');
+        const teaTierEl = document.getElementById('tea-tier');
+        const teaBatchesEl = document.getElementById('tea-batches');
+        const berryListEl = document.getElementById('berry-ingredients-list');
+        const totalBerriesEl = document.getElementById('total-berries');
+        const totalLgfEl = document.getElementById('total-tea-lgf');
+        const totalWaterEl = document.getElementById('total-water');
+
+        function updateTeaCalculator() {
+            let tier = teaTierEl.value;
+            let batches = parseInt(teaBatchesEl.value) || 1;
+            let baseBerries = tier === 'basic' ? 10 : (tier === 'advanced' ? 50 : 100);
+            let total = baseBerries * batches;
+
+            let red = 0, green = 0, blue = 0, yellow = 0, white = 0;
+            let tea = teaTypeEl.value;
+            if (tea === 'scrap') yellow = total;
+            else if (tea === 'ore') red = total;
+            else if (tea === 'wood') green = total;
+            else if (tea === 'maxhp') blue = total;
+            else if (tea === 'antirad') white = total;
+
+            berryListEl.innerHTML = `
+                ${red ? `<span class="berry-badge berry-red">🔴 Red Berries: ${red}</span>` : ''}
+                ${green ? `<span class="berry-badge berry-green">🟢 Green Berries: ${green}</span>` : ''}
+                ${blue ? `<span class="berry-badge berry-blue">🔵 Blue Berries: ${blue}</span>` : ''}
+                ${yellow ? `<span class="berry-badge berry-yellow">🟡 Yellow Berries: ${yellow}</span>` : ''}
+                ${white ? `<span class="berry-badge berry-white">⚪ White Berries: ${white}</span>` : ''}
+            `;
+            totalBerriesEl.innerText = total;
+            totalLgfEl.innerText = batches * 5;
+            totalWaterEl.innerText = (batches * 250) + " mL";
+        }
+        teaTypeEl.addEventListener('change', updateTeaCalculator);
+        teaTierEl.addEventListener('change', updateTeaCalculator);
+        teaBatchesEl.addEventListener('input', updateTeaCalculator);
+        updateTeaCalculator();
+
+        const vehTypeEl = document.getElementById('veh-type');
+        const carChassisBox = document.getElementById('car-chassis-box');
+        const boatChassisBox = document.getElementById('boat-chassis-box');
+        const vehSocketsEl = document.getElementById('veh-sockets');
+        const vehSpeedEl = document.getElementById('veh-speed');
+        const vehHpEl = document.getElementById('veh-hp');
+        const vehSeatsEl = document.getElementById('veh-seats');
+        const vehFuelEl = document.getElementById('veh-fuel');
+        const vehIconEl = document.getElementById('veh-icon');
+        const vehDescEl = document.getElementById('veh-desc');
+
+        function updateVehicleConfigUI() {
+            if (vehTypeEl.value === 'boat') {
+                carChassisBox.style.display = 'none';
+                boatChassisBox.style.display = 'block';
+            } else {
+                carChassisBox.style.display = 'block';
+                boatChassisBox.style.display = 'none';
+            }
+        }
+
+        document.getElementById('btn-calc-veh').addEventListener('click', () => {
+            if (vehTypeEl.value === 'boat') {
+                let model = document.getElementById('boat-model').value;
+                if (model === 'rhib') {
+                    vehSpeedEl.innerText = '55 km/h';
+                    vehHpEl.innerText = '500 HP (Heavy)';
+                    vehSeatsEl.innerText = '6 Seats';
+                    vehFuelEl.innerText = '2.5 LGF/min';
+                    vehIconEl.innerText = '🚤';
+                    vehDescEl.innerText = 'RHIB High-Speed Watercraft';
+                } else {
+                    vehSpeedEl.innerText = '22 km/h';
+                    vehHpEl.innerText = '250 HP (Fragile)';
+                    vehSeatsEl.innerText = '4 Seats';
+                    vehFuelEl.innerText = '1.0 LGF/min';
+                    vehIconEl.innerText = '🛶';
+                    vehDescEl.innerText = 'Standard Ocean Rowboat';
+                }
+            } else {
+                let sockets = vehSocketsEl.value;
+                let mods = document.querySelectorAll('.veh-mod');
+                let seatsCount = 2; // driver always
+                let hasEngine = false;
+                let storageCount = 0;
+
+                mods.forEach((m, idx) => {
+                    if (idx < parseInt(sockets)) {
+                        if (m.value === 'cockpit') seatsCount += 2;
+                        if (m.value === 'passenger') seatsCount += 2;
+                        if (m.value === 'engine') hasEngine = true;
+                        if (m.value === 'storage') storageCount++;
+                    }
+                });
+
+                vehSpeedEl.innerText = hasEngine ? (sockets == 4 ? '42 km/h' : '48 km/h') : '10 km/h (No Engine!)';
+                vehHpEl.innerText = `${sockets * 300} HP (${sockets}-Socket Armored)`;
+                vehSeatsEl.innerText = `${seatsCount} Seats`;
+                vehFuelEl.innerText = hasEngine ? '1.5 LGF/min' : '0.2 LGF/min';
+                vehIconEl.innerText = sockets == 4 ? '🚐' : '🚙';
+                vehDescEl.innerText = `${sockets}-Socket Custom Chassis (${storageCount} Storages)`;
+            }
+        });
+
+        const monumentsData = {
+            launch: {
+                title: "Launch Site Puzzle Guide",
+                desc: "The largest and most lucrative monument requiring full rad gear, fuses, and all three keycards.",
+                reqs: ["🟢 Green Card", "🔵 Blue Card", "🔴 Red Card", "⚡ 2x Fuses", "🛡️ Hazmat Suit"],
+                steps: [
+                    "Locate the main underground electrical station and insert 2 fuses.",
+                    "Flip the main breaker switch inside the station.",
+                    "Swipe Green Card at the security office to unlock the courtyard.",
+                    "Swipe Blue Card at the control tower building to access upper floors.",
+                    "Swipe Red Card in the bunker area to unlock the elite crate chamber."
+                ],
+                tips: "Heavy scientists patrol the area. Bring high-tier assault rifles and lots of bandages."
+            },
+            water: {
+                title: "Water Treatment Plant Guide",
+                desc: "A classic mid-tier monument with quick fuse timing and predictable puzzle layout.",
+                reqs: ["🟢 Green Card", "🔵 Blue Card", "⚡ 1x Fuse", "🛡️ 15%+ Rad Prot"],
+                steps: [
+                    "Find the breaker building near the large pool and insert 1 fuse.",
+                    "Flip the timer switch on the wall (listen for the buzzer).",
+                    "Run to the Blue Card office building before the timer expires.",
+                    "Swipe Blue Card to unlock the main loot room containing multiple military crates."
+                ],
+                tips: "Great monument for early-to-mid wipe components and scrap farming."
+            },
+            airfield: {
+                title: "Airfield Puzzle Guide",
+                desc: "Sprawling monument with hangars, underground tunnels, and locked crates.",
+                reqs: ["🟢 Green Card", "🔵 Blue Card", "⚡ 1x Fuse", "🛡️ 20%+ Rad Prot"],
+                steps: [
+                    "Head to the central office building and plug in the fuse.",
+                    "Activate the red push button to start power flow.",
+                    "Swipe Green Card at the side room to get inside the hangar tunnel.",
+                    "Swipe Blue Card at the main vault door for military and elite crates."
+                ],
+                tips: "High visibility makes it easy to spot counter-raiders or rival teams."
+            },
+            power: {
+                title: "Power Plant Puzzle Guide",
+                desc: "Industrial monument with cooling towers and multi-stage switch activation.",
+                reqs: ["🟢 Green Card", "🔵 Blue Card", "⚡ 1x Fuse", "🛡️ 20%+ Rad Prot"],
+                steps: [
+                    "Locate the breaker room structure in the center of the complex.",
+                    "Insert fuse and flip the switch to power the water pump building.",
+                    "Go to the Blue Card office near the cooling tower and swipe card.",
+                    "Collect loot and exit before radiation ticks damage you."
+                ],
+                tips: "Watch out for sneaky roof campers around the large cooling towers."
+            },
+            train: {
+                title: "Train Yard Puzzle Guide",
+                desc: "Features railway warehouses, magnetic crane, and valuable recycler.",
+                reqs: ["🟢 Green Card", "🔵 Blue Card", "⚡ 1x Fuse", "🛡️ 15%+ Rad Prot"],
+                steps: [
+                    "Find the electrical shack near the tracks and insert fuse.",
+                    "Trigger the breaker switch and time your run to the main tower.",
+                    "Swipe Green Card to access the upper control walkway.",
+                    "Swipe Blue Card at the bottom vault door for high-tier loot."
+                ],
+                tips: "Train yard has incredible component density and a safe recycling station."
+            },
+            sewer: {
+                title: "Sewer Branch Puzzle Guide",
+                desc: "Underground tunnel and pipe network featuring straightforward puzzle execution.",
+                reqs: ["🟢 Green Card", "🔵 Blue Card", "⚡ 1x Fuse", "🛡️ 10%+ Rad Prot"],
+                steps: [
+                    "Enter the small guard shack by the main entrance and plug in fuse.",
+                    "Activate switch and head down into the concrete sewer pipes.",
+                    "Swipe Green Card at the puzzle door.",
+                    "Swipe Blue Card at the final loot room cage."
+                ],
+                tips: "Compact layout makes quick in-and-out runs very viable for solo players."
+            }
+        };
+
+        function switchMonument(id) {
+            document.querySelectorAll('.monument-tab').forEach(t => t.classList.remove('active'));
+            if (event && event.currentTarget) {
+                event.currentTarget.classList.add('active');
+            } else {
+                const firstTab = document.querySelector('.monument-tab');
+                if (firstTab) firstTab.classList.add('active');
+            }
+
+            let data = monumentsData[id];
+            document.getElementById('monument-title').innerText = data.title;
+            document.getElementById('monument-desc').innerText = data.desc;
+            document.getElementById('monument-tips').innerText = data.tips;
+
+            let reqBox = document.getElementById('monument-requirements');
+            reqBox.innerHTML = data.reqs.map(r => `<span style="background: var(--input-bg); border: 1px solid var(--border-subtle); padding: 4px 10px; border-radius: 6px; font-weight: 600; font-size: 0.8rem;">${r}</span>`).join('');
+
+            let checkBox = document.getElementById('monument-checklist');
+            checkBox.innerHTML = data.steps.map((step, idx) => `
+                <div class="checklist-item" onclick="toggleChecklist(this)">
+                    <input type="checkbox" id="check-${id}-${idx}">
+                    <span style="font-size: 0.9rem; font-weight: 500;">Step ${idx+1}: ${step}</span>
+                </div>
+            `).join('');
+        }
+
+        function toggleChecklist(el) {
+            let chk = el.querySelector('input');
+            chk.checked = !chk.checked;
+            if (chk.checked) el.classList.add('checked');
+            else el.classList.remove('checked');
+        }
+
+        // Initialize Launch Site on load
+        switchMonument('launch');
+
         let timerInterval = null;
-        let timeLeft = 900; 
+        let timeLeft = 900;
         const timerDisplay = document.getElementById('crate-timer');
         const btnTimerStart = document.getElementById('btn-timer-start');
         const btnTimerReset = document.getElementById('btn-timer-reset');
@@ -800,11 +1185,8 @@
             try {
                 const ctx = new (window.AudioContext || window.webkitAudioContext)();
                 const osc = ctx.createOscillator();
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(600, ctx.currentTime);
-                osc.connect(ctx.destination);
-                osc.start();
-                osc.stop(ctx.currentTime + 0.4);
+                osc.type = 'sine'; osc.frequency.setValueAtTime(600, ctx.currentTime);
+                osc.connect(ctx.destination); osc.start(); osc.stop(ctx.currentTime + 0.4);
             } catch(e) {}
         }
 
@@ -817,34 +1199,26 @@
         btnTimerStart.addEventListener('click', () => {
             if (timerInterval) return;
             timerInterval = setInterval(() => {
-                if (timeLeft > 0) {
-                    timeLeft--;
-                    updateTimerUI();
-                } else {
-                    clearInterval(timerInterval);
-                    timerInterval = null;
-                    playBeep();
-                    alert('Locked Crate Unlocked!');
+                if (timeLeft > 0) { timeLeft--; updateTimerUI(); }
+                else {
+                    clearInterval(timerInterval); timerInterval = null;
+                    playBeep(); alert('Locked Crate Unlocked!');
                 }
             }, 1000);
         });
 
         btnTimerReset.addEventListener('click', () => {
-            clearInterval(timerInterval);
-            timerInterval = null;
-            timeLeft = 900;
-            updateTimerUI();
+            clearInterval(timerInterval); timerInterval = null;
+            timeLeft = 900; updateTimerUI();
         });
 
-        // 4. Gene Combiner
         document.getElementById('btn-calc-genes').addEventListener('click', () => {
             const g1 = document.getElementById('gene1').value.replace(/-/g, '').toUpperCase();
             const g2 = document.getElementById('gene2').value.replace(/-/g, '').toUpperCase();
             const g3 = document.getElementById('gene3').value.replace(/-/g, '').toUpperCase();
 
             if (g1.length < 5 || g2.length < 5 || g3.length < 5) {
-                document.getElementById('gene-result').innerText = "Invalid Length";
-                return;
+                document.getElementById('gene-result').innerText = "Invalid Length"; return;
             }
 
             let result = "";
@@ -852,18 +1226,13 @@
                 let pool = [g1[i], g2[i], g3[i]];
                 let counts = {};
                 pool.forEach(x => counts[x] = (counts[x] || 0) + 1);
-                
-                let winner = pool[0];
-                let max = 0;
-                for (let k in counts) {
-                    if (counts[k] > max) { max = counts[k]; winner = k; }
-                }
+                let winner = pool[0], max = 0;
+                for (let k in counts) { if (counts[k] > max) { max = counts[k]; winner = k; } }
                 result += winner + (i < 4 ? "-" : "");
             }
             document.getElementById('gene-result').innerText = result;
         });
 
-        // 5. Team Code Manager
         const codeLabel = document.getElementById('code-label');
         const codeVal = document.getElementById('code-val');
         const codeList = document.getElementById('code-list');
@@ -875,7 +1244,7 @@
                 let div = document.createElement('div');
                 div.className = 'list-item';
                 div.innerHTML = `
-                    <span><strong>${item.label}:</strong> <span style="color:var(--apple-blue);">${item.val}</span></span>
+                    <span><strong>${item.label}:</strong> <span style="color:var(--rust-orange);">${item.val}</span></span>
                     <button class="btn-del" onclick="deleteCode(${index})">Remove</button>
                 `;
                 codeList.appendChild(div);
@@ -886,25 +1255,20 @@
             if (!codeLabel.value || !codeVal.value) return;
             appData.codes.push({ label: codeLabel.value, val: codeVal.value });
             codeLabel.value = ''; codeVal.value = '';
-            saveData(appData);
-            renderCodes();
+            saveData(appData); renderCodes();
         });
 
         window.deleteCode = function(index) {
             appData.codes.splice(index, 1);
-            saveData(appData);
-            renderCodes();
+            saveData(appData); renderCodes();
         };
 
         teamNotes.value = appData.notes || '';
         teamNotes.addEventListener('input', () => {
-            appData.notes = teamNotes.value;
-            saveData(appData);
+            appData.notes = teamNotes.value; saveData(appData);
         });
-
         renderCodes();
 
-        // 6. Flappy Bird Mini-Game Engine
         const fCanvas = document.getElementById('flappy-canvas');
         const fCtx = fCanvas.getContext('2d');
         const fLiveScore = document.getElementById('flappy-live-score');
@@ -915,14 +1279,11 @@
         const fContainer = document.getElementById('flappy-container');
 
         function buildBird(artData) {
-            const scale = 2.5; 
+            const scale = 2.5;
             const c = document.createElement('canvas');
             c.width = artData[0].length * scale; c.height = artData.length * scale;
             const cx = c.getContext('2d');
-            const palette = {
-                '1': '#1d1d1f', '2': '#ffffff', '3': '#0a84ff', 
-                '4': '#34c759', '5': '#248a3d', '6': '#e0f2fe'
-            };
+            const palette = { '1': '#1d1d1f', '2': '#ffffff', '3': '#f59e0b', '4': '#10b981', '5': '#059669', '6': '#e0f2fe' };
             for (let y = 0; y < artData.length; y++) {
                 for (let x = 0; x < artData[y].length; x++) {
                     if (artData[y][x] !== ' ') {
@@ -937,7 +1298,6 @@
         const birdUp = ["     111111      ", "   113333331     ", "  13333333331    ", " 133333333333111 ", " 1333333333312221", " 1333333333312121", " 1333333333312221", " 133333333331111 ", "  133311111155551", " 1111166661444441", " 166666661444441 ", "  1111111111111  "];
         const birdMid = ["     111111      ", "   113333331     ", "  13333333331    ", " 133333333333111 ", " 1333333333312221", " 1331113333312121", " 1166661333312221", " 166666613331111 ", "  111111333155551", "   13333331444441", "    111111444441 ", "          11111  "];
         const birdDown = ["     111111      ", "   113333331     ", "  13333333331    ", " 133333333333111 ", " 1333333333312221", " 1333333333312121", " 1111133333312221", " 166661333331111 ", "  166661333155551", "   11113331444441", "    111111444441 ", "          11111  "];
-
         const fBirdSprites = [buildBird(birdUp), buildBird(birdMid), buildBird(birdDown)];
 
         let fAudioCtx = null;
@@ -967,7 +1327,7 @@
 
         const RAD = Math.PI / 180;
         const fState = { current: 0, getReady: 0, game: 1, over: 2 };
-        let fScore = { best: localStorage.getItem('fb_apple_best') || 0, value: 0 };
+        let fScore = { best: localStorage.getItem('fb_rust_best') || 0, value: 0 };
         let fFrames = 0; let fGroundX = 0;
 
         const fBird = {
@@ -975,22 +1335,17 @@
             gravity: 0.25, jump: -4.6, speed: 0, rotation: 0,
             draw() {
                 let s = fBirdSprites[this.frame];
-                fCtx.save();
-                fCtx.translate(this.x, this.y);
-                fCtx.rotate(this.rotation);
-                fCtx.drawImage(s, -s.width/2, -s.height/2);
-                fCtx.restore();
+                fCtx.save(); fCtx.translate(this.x, this.y); fCtx.rotate(this.rotation);
+                fCtx.drawImage(s, -s.width/2, -s.height/2); fCtx.restore();
             },
             update() {
                 if(fState.current === fState.getReady) {
-                    this.y = 150 + Math.cos(fFrames * 0.1) * 5; 
+                    this.y = 150 + Math.cos(fFrames * 0.1) * 5;
                     this.frame = (fFrames % 20 < 10) ? 0 : 1;
                 } else {
                     this.frame += fFrames % 5 === 0 ? 1 : 0;
                     this.frame %= fBirdSprites.length;
-                    
-                    this.speed += this.gravity;
-                    this.y += this.speed;
+                    this.speed += this.gravity; this.y += this.speed;
 
                     if(this.y + this.h/2 >= fCanvas.height - 112) {
                         this.y = fCanvas.height - 112 - this.h/2;
@@ -1000,13 +1355,10 @@
                         }
                     }
                     if(this.y - this.h/2 <= 0) { this.y = this.h/2; this.speed = 0; }
-
                     if(this.speed >= this.jump) {
                         this.rotation = Math.min(Math.PI / 2, this.rotation + 4 * RAD);
                         if(this.rotation === Math.PI / 2) this.frame = 1;
-                    } else {
-                        this.rotation = -25 * RAD;
-                    }
+                    } else { this.rotation = -25 * RAD; }
                 }
             },
             flap() { this.speed = this.jump; playFlappySound('flap'); }
@@ -1016,14 +1368,11 @@
             items: [], w: 60, gap: 120, dx: 2,
             draw() {
                 for(let p of this.items) {
-                    let bY = p.top + this.gap;
-                    let bH = fCanvas.height - 112 - bY;
-
+                    let bY = p.top + this.gap; let bH = fCanvas.height - 112 - bY;
                     const isDark = bodyEl.getAttribute('data-theme') === 'dark';
-                    fCtx.fillStyle = '#34c759'; fCtx.strokeStyle = isDark ? '#ffffff' : '#1d1d1f'; fCtx.lineWidth = 2;
+                    fCtx.fillStyle = '#10b981'; fCtx.strokeStyle = isDark ? '#ffffff' : '#1d1d1f'; fCtx.lineWidth = 2;
                     fCtx.fillRect(p.x, 0, this.w, p.top); fCtx.strokeRect(p.x, 0, this.w, p.top);
                     fCtx.fillRect(p.x - 4, p.top - 20, this.w + 8, 20); fCtx.strokeRect(p.x - 4, p.top - 20, this.w + 8, 20);
-                    
                     fCtx.fillRect(p.x, bY, this.w, bH); fCtx.strokeRect(p.x, bY, this.w, bH);
                     fCtx.fillRect(p.x - 4, bY, this.w + 8, 20); fCtx.strokeRect(p.x - 4, bY, this.w + 8, 20);
                 }
@@ -1034,24 +1383,19 @@
                     this.items.push({ x: fCanvas.width, top: Math.random()*(fCanvas.height - 112 - this.gap - 100) + 50, passed: false });
                 }
                 for(let i=0; i<this.items.length; i++) {
-                    let p = this.items[i];
-                    p.x -= this.dx;
-
+                    let p = this.items[i]; p.x -= this.dx;
                     let bY = p.top + this.gap;
                     let bx = fBird.x - fBird.radius + 2, br = fBird.x + fBird.radius - 2;
                     let by = fBird.y - fBird.radius + 2, bb = fBird.y + fBird.radius - 2;
 
                     if(br > p.x && bx < p.x + this.w) {
                         if(by < p.top || bb > bY) {
-                            fState.current = fState.over;
-                            playFlappySound('hit'); triggerFlappyOver();
+                            fState.current = fState.over; playFlappySound('hit'); triggerFlappyOver();
                         }
                     }
-
                     if(p.x + this.w < fBird.x - fBird.radius && !p.passed) {
                         fScore.value += 1; p.passed = true;
-                        playFlappySound('score');
-                        fLiveScore.innerText = fScore.value;
+                        playFlappySound('score'); fLiveScore.innerText = fScore.value;
                     }
                     if(p.x + this.w <= 0) { this.items.shift(); i--; }
                 }
@@ -1060,30 +1404,25 @@
 
         function drawFlappyBg() {
             const isDark = bodyEl.getAttribute('data-theme') === 'dark';
-            fCtx.fillStyle = isDark ? '#021526' : '#e0f2fe'; 
-            fCtx.fillRect(0, 0, fCanvas.width, fCanvas.height);
+            fCtx.fillStyle = isDark ? '#021526' : '#e0f2fe'; fCtx.fillRect(0, 0, fCanvas.width, fCanvas.height);
             let y = fCanvas.height - 112;
-            
             fCtx.fillStyle = isDark ? '#032539' : '#bae6fd';
             let bgX = (fGroundX * 0.3) % 200;
             for(let i=0; i<4; i++) { fCtx.fillRect(bgX + i*160, y - 80, 40, 80); }
-
-            fCtx.fillStyle = isDark ? '#141416' : '#f5f5f7'; fCtx.fillRect(0, y, fCanvas.width, 112);
-            fCtx.fillStyle = '#34c759'; fCtx.fillRect(0, y, fCanvas.width, 20);
+            fCtx.fillStyle = isDark ? '#18181b' : '#f5f5f7'; fCtx.fillRect(0, y, fCanvas.width, 112);
+            fCtx.fillStyle = '#10b981'; fCtx.fillRect(0, y, fCanvas.width, 20);
         }
 
         function startFlappyGame() {
             if(fState.current === fState.game) return;
             fState.current = fState.game;
-            fStartScreen.classList.add('hidden');
-            fLiveScore.classList.remove('hidden');
-            fBird.flap();
+            fStartScreen.classList.add('hidden'); fLiveScore.classList.remove('hidden'); fBird.flap();
         }
 
         function triggerFlappyOver() {
             fLiveScore.classList.add('hidden');
             fScore.best = Math.max(fScore.value, fScore.best);
-            localStorage.setItem('fb_apple_best', fScore.best);
+            localStorage.setItem('fb_rust_best', fScore.best);
             document.getElementById('flappy-final-score').innerText = fScore.value;
             document.getElementById('flappy-best-score').innerText = fScore.best;
             fOverScreen.classList.remove('hidden');
@@ -1091,9 +1430,7 @@
 
         function resetFlappyGame() {
             fBird.y = 150; fBird.speed = 0; fBird.rotation = 0; fPipes.items = []; fScore.value = 0;
-            fLiveScore.innerText = 0;
-            fOverScreen.classList.add('hidden');
-            fStartScreen.classList.remove('hidden');
+            fLiveScore.innerText = 0; fOverScreen.classList.add('hidden'); fStartScreen.classList.remove('hidden');
             fState.current = fState.getReady;
         }
 
@@ -1108,7 +1445,6 @@
         window.addEventListener('keydown', (e) => {
             const isFlappyActive = document.getElementById('flappy').classList.contains('active');
             const isTyping = ['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName);
-
             if (e.code === 'Space' && isFlappyActive && !isTyping) {
                 e.preventDefault();
                 if (fState.current === fState.getReady) startFlappyGame();
@@ -1118,18 +1454,11 @@
         });
 
         function flappyLoop() {
-            drawFlappyBg();
-            fPipes.draw();
-            fBird.draw();
-
+            drawFlappyBg(); fPipes.draw(); fBird.draw();
             if(fState.current !== fState.over) fGroundX -= 2;
-            fBird.update();
-            fPipes.update();
-
-            fFrames++;
+            fBird.update(); fPipes.update(); fFrames++;
             requestAnimationFrame(flappyLoop);
         }
-
         flappyLoop();
     </script>
 </body>
