@@ -3,94 +3,117 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rust Island - Ultimate Companion Suite</title>
-    <!-- Google Fonts: Plus Jakarta Sans -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>Rust Island Suite</title>
     <style>
+        /* ===== Apple "Liquid Glass" theme ===== */
         :root {
-            /* Default Apple/Rust Light Theme */
-            --bg-base: #f5f5f7;
-            --glass-panel: rgba(255, 255, 255, 0.75);
-            --glass-border: rgba(255, 255, 255, 0.6);
-            --glass-shadow: 0 10px 30px 0 rgba(0, 0, 0, 0.05);
-            --glass-dropdown: rgba(255, 255, 255, 0.9);
-            
-            --rust-orange: #d97706;
-            --rust-orange-hover: #b45309;
-            --rust-orange-glow: rgba(217, 119, 6, 0.15);
-            --apple-blue: #0284c7;
-            
+            --bg-base: #f2f2f7;
+            --glass-panel: rgba(255, 255, 255, 0.55);
+            --glass-border: rgba(255, 255, 255, 0.85);
+            --glass-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.9), inset 0 0 0 0.5px rgba(255, 255, 255, 0.6);
+            --glass-shadow: 0 8px 32px rgba(31, 38, 80, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+            --glass-dropdown: rgba(255, 255, 255, 0.72);
+            --glass-blur: blur(28px) saturate(180%);
+
+            --accent: #0071e3;
+            --accent-hover: #0077ed;
+            --accent-glow: rgba(0, 113, 227, 0.16);
+            --apple-blue: #0071e3;
+            --apple-green: #34c759;
+            --apple-red: #ff3b30;
+            --apple-orange: #ff9500;
+
             --text-main: #1d1d1f;
-            --text-muted: #6b7280;
-            --border-subtle: rgba(0, 0, 0, 0.08);
-            --input-bg: rgba(255, 255, 255, 0.6);
-            --input-focus-bg: #ffffff;
-            --list-item-bg: rgba(255, 255, 255, 0.5);
-            --topbar-bg: rgba(255, 255, 255, 0.8);
-            
-            --radius-xl: 20px;
-            --radius-lg: 14px;
-            --radius-md: 10px;
+            --text-muted: #86868b;
+            --border-subtle: rgba(0, 0, 0, 0.07);
+            --input-bg: rgba(255, 255, 255, 0.55);
+            --input-focus-bg: rgba(255, 255, 255, 0.95);
+            --list-item-bg: rgba(255, 255, 255, 0.45);
+            --topbar-bg: rgba(255, 255, 255, 0.6);
+
+            --blob-1: rgba(0, 122, 255, 0.28);
+            --blob-2: rgba(255, 149, 0, 0.22);
+            --blob-3: rgba(175, 82, 222, 0.18);
+
+            --radius-xl: 22px;
+            --radius-lg: 16px;
+            --radius-md: 12px;
             --radius-sm: 8px;
         }
 
-        /* Post-Apocalyptic Rust Dark Theme */
         [data-theme="dark"] {
-            --bg-base: #121214;
-            --glass-panel: rgba(24, 24, 27, 0.8);
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --glass-shadow: 0 10px 30px 0 rgba(0, 0, 0, 0.4);
-            --glass-dropdown: rgba(30, 30, 35, 0.95);
-            
-            --rust-orange: #f59e0b;
-            --rust-orange-hover: #d97706;
-            --rust-orange-glow: rgba(245, 158, 11, 0.2);
-            --apple-blue: #38bdf8;
-            
-            --text-main: #f4f4f5;
-            --text-muted: #a1a1aa;
+            --bg-base: #000000;
+            --glass-panel: rgba(44, 44, 46, 0.5);
+            --glass-border: rgba(255, 255, 255, 0.12);
+            --glass-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.12), inset 0 0 0 0.5px rgba(255, 255, 255, 0.06);
+            --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+            --glass-dropdown: rgba(40, 40, 44, 0.7);
+
+            --accent: #0a84ff;
+            --accent-hover: #409cff;
+            --accent-glow: rgba(10, 132, 255, 0.22);
+            --apple-blue: #0a84ff;
+            --apple-green: #30d158;
+            --apple-red: #ff453a;
+            --apple-orange: #ff9f0a;
+
+            --text-main: #f5f5f7;
+            --text-muted: #98989d;
             --border-subtle: rgba(255, 255, 255, 0.1);
-            --input-bg: rgba(255, 255, 255, 0.05);
-            --input-focus-bg: rgba(255, 255, 255, 0.09);
-            --list-item-bg: rgba(255, 255, 255, 0.03);
-            --topbar-bg: rgba(18, 18, 20, 0.85);
+            --input-bg: rgba(255, 255, 255, 0.06);
+            --input-focus-bg: rgba(255, 255, 255, 0.1);
+            --list-item-bg: rgba(255, 255, 255, 0.04);
+            --topbar-bg: rgba(22, 22, 24, 0.55);
+
+            --blob-1: rgba(10, 132, 255, 0.22);
+            --blob-2: rgba(255, 159, 10, 0.12);
+            --blob-3: rgba(191, 90, 242, 0.16);
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display', 'Helvetica Neue', 'Segoe UI', Roboto, Inter, sans-serif;
+            -webkit-font-smoothing: antialiased;
             user-select: none;
             transition: background-color 0.3s, color 0.3s, border-color 0.3s;
         }
 
-        /* Smooth Custom Scrollbar */
-        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: rgba(128, 128, 128, 0.3); border-radius: 3px; }
         ::-webkit-scrollbar-thumb:hover { background: rgba(128, 128, 128, 0.5); }
 
         body {
             background-color: var(--bg-base);
-            background-image: 
-                radial-gradient(at 10% 10%, rgba(217, 119, 6, 0.07) 0px, transparent 50%),
-                radial-gradient(at 90% 90%, rgba(2, 132, 199, 0.05) 0px, transparent 50%);
             color: var(--text-main);
             height: 100vh;
             display: flex;
             flex-direction: column;
             overflow: hidden;
+            position: relative;
         }
 
-        /* --- TOP MENUBAR --- */
+        /* Soft colour blobs behind everything so the glass has something to refract */
+        .bg-blobs { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+        .bg-blobs div { position: absolute; border-radius: 50%; filter: blur(80px); animation: drift 24s ease-in-out infinite alternate; }
+        .bg-blobs .b1 { width: 520px; height: 520px; background: var(--blob-1); top: -140px; left: -120px; }
+        .bg-blobs .b2 { width: 460px; height: 460px; background: var(--blob-2); bottom: -160px; right: -100px; animation-delay: -8s; }
+        .bg-blobs .b3 { width: 380px; height: 380px; background: var(--blob-3); top: 40%; left: 55%; animation-delay: -16s; }
+        @keyframes drift {
+            from { transform: translate(0, 0) scale(1); }
+            to { transform: translate(60px, 40px) scale(1.12); }
+        }
+        @media (prefers-reduced-motion: reduce) { .bg-blobs div { animation: none; } }
+
+        /* --- TOP MENUBAR ---
+           Glass lives on a ::before layer, NOT on the header itself. A backdrop-filter on the
+           header would (a) trap position:fixed dropdowns inside it and (b) stop the dropdowns'
+           own glass from blurring the page underneath. */
         header.top-bar {
             height: 52px;
-            background: var(--topbar-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            flex-shrink: 0;
             border-bottom: 1px solid var(--border-subtle);
             display: flex;
             align-items: center;
@@ -99,6 +122,17 @@
             position: relative;
             z-index: 100;
         }
+        header.top-bar::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            background: var(--topbar-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            box-shadow: var(--glass-highlight);
+        }
+        main { position: relative; z-index: 1; }
 
         .brand-logo {
             display: flex;
@@ -108,25 +142,32 @@
             font-size: 1rem;
             color: var(--text-main);
             cursor: pointer;
+            white-space: nowrap;
+            flex-shrink: 0;
         }
 
-        .brand-logo span {
-            font-size: 1.2rem;
-        }
+        .brand-logo span { font-size: 1.2rem; }
 
+        /* Menu row can scroll sideways on narrow Discord windows.
+           Dropdowns are NOT children of this scroll box visually (they're fixed-positioned by JS),
+           so they no longer get clipped. */
         .menu-items {
             display: flex;
             align-items: center;
             gap: 4px;
             height: 100%;
+            min-width: 0;
             overflow-x: auto;
+            overflow-y: hidden;
+            scrollbar-width: none;
         }
+        .menu-items::-webkit-scrollbar { display: none; }
 
         .menu-item {
-            position: relative;
             height: 100%;
             display: flex;
             align-items: center;
+            flex-shrink: 0;
         }
 
         .menu-btn {
@@ -146,23 +187,21 @@
             white-space: nowrap;
         }
 
-        .menu-btn:hover, .menu-btn.active {
-            background: var(--rust-orange-glow);
-            color: var(--rust-orange);
-        }
+        .menu-btn:hover { background: rgba(128, 128, 128, 0.14); }
+        .menu-item.open .menu-btn { background: rgba(128, 128, 128, 0.2); }
 
-        /* Dropdown Menu */
+        /* Dropdown: fixed + positioned in JS so overflow on .menu-items can't clip it */
         .dropdown {
-            position: absolute;
-            top: 46px;
+            position: fixed;
+            top: 0;
             left: 0;
             background: var(--glass-dropdown);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border: 1px solid var(--border-subtle);
-            border-radius: var(--radius-md);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-            min-width: 200px;
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--glass-highlight), 0 24px 48px rgba(0, 0, 0, 0.18), 0 2px 6px rgba(0, 0, 0, 0.06);
+            min-width: 220px;
             padding: 6px;
             display: none;
             flex-direction: column;
@@ -171,9 +210,7 @@
             animation: popDown 0.15s ease-out;
         }
 
-        .menu-item.open .dropdown {
-            display: flex;
-        }
+        .menu-item.open .dropdown { display: flex; }
 
         @keyframes popDown {
             from { opacity: 0; transform: translateY(-6px); }
@@ -190,12 +227,14 @@
             font-weight: 500;
             color: var(--text-main);
             cursor: pointer;
+            white-space: nowrap;
             transition: background 0.1s, color 0.1s;
         }
 
-        .dropdown-item:hover {
-            background: var(--rust-orange);
+        .dropdown-item:hover, .dropdown-item:focus-visible {
+            background: var(--apple-blue);
             color: #ffffff;
+            outline: none;
         }
 
         .topbar-right {
@@ -203,6 +242,7 @@
             display: flex;
             align-items: center;
             gap: 12px;
+            flex-shrink: 0;
         }
 
         .theme-toggle-btn {
@@ -221,8 +261,8 @@
         }
 
         .theme-toggle-btn:hover {
-            background: var(--rust-orange-glow);
-            border-color: var(--rust-orange);
+            background: var(--accent-glow);
+            border-color: var(--accent);
             transform: scale(1.05);
         }
 
@@ -236,6 +276,7 @@
             display: flex;
             align-items: center;
             gap: 6px;
+            white-space: nowrap;
         }
 
         .status-dot {
@@ -244,6 +285,15 @@
             background-color: #10b981;
             border-radius: 50%;
             box-shadow: 0 0 8px #10b981;
+        }
+
+        /* Narrow Discord windows / mobile */
+        @media (max-width: 760px) {
+            header.top-bar { padding: 0 12px; gap: 10px; }
+            .brand-text, .status-pill { display: none; }
+            .menu-btn { padding: 0 8px; font-size: 0.8rem; }
+            main { padding: 20px 16px !important; }
+            .grid, .tea-grid { grid-template-columns: 1fr !important; }
         }
 
         /* --- MAIN CONTENT AREA --- */
@@ -284,7 +334,6 @@
             font-weight: 400;
         }
 
-        /* Liquid Glass Card Grid */
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -293,18 +342,16 @@
 
         .card {
             background: var(--glass-panel);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
             border: 1px solid var(--glass-border);
             border-radius: var(--radius-xl);
             padding: 24px;
-            box-shadow: var(--glass-shadow);
-            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: var(--glass-highlight), var(--glass-shadow);
+            transition: transform 0.25s cubic-bezier(.2,.8,.2,1), box-shadow 0.25s;
         }
 
-        .card:hover {
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
-        }
+        .card:hover { box-shadow: var(--glass-highlight), 0 14px 40px rgba(31, 38, 80, 0.14); }
 
         .card-header {
             font-weight: 700;
@@ -316,7 +363,6 @@
             justify-content: space-between;
         }
 
-        /* Form Elements */
         label {
             display: block;
             font-size: 0.75rem;
@@ -340,16 +386,17 @@
             transition: all 0.2s;
         }
 
+        select option { background: var(--bg-base); color: var(--text-main); }
+
         input:focus, select:focus, textarea:focus {
             outline: none;
-            border-color: var(--rust-orange);
+            border-color: var(--accent);
             background: var(--input-focus-bg);
-            box-shadow: 0 0 0 4px var(--rust-orange-glow);
+            box-shadow: 0 0 0 4px var(--accent-glow);
         }
 
-        /* Action Buttons */
         .btn-action {
-            background: var(--rust-orange);
+            background: var(--accent);
             color: #ffffff;
             border: none;
             padding: 10px 20px;
@@ -358,7 +405,7 @@
             font-size: 0.9rem;
             cursor: pointer;
             transition: all 0.2s;
-            box-shadow: 0 4px 12px rgba(217, 119, 6, 0.3);
+            box-shadow: 0 4px 12px rgba(0, 113, 227, 0.3);
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -366,14 +413,13 @@
         }
 
         .btn-action:hover {
-            background: var(--rust-orange-hover);
+            background: var(--accent-hover);
             transform: translateY(-1px);
-            box-shadow: 0 6px 16px rgba(217, 119, 6, 0.4);
+            box-shadow: 0 6px 16px rgba(0, 113, 227, 0.4);
         }
 
         .btn-action:active { transform: translateY(0); }
 
-        /* Stat Displays */
         .stat-row {
             display: flex;
             justify-content: space-between;
@@ -385,11 +431,10 @@
 
         .stat-val {
             font-weight: 700;
-            color: var(--rust-orange);
+            color: var(--accent);
             font-size: 1rem;
         }
 
-        /* List Items */
         .list-item {
             display: flex;
             justify-content: space-between;
@@ -413,10 +458,7 @@
             transition: all 0.2s;
         }
 
-        .btn-del:hover {
-            background: #ef4444;
-            color: #fff;
-        }
+        .btn-del:hover { background: #ef4444; color: #fff; }
 
         .timer-display {
             font-size: 3.5rem;
@@ -427,7 +469,25 @@
             letter-spacing: -1px;
         }
 
-        /* --- FEATURE 1: TEA & FARM CALCULATOR --- */
+        /* In-page toast (alert() is blocked inside Discord's sandboxed iframe) */
+        #toast {
+            position: fixed;
+            left: 50%;
+            bottom: 24px;
+            transform: translateX(-50%) translateY(20px);
+            background: var(--accent);
+            color: #fff;
+            font-weight: 700;
+            padding: 12px 22px;
+            border-radius: var(--radius-md);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s, transform 0.25s;
+            z-index: 2000;
+        }
+        #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
         .tea-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -444,13 +504,11 @@
         .berry-yellow { background: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); }
         .berry-white { background: rgba(255, 255, 255, 0.15); color: var(--text-main); border: 1px solid var(--border-subtle); }
 
-        /* --- FEATURE 2: MODULAR CAR & BOAT CONFIGURATOR --- */
         .vehicle-preview-box {
             background: rgba(0,0,0,0.15); border-radius: var(--radius-lg);
             padding: 20px; text-align: center; margin-top: 15px; border: 1px solid var(--border-subtle);
         }
 
-        /* --- FEATURE 4: MONUMENT PUZZLE FLOWCHARTS --- */
         .monument-tabs {
             display: flex; gap: 8px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 4px;
         }
@@ -459,8 +517,8 @@
             padding: 8px 16px; border-radius: var(--radius-md); cursor: pointer;
             font-weight: 600; font-size: 0.85rem; color: var(--text-main); white-space: nowrap;
         }
-        .monument-tab.active { background: var(--rust-orange); color: white; border-color: var(--rust-orange); }
-        
+        .monument-tab.active { background: var(--accent); color: white; border-color: var(--accent); }
+
         .checklist-item {
             display: flex; align-items: center; gap: 12px;
             background: var(--list-item-bg); padding: 12px 16px;
@@ -468,17 +526,16 @@
             border: 1px solid var(--border-subtle); cursor: pointer;
         }
         .checklist-item input[type="checkbox"] {
-            width: 20px; height: 20px; accent-color: var(--rust-orange); cursor: pointer;
-            margin-bottom: 0;
+            width: 20px; height: 20px; accent-color: var(--accent); cursor: pointer;
+            margin-bottom: 0; flex-shrink: 0; pointer-events: none;
         }
         .checklist-item.checked span { text-decoration: line-through; opacity: 0.6; }
 
-        /* --- FLAPPY BIRD MINI-GAME CONTAINER --- */
         #flappy-container {
-            position: relative; width: 320px; height: 568px;
+            position: relative; width: 320px; max-width: 100%; height: 568px;
             background: #e0f2fe; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
             border: 1px solid var(--glass-border); border-radius: var(--radius-xl);
-            overflow: hidden; margin: 0 auto; cursor: pointer;
+            overflow: hidden; margin: 0 auto; cursor: pointer; touch-action: manipulation;
         }
         [data-theme="dark"] #flappy-container { background: #021526; }
         #flappy-canvas { display: block; width: 100%; height: 100%; object-fit: cover; image-rendering: pixelated; }
@@ -504,58 +561,142 @@
         .flappy-panel h1 { color: var(--text-main); font-size: 1.6rem; margin-bottom: 4px; font-weight: 700; }
         .flappy-panel p { font-size: 0.9rem; color: var(--text-muted); font-weight: 600; }
         .flappy-btn {
-            background: var(--rust-orange); border: none; color: #ffffff;
+            background: var(--accent); border: none; color: #ffffff;
             padding: 12px 28px; font-size: 1rem; font-weight: 700;
-            border-radius: var(--radius-md); cursor: pointer; box-shadow: 0 4px 12px rgba(217, 119, 6, 0.4);
+            border-radius: var(--radius-md); cursor: pointer; box-shadow: 0 4px 12px rgba(0, 113, 227, 0.4);
             text-transform: uppercase; outline: none; pointer-events: auto; transition: transform 0.1s;
         }
-        .flappy-btn:hover { background: var(--rust-orange-hover); }
+        .flappy-btn:hover { background: var(--accent-hover); }
         .flappy-btn:active { transform: scale(0.97); }
+        /* ===== ARCADE: shared ===== */
+        .game-wrap { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+        .game-card { display: inline-flex; flex-direction: column; align-items: center; gap: 14px; max-width: 100%; }
+        .game-hud { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+        .hud-pill {
+            background: var(--input-bg); border: 1px solid var(--border-subtle);
+            border-radius: 999px; padding: 6px 14px; font-size: 0.85rem; font-weight: 600;
+            box-shadow: var(--glass-highlight); white-space: nowrap;
+        }
+        .hud-pill b { color: var(--accent); font-variant-numeric: tabular-nums; }
+        .seg {
+            display: inline-flex; background: rgba(128,128,128,0.14); border-radius: 10px; padding: 3px; gap: 2px;
+        }
+        .seg button {
+            border: none; background: transparent; color: var(--text-main); font-size: 0.8rem; font-weight: 600;
+            padding: 6px 12px; border-radius: 8px; cursor: pointer;
+        }
+        .seg button.on { background: var(--input-focus-bg); box-shadow: 0 1px 3px rgba(0,0,0,0.15); }
+        .btn-ghost {
+            background: var(--input-bg); color: var(--text-main); border: 1px solid var(--border-subtle);
+            box-shadow: var(--glass-highlight);
+        }
+        .btn-ghost:hover { background: var(--input-focus-bg); box-shadow: var(--glass-highlight); }
+        .game-msg { min-height: 1.4em; font-weight: 600; color: var(--text-muted); font-size: 0.9rem; }
+
+        /* ===== SNAKE ===== */
+        #snake-stage { position: relative; width: 400px; max-width: 100%; aspect-ratio: 1; border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--glass-border); }
+        #snake-canvas { display: block; width: 100%; height: 100%; touch-action: none; }
+        #snake-overlay {
+            position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;
+            background: rgba(255,255,255,0.35); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+        }
+        [data-theme="dark"] #snake-overlay { background: rgba(0,0,0,0.45); }
+        #snake-overlay h3 { font-size: 1.5rem; font-weight: 700; }
+        .dpad { display: grid; grid-template-columns: repeat(3, 52px); grid-template-rows: repeat(2, 44px); gap: 6px; }
+        .dpad button {
+            border: 1px solid var(--border-subtle); background: var(--input-bg); color: var(--text-main);
+            border-radius: 12px; font-size: 1.1rem; cursor: pointer; box-shadow: var(--glass-highlight);
+        }
+        .dpad button:active { background: var(--accent-glow); }
+        .dpad .up { grid-column: 2; }
+        .dpad .left { grid-column: 1; grid-row: 2; }
+        .dpad .down { grid-column: 2; grid-row: 2; }
+        .dpad .right { grid-column: 3; grid-row: 2; }
+        @media (hover: hover) and (pointer: fine) { .dpad { display: none; } }
+
+        /* ===== MINESWEEPER ===== */
+        #mines-board {
+            display: grid; gap: 3px; padding: 10px; border-radius: var(--radius-lg);
+            background: rgba(128,128,128,0.16); max-width: 100%; overflow: auto; touch-action: manipulation;
+        }
+        .mcell {
+            width: 30px; height: 30px; border-radius: 7px; border: none; cursor: pointer;
+            font-weight: 800; font-size: 0.9rem; display: flex; align-items: center; justify-content: center;
+            background: var(--mcell-bg); box-shadow: var(--glass-highlight), 0 1px 3px rgba(0,0,0,0.14);
+            color: var(--text-main); padding: 0; transition: transform 0.08s, background 0.15s;
+        }
+        :root { --mcell-bg: #ffffff; }
+        [data-theme="dark"] { --mcell-bg: rgba(255,255,255,0.16); }
+        .mcell:hover:not(.open) { transform: scale(1.06); background: var(--input-focus-bg); }
+        .mcell.open { background: transparent; box-shadow: none; cursor: default; }
+        .mcell.boom { background: var(--apple-red) !important; }
+        .mcell.n1 { color: #0a84ff; } .mcell.n2 { color: #30b158; } .mcell.n3 { color: #ff3b30; }
+        .mcell.n4 { color: #5e5ce6; } .mcell.n5 { color: #ff9500; } .mcell.n6 { color: #32ade6; }
+        .mcell.n7 { color: #af52de; } .mcell.n8 { color: #8e8e93; }
+        #mines-board.hard .mcell { width: 24px; height: 24px; font-size: 0.75rem; border-radius: 5px; }
+
+        /* ===== TIC-TAC-TOE ===== */
+        #ttt-board { display: grid; grid-template-columns: repeat(3, 96px); gap: 10px; }
+        .tcell {
+            width: 96px; height: 96px; border-radius: var(--radius-lg); border: 1px solid var(--glass-border);
+            background: var(--glass-panel); box-shadow: var(--glass-highlight), var(--glass-shadow);
+            font-size: 2.6rem; font-weight: 800; cursor: pointer; color: var(--text-main);
+            display: flex; align-items: center; justify-content: center; transition: transform 0.12s, background 0.2s;
+        }
+        .tcell:hover:empty { transform: scale(1.04); background: var(--input-focus-bg); }
+        .tcell.x { color: var(--apple-blue); }
+        .tcell.o { color: var(--apple-orange); }
+        .tcell.win { background: var(--accent-glow); transform: scale(1.05); }
+        .tcell span { animation: pop 0.2s cubic-bezier(.2,1.6,.4,1); }
+        @keyframes pop { from { transform: scale(0.3); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        @media (max-width: 420px) {
+            #ttt-board { grid-template-columns: repeat(3, 80px); }
+            .tcell { width: 80px; height: 80px; font-size: 2.2rem; }
+        }
     </style>
 </head>
 <body data-theme="light">
+    <div class="bg-blobs" aria-hidden="true"><div class="b1"></div><div class="b2"></div><div class="b3"></div></div>
 
-    <!-- Top Navigation Bar -->
     <header class="top-bar">
-        <div class="brand-logo" onclick="switchTab('raid')">
-            <span>🏝️</span> Rust Island Suite
+        <div class="brand-logo" data-tab="raid">
+            <span>🏝️</span> <span class="brand-text">Rust Island Suite</span>
         </div>
 
         <nav class="menu-items">
-            <!-- Combat & Raid -->
             <div class="menu-item">
-                <button class="menu-btn">Combat & Raiding ▾</button>
+                <button class="menu-btn" type="button">Combat & Raiding ▾</button>
                 <div class="dropdown">
-                    <button class="dropdown-item" onclick="switchTab('raid')">💥 Raid Calculator</button>
-                    <button class="dropdown-item" onclick="switchTab('recycler')">♻️ Recycler Yield</button>
+                    <button class="dropdown-item" type="button" data-tab="raid">💥 Raid Calculator</button>
+                    <button class="dropdown-item" type="button" data-tab="recycler">♻️ Recycler Yield</button>
                 </div>
             </div>
 
-            <!-- Vehicles & Farm -->
             <div class="menu-item">
-                <button class="menu-btn">Farming & Vehicles ▾</button>
+                <button class="menu-btn" type="button">Farming & Vehicles ▾</button>
                 <div class="dropdown">
-                    <button class="dropdown-item" onclick="switchTab('tea')">🌿 Tea & Farm Planner</button>
-                    <button class="dropdown-item" onclick="switchTab('vehicles')">🚗 Car & Boat Configurator</button>
+                    <button class="dropdown-item" type="button" data-tab="tea">🌿 Tea & Farm Planner</button>
+                    <button class="dropdown-item" type="button" data-tab="vehicles">🚗 Car & Boat Configurator</button>
                 </div>
             </div>
 
-            <!-- Operations & Monuments -->
             <div class="menu-item">
-                <button class="menu-btn">Base & Monuments ▾</button>
+                <button class="menu-btn" type="button">Base & Monuments ▾</button>
                 <div class="dropdown">
-                    <button class="dropdown-item" onclick="switchTab('monuments')">🗺️ Monument Keycard Guides</button>
-                    <button class="dropdown-item" onclick="switchTab('timers')">⏱️ Crate Timers</button>
-                    <button class="dropdown-item" onclick="switchTab('genes')">🌱 Gene Combiner</button>
-                    <button class="dropdown-item" onclick="switchTab('team')">📋 Team & Codes</button>
+                    <button class="dropdown-item" type="button" data-tab="monuments">🗺️ Monument Keycard Guides</button>
+                    <button class="dropdown-item" type="button" data-tab="timers">⏱️ Crate Timers</button>
+                    <button class="dropdown-item" type="button" data-tab="genes">🌱 Gene Combiner</button>
+                    <button class="dropdown-item" type="button" data-tab="team">📋 Team & Codes</button>
                 </div>
             </div>
 
-            <!-- Arcade -->
             <div class="menu-item">
-                <button class="menu-btn">Arcade ▾</button>
+                <button class="menu-btn" type="button">Arcade ▾</button>
                 <div class="dropdown">
-                    <button class="dropdown-item" onclick="switchTab('flappy')">🐤 Flappy Bird</button>
+                    <button class="dropdown-item" type="button" data-tab="flappy">🐤 Flappy Bird</button>
+                    <button class="dropdown-item" type="button" data-tab="snake">🐍 Snake</button>
+                    <button class="dropdown-item" type="button" data-tab="mines">💣 Minesweeper</button>
+                    <button class="dropdown-item" type="button" data-tab="ttt">⭕ Tic-Tac-Toe</button>
                 </div>
             </div>
         </nav>
@@ -564,7 +705,7 @@
             <div class="status-pill">
                 <div class="status-dot"></div> Live Sync
             </div>
-            <button class="theme-toggle-btn" id="theme-toggle" title="Toggle Dark/Light Mode">🌙</button>
+            <button class="theme-toggle-btn" id="theme-toggle" type="button" title="Toggle Dark/Light Mode">🌙</button>
         </div>
     </header>
 
@@ -590,7 +731,7 @@
                     <div class="stat-row"><span>C4 Needed</span> <span class="stat-val" id="res-c4">0</span></div>
                     <div class="stat-row"><span>Rockets Needed</span> <span class="stat-val" id="res-rockets">0</span></div>
                     <div class="stat-row"><span>Satchels Needed</span> <span class="stat-val" id="res-satchels">0</span></div>
-                    
+
                     <div class="card-header" style="margin-top:24px;">Raw Components</div>
                     <div class="stat-row"><span>Sulfur</span> <span class="stat-val" id="raw-sulfur">0</span></div>
                     <div class="stat-row"><span>Charcoal</span> <span class="stat-val" id="raw-charcoal">0</span></div>
@@ -608,11 +749,11 @@
             <div class="grid">
                 <div class="card">
                     <div class="card-header">Recycler Input</div>
-                    <label>Gears</label><input type="number" class="rec-in" data-type="gear" value="0">
-                    <label>Metal Pipes</label><input type="number" class="rec-in" data-type="pipe" value="0">
-                    <label>Tech Trash</label><input type="number" class="rec-in" data-type="tech" value="0">
-                    <label>Rifle Bodies</label><input type="number" class="rec-in" data-type="rifle" value="0">
-                    <label>Road Signs</label><input type="number" class="rec-in" data-type="sign" value="0">
+                    <label>Gears</label><input type="number" class="rec-in" data-type="gear" min="0" value="0">
+                    <label>Metal Pipes</label><input type="number" class="rec-in" data-type="pipe" min="0" value="0">
+                    <label>Tech Trash</label><input type="number" class="rec-in" data-type="tech" min="0" value="0">
+                    <label>Rifle Bodies</label><input type="number" class="rec-in" data-type="rifle" min="0" value="0">
+                    <label>Road Signs</label><input type="number" class="rec-in" data-type="sign" min="0" value="0">
                 </div>
 
                 <div class="card">
@@ -624,7 +765,7 @@
             </div>
         </div>
 
-        <!-- 3. TEA & FARM YIELD CALCULATOR -->
+        <!-- 3. TEA -->
         <div id="tea" class="tab-content">
             <h2>Tea & Farm Yield Calculator</h2>
             <p class="desc">Plan mixing table recipes and compute exact berry requirements per harvest cycle.</p>
@@ -654,9 +795,7 @@
 
                 <div class="card">
                     <div class="card-header">Required Ingredients</div>
-                    <div style="margin-bottom: 16px;" id="berry-ingredients-list">
-                        <!-- Populated by JS -->
-                    </div>
+                    <div style="margin-bottom: 16px;" id="berry-ingredients-list"></div>
                     <div class="stat-row"><span>Total Berries Needed</span> <span class="stat-val" id="total-berries">0</span></div>
                     <div class="stat-row"><span>Low Grade Fuel Needed</span> <span class="stat-val" id="total-tea-lgf">0</span></div>
                     <div class="stat-row"><span>Water Required</span> <span class="stat-val" id="total-water">0 mL</span></div>
@@ -664,7 +803,7 @@
             </div>
         </div>
 
-        <!-- 4. MODULAR CAR & BOAT CONFIGURATOR -->
+        <!-- 4. VEHICLES -->
         <div id="vehicles" class="tab-content">
             <h2>Modular Car & Boat Configurator</h2>
             <p class="desc">Snap vehicle modules together to calculate top speeds, armor rating, seating, and fuel burn.</p>
@@ -673,7 +812,7 @@
                 <div class="card">
                     <div class="card-header">Vehicle Selection & Chassis</div>
                     <label>Vehicle Type</label>
-                    <select id="veh-type" onchange="updateVehicleConfigUI()">
+                    <select id="veh-type">
                         <option value="car">Modular Car (Land)</option>
                         <option value="boat">RHIB / Rowboat (Water)</option>
                     </select>
@@ -685,30 +824,38 @@
                             <option value="3" selected>3-Socket Chassis</option>
                             <option value="4">4-Socket Chassis</option>
                         </select>
-                        <label>Module 1</label>
+                        <div class="veh-slot"><label>Module 1</label>
                         <select class="veh-mod" data-slot="0">
                             <option value="engine">Engine Module</option>
                             <option value="cockpit" selected>Cockpit (Driver + Passenger)</option>
                             <option value="storage">Large Storage</option>
                             <option value="fuel">Fuel Tank</option>
                             <option value="passenger">Passenger Module</option>
-                        </select>
-                        <label>Module 2</label>
+                        </select></div>
+                        <div class="veh-slot"><label>Module 2</label>
                         <select class="veh-mod" data-slot="1">
                             <option value="engine" selected>Engine Module</option>
                             <option value="cockpit">Cockpit</option>
                             <option value="storage">Large Storage</option>
                             <option value="fuel">Fuel Tank</option>
                             <option value="passenger">Passenger Module</option>
-                        </select>
-                        <label>Module 3</label>
+                        </select></div>
+                        <div class="veh-slot"><label>Module 3</label>
                         <select class="veh-mod" data-slot="2">
                             <option value="storage" selected>Large Storage</option>
                             <option value="engine">Engine Module</option>
                             <option value="cockpit">Cockpit</option>
                             <option value="fuel">Fuel Tank</option>
                             <option value="passenger">Passenger Module</option>
-                        </select>
+                        </select></div>
+                        <div class="veh-slot"><label>Module 4</label>
+                        <select class="veh-mod" data-slot="3">
+                            <option value="passenger" selected>Passenger Module</option>
+                            <option value="engine">Engine Module</option>
+                            <option value="cockpit">Cockpit</option>
+                            <option value="storage">Large Storage</option>
+                            <option value="fuel">Fuel Tank</option>
+                        </select></div>
                     </div>
 
                     <div id="boat-chassis-box" style="display: none;">
@@ -719,7 +866,7 @@
                         </select>
                     </div>
 
-                    <button class="btn-action" id="btn-calc-veh" style="margin-top: 12px;">Calculate Stats</button>
+                    <button class="btn-action" id="btn-calc-veh" type="button" style="margin-top: 12px;">Calculate Stats</button>
                 </div>
 
                 <div class="card">
@@ -728,7 +875,7 @@
                     <div class="stat-row"><span>Vehicle Health / Armor</span> <span class="stat-val" id="veh-hp">850 HP (Medium)</span></div>
                     <div class="stat-row"><span>Total Seating Capacity</span> <span class="stat-val" id="veh-seats">4 Seats</span></div>
                     <div class="stat-row"><span>Fuel Consumption (LGF/min)</span> <span class="stat-val" id="veh-fuel">1.2 LGF/min</span></div>
-                    
+
                     <div class="vehicle-preview-box">
                         <span style="font-size: 2.5rem;" id="veh-icon">🚙</span>
                         <div style="font-weight: 700; margin-top: 8px; color: var(--text-main);" id="veh-desc">Configured 3-Socket Cruiser</div>
@@ -737,45 +884,37 @@
             </div>
         </div>
 
-        <!-- 5. MONUMENT PUZZLE FLOWCHARTS & KEYCARD GUIDE -->
+        <!-- 5. MONUMENTS -->
         <div id="monuments" class="tab-content">
             <h2>Monument Puzzle & Keycard Guide</h2>
             <p class="desc">Step-by-step interactive puzzle solvers and keycard checklist for high-tier monuments.</p>
 
             <div class="monument-tabs">
-                <button class="monument-tab active" onclick="switchMonument('launch')">🚀 Launch Site</button>
-                <button class="monument-tab" onclick="switchMonument('water')">🏭 Water Treatment</button>
-                <button class="monument-tab" onclick="switchMonument('airfield')">✈️ Airfield</button>
-                <button class="monument-tab" onclick="switchMonument('power')">⚡ Power Plant</button>
-                <button class="monument-tab" onclick="switchMonument('train')">🚂 Train Yard</button>
-                <button class="monument-tab" onclick="switchMonument('sewer')">🕳️ Sewer Branch</button>
+                <button class="monument-tab active" type="button" data-monument="launch">🚀 Launch Site</button>
+                <button class="monument-tab" type="button" data-monument="water">🏭 Water Treatment</button>
+                <button class="monument-tab" type="button" data-monument="airfield">✈️ Airfield</button>
+                <button class="monument-tab" type="button" data-monument="power">⚡ Power Plant</button>
+                <button class="monument-tab" type="button" data-monument="train">🚂 Train Yard</button>
+                <button class="monument-tab" type="button" data-monument="sewer">🕳️ Sewer Branch</button>
             </div>
 
             <div class="grid">
                 <div class="card">
                     <div class="card-header"><span id="monument-title">Launch Site Guide</span></div>
-                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 16px;" id="monument-desc">Requires high radiation protection, fuses, green, blue, and red keycards to loot elite crates.</p>
-                    
-                    <div id="monument-requirements" style="margin-bottom: 16px; display: flex; gap: 8px; flex-wrap: wrap;">
-                        <!-- Requirements badges populated by JS -->
-                    </div>
-
+                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 16px;" id="monument-desc"></p>
+                    <div id="monument-requirements" style="margin-bottom: 16px; display: flex; gap: 8px; flex-wrap: wrap;"></div>
                     <div class="card-header" style="font-size: 0.95rem;">Puzzle Checklist & Steps</div>
-                    <div id="monument-checklist">
-                        <!-- Checklist items populated by JS -->
-                    </div>
+                    <div id="monument-checklist"></div>
                 </div>
 
                 <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
                     <div>
                         <div class="card-header">Tactical Tips & Loot Expected</div>
-                        <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6;" id="monument-tips">
-                            Watch out for heavy scientists roaming the perimeter. Bring at least 30% radiation protection (hazmat suit recommended) and multiple medical syringes.
-                        </p>
+                        <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6;" id="monument-tips"></p>
                     </div>
-                    <div style="background: rgba(217, 119, 6, 0.1); border: 1px solid var(--rust-orange); border-radius: var(--radius-md); padding: 16px; margin-top: 20px;">
-                        <div style="font-weight: 700; color: var(--rust-orange); margin-bottom: 4px;">⚠️ PVP Warning</div>
-                        <div style="font-size: 0.850rem; color: var(--text-main);">Monuments are high-traffic zones for counter-raiders and snipers. Always secure your minicopter or scrap heli before entering.</div>
+                    <div style="background: rgba(0, 113, 227, 0.1); border: 1px solid var(--accent); border-radius: var(--radius-md); padding: 16px; margin-top: 20px;">
+                        <div style="font-weight: 700; color: var(--accent); margin-bottom: 4px;">⚠️ PVP Warning</div>
+                        <div style="font-size: 0.85rem; color: var(--text-main);">Monuments are high-traffic zones for counter-raiders and snipers. Always secure your minicopter or scrap heli before entering.</div>
                     </div>
                 </div>
             </div>
@@ -791,14 +930,14 @@
                     <div class="card-header" style="justify-content: center;">Locked Crate Hack Timer</div>
                     <div class="timer-display" id="crate-timer">15:00</div>
                     <div style="display: flex; gap: 10px; justify-content: center;">
-                        <button class="btn-action" id="btn-timer-start">Start Hack</button>
-                        <button class="btn-action" id="btn-timer-reset" style="background: var(--input-bg); color: var(--text-main); border: 1px solid var(--border-subtle); box-shadow: none;">Reset</button>
+                        <button class="btn-action" id="btn-timer-start" type="button">Start Hack</button>
+                        <button class="btn-action" id="btn-timer-reset" type="button" style="background: var(--input-bg); color: var(--text-main); border: 1px solid var(--border-subtle); box-shadow: none;">Reset</button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- 7. GENE COMBINER -->
+        <!-- 7. GENES -->
         <div id="genes" class="tab-content">
             <h2>Plant Gene Combiner</h2>
             <p class="desc">Crossbreed seed strings to evaluate dominant genetic offspring.</p>
@@ -808,24 +947,24 @@
                 <label>Seed 1</label><input type="text" id="gene1" value="G-Y-G-H-W" maxlength="9">
                 <label>Seed 2</label><input type="text" id="gene2" value="G-Y-Y-H-X" maxlength="9">
                 <label>Seed 3</label><input type="text" id="gene3" value="G-G-Y-H-G" maxlength="9">
-                <button class="btn-action" id="btn-calc-genes" style="margin-top: 8px;">Combine Genetics</button>
+                <button class="btn-action" id="btn-calc-genes" type="button" style="margin-top: 8px;">Combine Genetics</button>
 
                 <div class="card-header" style="margin-top: 24px;">Predicted Result</div>
                 <div class="stat-row"><span style="font-size:1rem;">Dominant Output</span> <span class="stat-val" id="gene-result" style="font-size:1.1rem;">???</span></div>
             </div>
         </div>
 
-        <!-- 8. TEAM & CODES -->
+        <!-- 8. TEAM -->
         <div id="team" class="tab-content">
             <h2>Team Base Registry</h2>
-            <p class="desc">Securely store code lock pinouts and tactical wishlist notes locally.</p>
+            <p class="desc">Store code lock pinouts and tactical wishlist notes locally on this device.</p>
 
             <div class="grid">
                 <div class="card">
                     <div class="card-header">Code Lock Pins</div>
                     <input type="text" id="code-label" placeholder="Door / Gate (e.g., Main Airlock)">
                     <input type="text" id="code-val" placeholder="PIN Code (e.g., 4921)">
-                    <button class="btn-action" id="btn-add-code">Save Code</button>
+                    <button class="btn-action" id="btn-add-code" type="button">Save Code</button>
                     <div id="code-list" style="margin-top:16px;"></div>
                 </div>
 
@@ -836,20 +975,20 @@
             </div>
         </div>
 
-        <!-- 9. FLAPPY BIRD -->
+        <!-- 9. FLAPPY -->
         <div id="flappy" class="tab-content" style="text-align: center;">
             <h2>Arcade Mini-Game</h2>
             <p class="desc">Pass the time during night cycles or crafting queues!</p>
 
             <div id="flappy-container">
                 <div id="flappy-live-score" class="hidden">0</div>
-                
+
                 <div id="flappy-start-screen" class="flappy-ui">
                     <div class="flappy-panel">
                         <h1>FLAPPY BIRD</h1>
                         <p>Click or Press Space to Flap</p>
                     </div>
-                    <button id="flappy-play-btn" class="flappy-btn">PLAY</button>
+                    <button id="flappy-play-btn" class="flappy-btn" type="button">PLAY</button>
                 </div>
 
                 <div id="flappy-over-screen" class="flappy-ui hidden">
@@ -858,211 +997,331 @@
                         <p>SCORE: <span id="flappy-final-score">0</span></p>
                         <p>BEST: <span id="flappy-best-score">0</span></p>
                     </div>
-                    <button id="flappy-restart-btn" class="flappy-btn">TRY AGAIN</button>
+                    <button id="flappy-restart-btn" class="flappy-btn" type="button">TRY AGAIN</button>
                 </div>
 
                 <canvas id="flappy-canvas" width="288" height="512"></canvas>
             </div>
         </div>
+        <!-- 10. SNAKE -->
+        <div id="snake" class="tab-content">
+            <h2>Snake</h2>
+            <p class="desc">Arrow keys / WASD, swipe, or the pad. Space to pause.</p>
+            <div class="game-wrap">
+                <div class="card game-card">
+                    <div class="game-hud">
+                        <div class="hud-pill">Score <b id="snake-score">0</b></div>
+                        <div class="hud-pill">Best <b id="snake-best">0</b></div>
+                        <div class="seg" id="snake-speed">
+                            <button type="button" data-v="140">Chill</button>
+                            <button type="button" data-v="100" class="on">Normal</button>
+                            <button type="button" data-v="65">Sweaty</button>
+                        </div>
+                    </div>
+                    <div id="snake-stage">
+                        <canvas id="snake-canvas" width="400" height="400"></canvas>
+                        <div id="snake-overlay">
+                            <h3 id="snake-title">🐍 Snake</h3>
+                            <div class="game-msg" id="snake-sub">Eat the scrap. Don't bite yourself.</div>
+                            <button class="btn-action" type="button" id="snake-start">Play</button>
+                        </div>
+                    </div>
+                    <div class="dpad">
+                        <button type="button" class="up" data-dir="up">▲</button>
+                        <button type="button" class="left" data-dir="left">◀</button>
+                        <button type="button" class="down" data-dir="down">▼</button>
+                        <button type="button" class="right" data-dir="right">▶</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 11. MINESWEEPER -->
+        <div id="mines" class="tab-content">
+            <h2>Minesweeper</h2>
+            <p class="desc">Clear the field without stepping on a landmine. Right-click, long-press, or use Flag mode to flag.</p>
+            <div class="game-wrap">
+                <div class="card game-card">
+                    <div class="game-hud">
+                        <div class="hud-pill">💣 <b id="mines-left">10</b></div>
+                        <div class="hud-pill">⏱ <b id="mines-time">0</b>s</div>
+                        <div class="seg" id="mines-diff">
+                            <button type="button" data-d="easy" class="on">Easy</button>
+                            <button type="button" data-d="medium">Medium</button>
+                            <button type="button" data-d="hard">Hard</button>
+                        </div>
+                    </div>
+                    <div id="mines-board"></div>
+                    <div class="game-hud">
+                        <div class="seg" id="mines-mode">
+                            <button type="button" data-m="dig" class="on">⛏️ Dig</button>
+                            <button type="button" data-m="flag">🚩 Flag</button>
+                        </div>
+                        <button class="btn-action btn-ghost" type="button" id="mines-new">New Game</button>
+                    </div>
+                    <div class="game-msg" id="mines-msg"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 12. TIC-TAC-TOE -->
+        <div id="ttt" class="tab-content">
+            <h2>Tic-Tac-Toe</h2>
+            <p class="desc">Settle who's farming sulfur tonight.</p>
+            <div class="game-wrap">
+                <div class="card game-card">
+                    <div class="game-hud">
+                        <div class="seg" id="ttt-mode">
+                            <button type="button" data-m="easy">vs AI · Easy</button>
+                            <button type="button" data-m="hard" class="on">vs AI · Hard</button>
+                            <button type="button" data-m="pvp">2 Players</button>
+                        </div>
+                    </div>
+                    <div class="game-hud">
+                        <div class="hud-pill">✕ <b id="ttt-x">0</b></div>
+                        <div class="hud-pill">Draws <b id="ttt-d">0</b></div>
+                        <div class="hud-pill">◯ <b id="ttt-o">0</b></div>
+                    </div>
+                    <div id="ttt-board"></div>
+                    <div class="game-msg" id="ttt-msg">Your move — you're ✕</div>
+                    <div class="game-hud">
+                        <button class="btn-action" type="button" id="ttt-new">New Round</button>
+                        <button class="btn-action btn-ghost" type="button" id="ttt-reset">Reset Score</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
 
+    <div id="toast"></div>
+
     <script>
+        // ---------- Safe storage (Discord iframes can throw on localStorage) ----------
+        const store = {
+            get(k) { try { return window.localStorage.getItem(k); } catch (e) { return null; } },
+            set(k, v) { try { window.localStorage.setItem(k, v); } catch (e) {} }
+        };
+
+        // ---------- Toast (replaces alert(), which Discord's sandbox blocks) ----------
+        const toastEl = document.getElementById('toast');
+        let toastTimer = null;
+        function showToast(msg) {
+            toastEl.textContent = msg;
+            toastEl.classList.add('show');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => toastEl.classList.remove('show'), 4000);
+        }
+
+        // ---------- Theme ----------
         const themeToggleBtn = document.getElementById('theme-toggle');
         const bodyEl = document.body;
 
         function setTheme(theme) {
             bodyEl.setAttribute('data-theme', theme);
-            themeToggleBtn.innerText = theme === 'dark' ? '☀️' : '🌙';
-            localStorage.setItem('rust_island_theme', theme);
+            themeToggleBtn.textContent = theme === 'dark' ? '☀️' : '🌙';
+            store.set('rust_island_theme', theme);
         }
-
-        const savedTheme = localStorage.getItem('rust_island_theme') || 'light';
-        setTheme(savedTheme);
+        setTheme(store.get('rust_island_theme') || 'light');
 
         themeToggleBtn.addEventListener('click', () => {
-            const currentTheme = bodyEl.getAttribute('data-theme');
-            setTheme(currentTheme === 'dark' ? 'light' : 'dark');
+            setTheme(bodyEl.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
         });
 
-        // Dropdown Menu Logic
+        // ---------- Dropdown menus (FIXED) ----------
+        // Old bug: .menu-items had overflow-x:auto, which also forces overflow-y to clip,
+        // so the absolutely positioned dropdowns were cut off / invisible.
+        // Now dropdowns are position:fixed and placed from the button's on-screen rect.
         const menuItems = document.querySelectorAll('.menu-item');
+        const menuBar = document.querySelector('.menu-items');
+
+        function closeMenus() {
+            menuItems.forEach(i => i.classList.remove('open'));
+        }
+
+        function positionDropdown(item) {
+            const btn = item.querySelector('.menu-btn');
+            const dd = item.querySelector('.dropdown');
+            const r = btn.getBoundingClientRect();
+            const ddWidth = dd.offsetWidth || 200;
+            let left = r.left;
+            const maxLeft = window.innerWidth - ddWidth - 8;
+            if (left > maxLeft) left = Math.max(8, maxLeft);
+            dd.style.left = left + 'px';
+            dd.style.top = (r.bottom + 6) + 'px';
+        }
+
         menuItems.forEach(item => {
             const btn = item.querySelector('.menu-btn');
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
-                const isOpen = item.classList.contains('open');
-                menuItems.forEach(i => i.classList.remove('open'));
-                if (!isOpen) item.classList.add('open');
+                const wasOpen = item.classList.contains('open');
+                closeMenus();
+                if (!wasOpen) {
+                    item.classList.add('open');     // show first so offsetWidth is measurable
+                    positionDropdown(item);
+                }
             });
+            // Clicks inside the dropdown shouldn't bubble to the window closer before handling
+            item.querySelector('.dropdown').addEventListener('click', e => e.stopPropagation());
         });
 
-        window.addEventListener('click', () => {
-            menuItems.forEach(i => i.classList.remove('open'));
-        });
+        document.addEventListener('click', closeMenus);
+        window.addEventListener('resize', closeMenus);
+        window.addEventListener('blur', closeMenus);
+        menuBar.addEventListener('scroll', closeMenus, { passive: true });
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenus(); });
 
+        // ---------- Tab switching (delegated; no inline onclick) ----------
         function switchTab(tabId) {
-            menuItems.forEach(i => i.classList.remove('open'));
+            closeMenus();
+            const target = document.getElementById(tabId);
+            if (!target) return;
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
+            target.classList.add('active');
+            document.querySelector('main').scrollTop = 0;
         }
+        document.querySelectorAll('[data-tab]').forEach(el => {
+            el.addEventListener('click', () => switchTab(el.dataset.tab));
+        });
 
+        // ---------- Saved data ----------
         const STORAGE_KEY = 'rust_island_suite_v2';
         function loadSavedData() {
-            const raw = localStorage.getItem(STORAGE_KEY);
+            const raw = store.get(STORAGE_KEY);
             if (!raw) return { codes: [], notes: "" };
-            try { return JSON.parse(raw); } catch(e) { return { codes: [], notes: "" }; }
+            try {
+                const d = JSON.parse(raw);
+                return { codes: Array.isArray(d.codes) ? d.codes : [], notes: d.notes || "" };
+            } catch (e) { return { codes: [], notes: "" }; }
         }
-        function saveData(data) { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }
+        function saveData(data) { store.set(STORAGE_KEY, JSON.stringify(data)); }
         let appData = loadSavedData();
 
+        // ---------- Raid ----------
         const raidInputs = ['wood-door', 'sheet-door', 'garage-door', 'armored-door', 'stone-wall', 'metal-wall'];
+        const num = id => Math.max(0, parseInt(document.getElementById(id).value) || 0);
         function calcRaid() {
-            let woodDoors = parseInt(document.getElementById('target-wood-door').value) || 0;
-            let sheetDoors = parseInt(document.getElementById('target-sheet-door').value) || 0;
-            let garageDoors = parseInt(document.getElementById('target-garage-door').value) || 0;
-            let armoredDoors = parseInt(document.getElementById('target-armored-door').value) || 0;
-            let stoneWalls = parseInt(document.getElementById('target-stone-wall').value) || 0;
-            let metalWalls = parseInt(document.getElementById('target-metal-wall').value) || 0;
+            const woodDoors = num('target-wood-door');
+            const sheetDoors = num('target-sheet-door');
+            const garageDoors = num('target-garage-door');
+            const armoredDoors = num('target-armored-door');
+            const stoneWalls = num('target-stone-wall');
+            const metalWalls = num('target-metal-wall');
 
-            let c4 = (armoredDoors * 2) + (metalWalls * 3);
-            let rockets = (garageDoors * 3) + (stoneWalls * 4);
-            let satchels = (woodDoors * 2) + (sheetDoors * 4);
+            const c4 = (armoredDoors * 2) + (metalWalls * 3);
+            const rockets = (garageDoors * 3) + (stoneWalls * 4);
+            const satchels = (woodDoors * 2) + (sheetDoors * 4);
 
-            let sulfur = (c4 * 2200) + (rockets * 1400) + (satchels * 480);
-            let charcoal = (c4 * 3000) + (rockets * 1950) + (satchels * 720);
-            let metal = (c4 * 200) + (rockets * 100) + (satchels * 80);
-            let lgf = (c4 * 60) + (rockets * 30);
+            const sulfur = (c4 * 2200) + (rockets * 1400) + (satchels * 480);
+            const charcoal = (c4 * 3000) + (rockets * 1950) + (satchels * 720);
+            const metal = (c4 * 200) + (rockets * 100) + (satchels * 80);
+            const lgf = (c4 * 60) + (rockets * 30);
 
-            document.getElementById('res-c4').innerText = c4;
-            document.getElementById('res-rockets').innerText = rockets;
-            document.getElementById('res-satchels').innerText = satchels;
-            document.getElementById('raw-sulfur').innerText = sulfur.toLocaleString();
-            document.getElementById('raw-charcoal').innerText = charcoal.toLocaleString();
-            document.getElementById('raw-metal').innerText = metal.toLocaleString();
-            document.getElementById('raw-lgf').innerText = lgf.toLocaleString();
+            document.getElementById('res-c4').textContent = c4;
+            document.getElementById('res-rockets').textContent = rockets;
+            document.getElementById('res-satchels').textContent = satchels;
+            document.getElementById('raw-sulfur').textContent = sulfur.toLocaleString();
+            document.getElementById('raw-charcoal').textContent = charcoal.toLocaleString();
+            document.getElementById('raw-metal').textContent = metal.toLocaleString();
+            document.getElementById('raw-lgf').textContent = lgf.toLocaleString();
         }
         raidInputs.forEach(id => document.getElementById(`target-${id}`).addEventListener('input', calcRaid));
 
+        // ---------- Recycler ----------
         const recInputs = document.querySelectorAll('.rec-in');
         function calcRecycler() {
             let scrap = 0, hqm = 0, frags = 0;
             recInputs.forEach(i => {
-                let qty = parseInt(i.value) || 0;
-                let type = i.dataset.type;
+                const qty = Math.max(0, parseInt(i.value) || 0);
+                const type = i.dataset.type;
                 if (type === 'gear') { scrap += qty * 10; frags += qty * 13; }
                 if (type === 'pipe') { scrap += qty * 5; hqm += qty * 1; }
                 if (type === 'tech') { scrap += qty * 20; hqm += qty * 1; }
                 if (type === 'rifle') { scrap += qty * 15; hqm += qty * 2; }
                 if (type === 'sign') { scrap += qty * 5; hqm += qty * 1; }
             });
-            document.getElementById('yield-scrap').innerText = scrap;
-            document.getElementById('yield-hqm').innerText = hqm;
-            document.getElementById('yield-frags').innerText = frags;
+            document.getElementById('yield-scrap').textContent = scrap;
+            document.getElementById('yield-hqm').textContent = hqm;
+            document.getElementById('yield-frags').textContent = frags;
         }
         recInputs.forEach(i => i.addEventListener('input', calcRecycler));
 
+        // ---------- Tea ----------
         const teaTypeEl = document.getElementById('tea-type');
         const teaTierEl = document.getElementById('tea-tier');
         const teaBatchesEl = document.getElementById('tea-batches');
         const berryListEl = document.getElementById('berry-ingredients-list');
-        const totalBerriesEl = document.getElementById('total-berries');
-        const totalLgfEl = document.getElementById('total-tea-lgf');
-        const totalWaterEl = document.getElementById('total-water');
 
         function updateTeaCalculator() {
-            let tier = teaTierEl.value;
-            let batches = parseInt(teaBatchesEl.value) || 1;
-            let baseBerries = tier === 'basic' ? 10 : (tier === 'advanced' ? 50 : 100);
-            let total = baseBerries * batches;
+            const tier = teaTierEl.value;
+            const batches = Math.max(1, parseInt(teaBatchesEl.value) || 1);
+            const baseBerries = tier === 'basic' ? 10 : (tier === 'advanced' ? 50 : 100);
+            const total = baseBerries * batches;
 
-            let red = 0, green = 0, blue = 0, yellow = 0, white = 0;
-            let tea = teaTypeEl.value;
-            if (tea === 'scrap') yellow = total;
-            else if (tea === 'ore') red = total;
-            else if (tea === 'wood') green = total;
-            else if (tea === 'maxhp') blue = total;
-            else if (tea === 'antirad') white = total;
-
-            berryListEl.innerHTML = `
-                ${red ? `<span class="berry-badge berry-red">🔴 Red Berries: ${red}</span>` : ''}
-                ${green ? `<span class="berry-badge berry-green">🟢 Green Berries: ${green}</span>` : ''}
-                ${blue ? `<span class="berry-badge berry-blue">🔵 Blue Berries: ${blue}</span>` : ''}
-                ${yellow ? `<span class="berry-badge berry-yellow">🟡 Yellow Berries: ${yellow}</span>` : ''}
-                ${white ? `<span class="berry-badge berry-white">⚪ White Berries: ${white}</span>` : ''}
-            `;
-            totalBerriesEl.innerText = total;
-            totalLgfEl.innerText = batches * 5;
-            totalWaterEl.innerText = (batches * 250) + " mL";
+            const berryMap = {
+                scrap: ['berry-yellow', '🟡 Yellow Berries'],
+                ore: ['berry-red', '🔴 Red Berries'],
+                wood: ['berry-green', '🟢 Green Berries'],
+                maxhp: ['berry-blue', '🔵 Blue Berries'],
+                antirad: ['berry-white', '⚪ White Berries']
+            };
+            const [cls, name] = berryMap[teaTypeEl.value];
+            berryListEl.innerHTML = `<span class="berry-badge ${cls}">${name}: ${total}</span>`;
+            document.getElementById('total-berries').textContent = total;
+            document.getElementById('total-tea-lgf').textContent = batches * 5;
+            document.getElementById('total-water').textContent = (batches * 250) + " mL";
         }
         teaTypeEl.addEventListener('change', updateTeaCalculator);
         teaTierEl.addEventListener('change', updateTeaCalculator);
         teaBatchesEl.addEventListener('input', updateTeaCalculator);
         updateTeaCalculator();
 
+        // ---------- Vehicles ----------
         const vehTypeEl = document.getElementById('veh-type');
-        const carChassisBox = document.getElementById('car-chassis-box');
-        const boatChassisBox = document.getElementById('boat-chassis-box');
         const vehSocketsEl = document.getElementById('veh-sockets');
-        const vehSpeedEl = document.getElementById('veh-speed');
-        const vehHpEl = document.getElementById('veh-hp');
-        const vehSeatsEl = document.getElementById('veh-seats');
-        const vehFuelEl = document.getElementById('veh-fuel');
-        const vehIconEl = document.getElementById('veh-icon');
-        const vehDescEl = document.getElementById('veh-desc');
+        const vehSlots = document.querySelectorAll('.veh-slot');
 
         function updateVehicleConfigUI() {
-            if (vehTypeEl.value === 'boat') {
-                carChassisBox.style.display = 'none';
-                boatChassisBox.style.display = 'block';
-            } else {
-                carChassisBox.style.display = 'block';
-                boatChassisBox.style.display = 'none';
-            }
+            const isBoat = vehTypeEl.value === 'boat';
+            document.getElementById('car-chassis-box').style.display = isBoat ? 'none' : 'block';
+            document.getElementById('boat-chassis-box').style.display = isBoat ? 'block' : 'none';
+            const sockets = parseInt(vehSocketsEl.value);
+            vehSlots.forEach((s, i) => s.style.display = i < sockets ? 'block' : 'none');
         }
+        vehTypeEl.addEventListener('change', updateVehicleConfigUI);
+        vehSocketsEl.addEventListener('change', updateVehicleConfigUI);
+        updateVehicleConfigUI();
 
         document.getElementById('btn-calc-veh').addEventListener('click', () => {
+            const set = (id, v) => document.getElementById(id).textContent = v;
             if (vehTypeEl.value === 'boat') {
-                let model = document.getElementById('boat-model').value;
-                if (model === 'rhib') {
-                    vehSpeedEl.innerText = '55 km/h';
-                    vehHpEl.innerText = '500 HP (Heavy)';
-                    vehSeatsEl.innerText = '6 Seats';
-                    vehFuelEl.innerText = '2.5 LGF/min';
-                    vehIconEl.innerText = '🚤';
-                    vehDescEl.innerText = 'RHIB High-Speed Watercraft';
+                if (document.getElementById('boat-model').value === 'rhib') {
+                    set('veh-speed', '55 km/h'); set('veh-hp', '500 HP (Heavy)'); set('veh-seats', '6 Seats');
+                    set('veh-fuel', '2.5 LGF/min'); set('veh-icon', '🚤'); set('veh-desc', 'RHIB High-Speed Watercraft');
                 } else {
-                    vehSpeedEl.innerText = '22 km/h';
-                    vehHpEl.innerText = '250 HP (Fragile)';
-                    vehSeatsEl.innerText = '4 Seats';
-                    vehFuelEl.innerText = '1.0 LGF/min';
-                    vehIconEl.innerText = '🛶';
-                    vehDescEl.innerText = 'Standard Ocean Rowboat';
+                    set('veh-speed', '22 km/h'); set('veh-hp', '250 HP (Fragile)'); set('veh-seats', '4 Seats');
+                    set('veh-fuel', '1.0 LGF/min'); set('veh-icon', '🛶'); set('veh-desc', 'Standard Ocean Rowboat');
                 }
             } else {
-                let sockets = vehSocketsEl.value;
-                let mods = document.querySelectorAll('.veh-mod');
-                let seatsCount = 2; // driver always
-                let hasEngine = false;
-                let storageCount = 0;
-
-                mods.forEach((m, idx) => {
-                    if (idx < parseInt(sockets)) {
-                        if (m.value === 'cockpit') seatsCount += 2;
-                        if (m.value === 'passenger') seatsCount += 2;
-                        if (m.value === 'engine') hasEngine = true;
-                        if (m.value === 'storage') storageCount++;
-                    }
+                const sockets = parseInt(vehSocketsEl.value);
+                let seatsCount = 0, hasEngine = false, storageCount = 0;
+                document.querySelectorAll('.veh-mod').forEach((m, idx) => {
+                    if (idx >= sockets) return;
+                    if (m.value === 'cockpit') seatsCount += 2;
+                    if (m.value === 'passenger') seatsCount += 2;
+                    if (m.value === 'engine') hasEngine = true;
+                    if (m.value === 'storage') storageCount++;
                 });
-
-                vehSpeedEl.innerText = hasEngine ? (sockets == 4 ? '42 km/h' : '48 km/h') : '10 km/h (No Engine!)';
-                vehHpEl.innerText = `${sockets * 300} HP (${sockets}-Socket Armored)`;
-                vehSeatsEl.innerText = `${seatsCount} Seats`;
-                vehFuelEl.innerText = hasEngine ? '1.5 LGF/min' : '0.2 LGF/min';
-                vehIconEl.innerText = sockets == 4 ? '🚐' : '🚙';
-                vehDescEl.innerText = `${sockets}-Socket Custom Chassis (${storageCount} Storages)`;
+                set('veh-speed', hasEngine ? (sockets === 4 ? '42 km/h' : '48 km/h') : '0 km/h (No Engine!)');
+                set('veh-hp', `${sockets * 300} HP (${sockets}-Socket Armored)`);
+                set('veh-seats', `${seatsCount} Seats${seatsCount === 0 ? ' (No Cockpit!)' : ''}`);
+                set('veh-fuel', hasEngine ? '1.5 LGF/min' : '0 LGF/min');
+                set('veh-icon', sockets === 4 ? '🚐' : '🚙');
+                set('veh-desc', `${sockets}-Socket Custom Chassis (${storageCount} Storages)`);
             }
         });
 
+        // ---------- Monuments ----------
         const monumentsData = {
             launch: {
                 title: "Launch Site Puzzle Guide",
@@ -1140,99 +1399,105 @@
         };
 
         function switchMonument(id) {
-            document.querySelectorAll('.monument-tab').forEach(t => t.classList.remove('active'));
-            if (event && event.currentTarget) {
-                event.currentTarget.classList.add('active');
-            } else {
-                const firstTab = document.querySelector('.monument-tab');
-                if (firstTab) firstTab.classList.add('active');
-            }
+            // Old version relied on the global `event` object, which isn't reliable everywhere.
+            document.querySelectorAll('.monument-tab').forEach(t =>
+                t.classList.toggle('active', t.dataset.monument === id));
 
-            let data = monumentsData[id];
-            document.getElementById('monument-title').innerText = data.title;
-            document.getElementById('monument-desc').innerText = data.desc;
-            document.getElementById('monument-tips').innerText = data.tips;
+            const data = monumentsData[id];
+            document.getElementById('monument-title').textContent = data.title;
+            document.getElementById('monument-desc').textContent = data.desc;
+            document.getElementById('monument-tips').textContent = data.tips;
 
-            let reqBox = document.getElementById('monument-requirements');
-            reqBox.innerHTML = data.reqs.map(r => `<span style="background: var(--input-bg); border: 1px solid var(--border-subtle); padding: 4px 10px; border-radius: 6px; font-weight: 600; font-size: 0.8rem;">${r}</span>`).join('');
+            document.getElementById('monument-requirements').innerHTML = data.reqs.map(r =>
+                `<span style="background: var(--input-bg); border: 1px solid var(--border-subtle); padding: 4px 10px; border-radius: 6px; font-weight: 600; font-size: 0.8rem;">${r}</span>`
+            ).join('');
 
-            let checkBox = document.getElementById('monument-checklist');
-            checkBox.innerHTML = data.steps.map((step, idx) => `
-                <div class="checklist-item" onclick="toggleChecklist(this)">
-                    <input type="checkbox" id="check-${id}-${idx}">
-                    <span style="font-size: 0.9rem; font-weight: 500;">Step ${idx+1}: ${step}</span>
+            document.getElementById('monument-checklist').innerHTML = data.steps.map((step, idx) => `
+                <div class="checklist-item">
+                    <input type="checkbox" tabindex="-1">
+                    <span style="font-size: 0.9rem; font-weight: 500;">Step ${idx + 1}: ${step}</span>
                 </div>
             `).join('');
         }
 
-        function toggleChecklist(el) {
-            let chk = el.querySelector('input');
-            chk.checked = !chk.checked;
-            if (chk.checked) el.classList.add('checked');
-            else el.classList.remove('checked');
-        }
+        document.querySelectorAll('.monument-tab').forEach(t =>
+            t.addEventListener('click', () => switchMonument(t.dataset.monument)));
 
-        // Initialize Launch Site on load
+        document.getElementById('monument-checklist').addEventListener('click', (e) => {
+            const item = e.target.closest('.checklist-item');
+            if (!item) return;
+            const chk = item.querySelector('input');
+            chk.checked = !chk.checked;
+            item.classList.toggle('checked', chk.checked);
+        });
+
         switchMonument('launch');
 
+        // ---------- Crate timer ----------
         let timerInterval = null;
-        let timeLeft = 900;
+        let timerEnd = 0;
+        const TIMER_TOTAL = 900;
         const timerDisplay = document.getElementById('crate-timer');
-        const btnTimerStart = document.getElementById('btn-timer-start');
-        const btnTimerReset = document.getElementById('btn-timer-reset');
 
         function playBeep() {
             try {
                 const ctx = new (window.AudioContext || window.webkitAudioContext)();
-                const osc = ctx.createOscillator();
-                osc.type = 'sine'; osc.frequency.setValueAtTime(600, ctx.currentTime);
-                osc.connect(ctx.destination); osc.start(); osc.stop(ctx.currentTime + 0.4);
-            } catch(e) {}
+                [0, 0.5, 1].forEach(offset => {
+                    const osc = ctx.createOscillator();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(600, ctx.currentTime + offset);
+                    osc.connect(ctx.destination);
+                    osc.start(ctx.currentTime + offset);
+                    osc.stop(ctx.currentTime + offset + 0.3);
+                });
+            } catch (e) {}
         }
 
-        function updateTimerUI() {
-            let m = Math.floor(timeLeft / 60);
-            let s = timeLeft % 60;
-            timerDisplay.innerText = `${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
+        function renderTimer(sec) {
+            const m = Math.floor(sec / 60), s = sec % 60;
+            timerDisplay.textContent = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
         }
 
-        btnTimerStart.addEventListener('click', () => {
+        // Uses wall-clock time so it stays accurate even if Discord throttles a background iframe
+        document.getElementById('btn-timer-start').addEventListener('click', () => {
             if (timerInterval) return;
+            timerEnd = Date.now() + TIMER_TOTAL * 1000;
             timerInterval = setInterval(() => {
-                if (timeLeft > 0) { timeLeft--; updateTimerUI(); }
-                else {
+                const left = Math.max(0, Math.round((timerEnd - Date.now()) / 1000));
+                renderTimer(left);
+                if (left <= 0) {
                     clearInterval(timerInterval); timerInterval = null;
-                    playBeep(); alert('Locked Crate Unlocked!');
+                    playBeep(); showToast('🔓 Locked Crate Unlocked!');
                 }
-            }, 1000);
+            }, 250);
         });
 
-        btnTimerReset.addEventListener('click', () => {
+        document.getElementById('btn-timer-reset').addEventListener('click', () => {
             clearInterval(timerInterval); timerInterval = null;
-            timeLeft = 900; updateTimerUI();
+            renderTimer(TIMER_TOTAL);
         });
 
+        // ---------- Genes ----------
         document.getElementById('btn-calc-genes').addEventListener('click', () => {
-            const g1 = document.getElementById('gene1').value.replace(/-/g, '').toUpperCase();
-            const g2 = document.getElementById('gene2').value.replace(/-/g, '').toUpperCase();
-            const g3 = document.getElementById('gene3').value.replace(/-/g, '').toUpperCase();
+            const clean = id => document.getElementById(id).value.replace(/[^A-Za-z]/g, '').toUpperCase();
+            const g1 = clean('gene1'), g2 = clean('gene2'), g3 = clean('gene3');
+            const out = document.getElementById('gene-result');
 
-            if (g1.length < 5 || g2.length < 5 || g3.length < 5) {
-                document.getElementById('gene-result').innerText = "Invalid Length"; return;
-            }
+            if (g1.length < 5 || g2.length < 5 || g3.length < 5) { out.textContent = "Invalid Length"; return; }
 
-            let result = "";
+            const res = [];
             for (let i = 0; i < 5; i++) {
-                let pool = [g1[i], g2[i], g3[i]];
-                let counts = {};
+                const pool = [g1[i], g2[i], g3[i]];
+                const counts = {};
                 pool.forEach(x => counts[x] = (counts[x] || 0) + 1);
                 let winner = pool[0], max = 0;
-                for (let k in counts) { if (counts[k] > max) { max = counts[k]; winner = k; } }
-                result += winner + (i < 4 ? "-" : "");
+                for (const k in counts) { if (counts[k] > max) { max = counts[k]; winner = k; } }
+                res.push(winner);
             }
-            document.getElementById('gene-result').innerText = result;
+            out.textContent = res.join('-');
         });
 
+        // ---------- Team codes ----------
         const codeLabel = document.getElementById('code-label');
         const codeVal = document.getElementById('code-val');
         const codeList = document.getElementById('code-list');
@@ -1241,41 +1506,50 @@
         function renderCodes() {
             codeList.innerHTML = '';
             appData.codes.forEach((item, index) => {
-                let div = document.createElement('div');
+                const div = document.createElement('div');
                 div.className = 'list-item';
-                div.innerHTML = `
-                    <span><strong>${item.label}:</strong> <span style="color:var(--rust-orange);">${item.val}</span></span>
-                    <button class="btn-del" onclick="deleteCode(${index})">Remove</button>
-                `;
+
+                const span = document.createElement('span');
+                const strong = document.createElement('strong');
+                strong.textContent = item.label + ': ';
+                const val = document.createElement('span');
+                val.style.color = 'var(--accent)';
+                val.textContent = item.val;
+                span.append(strong, val);
+
+                const del = document.createElement('button');
+                del.className = 'btn-del';
+                del.type = 'button';
+                del.textContent = 'Remove';
+                del.addEventListener('click', () => {
+                    appData.codes.splice(index, 1);
+                    saveData(appData); renderCodes();
+                });
+
+                div.append(span, del);
                 codeList.appendChild(div);
             });
         }
 
-        document.getElementById('btn-add-code').addEventListener('click', () => {
-            if (!codeLabel.value || !codeVal.value) return;
-            appData.codes.push({ label: codeLabel.value, val: codeVal.value });
+        function addCode() {
+            if (!codeLabel.value.trim() || !codeVal.value.trim()) return;
+            appData.codes.push({ label: codeLabel.value.trim(), val: codeVal.value.trim() });
             codeLabel.value = ''; codeVal.value = '';
             saveData(appData); renderCodes();
-        });
-
-        window.deleteCode = function(index) {
-            appData.codes.splice(index, 1);
-            saveData(appData); renderCodes();
-        };
+        }
+        document.getElementById('btn-add-code').addEventListener('click', addCode);
+        codeVal.addEventListener('keydown', e => { if (e.key === 'Enter') addCode(); });
 
         teamNotes.value = appData.notes || '';
-        teamNotes.addEventListener('input', () => {
-            appData.notes = teamNotes.value; saveData(appData);
-        });
+        teamNotes.addEventListener('input', () => { appData.notes = teamNotes.value; saveData(appData); });
         renderCodes();
 
+        // ---------- Flappy Bird ----------
         const fCanvas = document.getElementById('flappy-canvas');
         const fCtx = fCanvas.getContext('2d');
         const fLiveScore = document.getElementById('flappy-live-score');
         const fStartScreen = document.getElementById('flappy-start-screen');
         const fOverScreen = document.getElementById('flappy-over-screen');
-        const fPlayBtn = document.getElementById('flappy-play-btn');
-        const fRestartBtn = document.getElementById('flappy-restart-btn');
         const fContainer = document.getElementById('flappy-container');
 
         function buildBird(artData) {
@@ -1322,24 +1596,24 @@
                     gain.gain.setValueAtTime(0.15, t); gain.gain.linearRampToValueAtTime(0.01, t + 0.2);
                     osc.start(t); osc.stop(t + 0.2);
                 }
-            } catch(e) {}
+            } catch (e) {}
         }
 
         const RAD = Math.PI / 180;
         const fState = { current: 0, getReady: 0, game: 1, over: 2 };
-        let fScore = { best: localStorage.getItem('fb_rust_best') || 0, value: 0 };
+        const fScore = { best: parseInt(store.get('fb_rust_best')) || 0, value: 0 };
         let fFrames = 0; let fGroundX = 0;
 
         const fBird = {
             frame: 0, x: 60, y: 150, w: 34, h: 24, radius: 12,
             gravity: 0.25, jump: -4.6, speed: 0, rotation: 0,
             draw() {
-                let s = fBirdSprites[this.frame];
+                const s = fBirdSprites[this.frame];
                 fCtx.save(); fCtx.translate(this.x, this.y); fCtx.rotate(this.rotation);
-                fCtx.drawImage(s, -s.width/2, -s.height/2); fCtx.restore();
+                fCtx.drawImage(s, -s.width / 2, -s.height / 2); fCtx.restore();
             },
             update() {
-                if(fState.current === fState.getReady) {
+                if (fState.current === fState.getReady) {
                     this.y = 150 + Math.cos(fFrames * 0.1) * 5;
                     this.frame = (fFrames % 20 < 10) ? 0 : 1;
                 } else {
@@ -1347,17 +1621,14 @@
                     this.frame %= fBirdSprites.length;
                     this.speed += this.gravity; this.y += this.speed;
 
-                    if(this.y + this.h/2 >= fCanvas.height - 112) {
-                        this.y = fCanvas.height - 112 - this.h/2;
-                        if(fState.current === fState.game) {
-                            fState.current = fState.over;
-                            playFlappySound('hit'); triggerFlappyOver();
-                        }
+                    if (this.y + this.h / 2 >= fCanvas.height - 112) {
+                        this.y = fCanvas.height - 112 - this.h / 2;
+                        if (fState.current === fState.game) endFlappy();
                     }
-                    if(this.y - this.h/2 <= 0) { this.y = this.h/2; this.speed = 0; }
-                    if(this.speed >= this.jump) {
+                    if (this.y - this.h / 2 <= 0) { this.y = this.h / 2; this.speed = 0; }
+                    if (this.speed >= this.jump) {
                         this.rotation = Math.min(Math.PI / 2, this.rotation + 4 * RAD);
-                        if(this.rotation === Math.PI / 2) this.frame = 1;
+                        if (this.rotation === Math.PI / 2) this.frame = 1;
                     } else { this.rotation = -25 * RAD; }
                 }
             },
@@ -1367,9 +1638,9 @@
         const fPipes = {
             items: [], w: 60, gap: 120, dx: 2,
             draw() {
-                for(let p of this.items) {
-                    let bY = p.top + this.gap; let bH = fCanvas.height - 112 - bY;
-                    const isDark = bodyEl.getAttribute('data-theme') === 'dark';
+                const isDark = bodyEl.getAttribute('data-theme') === 'dark';
+                for (const p of this.items) {
+                    const bY = p.top + this.gap; const bH = fCanvas.height - 112 - bY;
                     fCtx.fillStyle = '#10b981'; fCtx.strokeStyle = isDark ? '#ffffff' : '#1d1d1f'; fCtx.lineWidth = 2;
                     fCtx.fillRect(p.x, 0, this.w, p.top); fCtx.strokeRect(p.x, 0, this.w, p.top);
                     fCtx.fillRect(p.x - 4, p.top - 20, this.w + 8, 20); fCtx.strokeRect(p.x - 4, p.top - 20, this.w + 8, 20);
@@ -1378,26 +1649,24 @@
                 }
             },
             update() {
-                if(fState.current !== fState.game) return;
-                if(fFrames % 100 === 0) {
-                    this.items.push({ x: fCanvas.width, top: Math.random()*(fCanvas.height - 112 - this.gap - 100) + 50, passed: false });
+                if (fState.current !== fState.game) return;
+                if (fFrames % 100 === 0) {
+                    this.items.push({ x: fCanvas.width, top: Math.random() * (fCanvas.height - 112 - this.gap - 100) + 50, passed: false });
                 }
-                for(let i=0; i<this.items.length; i++) {
-                    let p = this.items[i]; p.x -= this.dx;
-                    let bY = p.top + this.gap;
-                    let bx = fBird.x - fBird.radius + 2, br = fBird.x + fBird.radius - 2;
-                    let by = fBird.y - fBird.radius + 2, bb = fBird.y + fBird.radius - 2;
+                for (let i = 0; i < this.items.length; i++) {
+                    const p = this.items[i]; p.x -= this.dx;
+                    const bY = p.top + this.gap;
+                    const bx = fBird.x - fBird.radius + 2, br = fBird.x + fBird.radius - 2;
+                    const by = fBird.y - fBird.radius + 2, bb = fBird.y + fBird.radius - 2;
 
-                    if(br > p.x && bx < p.x + this.w) {
-                        if(by < p.top || bb > bY) {
-                            fState.current = fState.over; playFlappySound('hit'); triggerFlappyOver();
-                        }
+                    if (br > p.x && bx < p.x + this.w && (by < p.top || bb > bY)) {
+                        endFlappy(); return;
                     }
-                    if(p.x + this.w < fBird.x - fBird.radius && !p.passed) {
+                    if (p.x + this.w < fBird.x - fBird.radius && !p.passed) {
                         fScore.value += 1; p.passed = true;
-                        playFlappySound('score'); fLiveScore.innerText = fScore.value;
+                        playFlappySound('score'); fLiveScore.textContent = fScore.value;
                     }
-                    if(p.x + this.w <= 0) { this.items.shift(); i--; }
+                    if (p.x + this.w <= 0) { this.items.shift(); i--; }
                 }
             }
         };
@@ -1405,46 +1674,51 @@
         function drawFlappyBg() {
             const isDark = bodyEl.getAttribute('data-theme') === 'dark';
             fCtx.fillStyle = isDark ? '#021526' : '#e0f2fe'; fCtx.fillRect(0, 0, fCanvas.width, fCanvas.height);
-            let y = fCanvas.height - 112;
+            const y = fCanvas.height - 112;
             fCtx.fillStyle = isDark ? '#032539' : '#bae6fd';
-            let bgX = (fGroundX * 0.3) % 200;
-            for(let i=0; i<4; i++) { fCtx.fillRect(bgX + i*160, y - 80, 40, 80); }
+            const bgX = (fGroundX * 0.3) % 200;
+            for (let i = 0; i < 4; i++) { fCtx.fillRect(bgX + i * 160, y - 80, 40, 80); }
             fCtx.fillStyle = isDark ? '#18181b' : '#f5f5f7'; fCtx.fillRect(0, y, fCanvas.width, 112);
             fCtx.fillStyle = '#10b981'; fCtx.fillRect(0, y, fCanvas.width, 20);
         }
 
         function startFlappyGame() {
-            if(fState.current === fState.game) return;
+            if (fState.current === fState.game) return;
             fState.current = fState.game;
             fStartScreen.classList.add('hidden'); fLiveScore.classList.remove('hidden'); fBird.flap();
         }
 
-        function triggerFlappyOver() {
+        function endFlappy() {
+            if (fState.current === fState.over) return;   // prevent double-trigger
+            fState.current = fState.over;
+            playFlappySound('hit');
             fLiveScore.classList.add('hidden');
             fScore.best = Math.max(fScore.value, fScore.best);
-            localStorage.setItem('fb_rust_best', fScore.best);
-            document.getElementById('flappy-final-score').innerText = fScore.value;
-            document.getElementById('flappy-best-score').innerText = fScore.best;
+            store.set('fb_rust_best', fScore.best);
+            document.getElementById('flappy-final-score').textContent = fScore.value;
+            document.getElementById('flappy-best-score').textContent = fScore.best;
             fOverScreen.classList.remove('hidden');
         }
 
         function resetFlappyGame() {
             fBird.y = 150; fBird.speed = 0; fBird.rotation = 0; fPipes.items = []; fScore.value = 0;
-            fLiveScore.innerText = 0; fOverScreen.classList.add('hidden'); fStartScreen.classList.remove('hidden');
+            fLiveScore.textContent = 0; fOverScreen.classList.add('hidden'); fStartScreen.classList.remove('hidden');
             fState.current = fState.getReady;
         }
 
-        fPlayBtn.addEventListener('click', (e) => { e.stopPropagation(); startFlappyGame(); });
-        fRestartBtn.addEventListener('click', (e) => { e.stopPropagation(); resetFlappyGame(); });
+        document.getElementById('flappy-play-btn').addEventListener('pointerdown', e => e.stopPropagation());
+        document.getElementById('flappy-restart-btn').addEventListener('pointerdown', e => e.stopPropagation());
+        document.getElementById('flappy-play-btn').addEventListener('click', (e) => { e.stopPropagation(); startFlappyGame(); });
+        document.getElementById('flappy-restart-btn').addEventListener('click', (e) => { e.stopPropagation(); resetFlappyGame(); });
 
-        fContainer.addEventListener('pointerdown', (e) => {
+        fContainer.addEventListener('pointerdown', () => {
             if (fState.current === fState.getReady) startFlappyGame();
             else if (fState.current === fState.game) fBird.flap();
         });
 
         window.addEventListener('keydown', (e) => {
             const isFlappyActive = document.getElementById('flappy').classList.contains('active');
-            const isTyping = ['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName);
+            const isTyping = ['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName);
             if (e.code === 'Space' && isFlappyActive && !isTyping) {
                 e.preventDefault();
                 if (fState.current === fState.getReady) startFlappyGame();
@@ -1453,13 +1727,400 @@
             }
         });
 
+        // Only animate while the Flappy tab is visible (saves CPU in the Discord client)
         function flappyLoop() {
-            drawFlappyBg(); fPipes.draw(); fBird.draw();
-            if(fState.current !== fState.over) fGroundX -= 2;
-            fBird.update(); fPipes.update(); fFrames++;
+            if (document.getElementById('flappy').classList.contains('active')) {
+                drawFlappyBg(); fPipes.draw(); fBird.draw();
+                if (fState.current !== fState.over) fGroundX -= 2;
+                fBird.update(); fPipes.update(); fFrames++;
+            }
             requestAnimationFrame(flappyLoop);
         }
         flappyLoop();
+        // =====================================================================
+        //  SNAKE
+        // =====================================================================
+        (function () {
+            const cv = document.getElementById('snake-canvas');
+            const ctx = cv.getContext('2d');
+            const N = 20, C = cv.width / N;
+            const overlay = document.getElementById('snake-overlay');
+            const titleEl = document.getElementById('snake-title');
+            const subEl = document.getElementById('snake-sub');
+            const startBtn = document.getElementById('snake-start');
+            const scoreEl = document.getElementById('snake-score');
+            const bestEl = document.getElementById('snake-best');
+            const tab = document.getElementById('snake');
+
+            let snake, dir, queue, food, score, timer = null, running = false, over = false;
+            let speed = 100;
+            let best = parseInt(store.get('snake_best')) || 0;
+            bestEl.textContent = best;
+
+            const DIRS = { up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] };
+
+            function css(v) { return getComputedStyle(document.body).getPropertyValue(v).trim(); }
+
+            function reset() {
+                snake = [[9, 10], [8, 10], [7, 10]];
+                dir = 'right'; queue = [];
+                score = 0; scoreEl.textContent = 0; over = false;
+                placeFood();
+            }
+            function placeFood() {
+                do { food = [Math.floor(Math.random() * N), Math.floor(Math.random() * N)]; }
+                while (snake.some(p => p[0] === food[0] && p[1] === food[1]));
+            }
+            function roundRect(x, y, w, h, r) {
+                ctx.beginPath();
+                ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r);
+                ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath(); ctx.fill();
+            }
+            function draw() {
+                const dark = document.body.getAttribute('data-theme') === 'dark';
+                ctx.fillStyle = dark ? '#111114' : '#f7f8fb';
+                ctx.fillRect(0, 0, cv.width, cv.height);
+                ctx.fillStyle = dark ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.025)';
+                for (let y = 0; y < N; y++) for (let x = (y % 2); x < N; x += 2) ctx.fillRect(x * C, y * C, C, C);
+
+                // food (scrap)
+                ctx.fillStyle = css('--apple-orange') || '#ff9500';
+                roundRect(food[0] * C + 3, food[1] * C + 3, C - 6, C - 6, 6);
+
+                const green = css('--apple-green') || '#34c759';
+                snake.forEach((p, i) => {
+                    ctx.fillStyle = i === 0 ? (css('--apple-blue') || '#0071e3') : green;
+                    ctx.globalAlpha = i === 0 ? 1 : Math.max(0.45, 1 - i / (snake.length * 1.4));
+                    roundRect(p[0] * C + 1.5, p[1] * C + 1.5, C - 3, C - 3, 6);
+                });
+                ctx.globalAlpha = 1;
+                // eyes
+                const [hx, hy] = snake[0];
+                ctx.fillStyle = '#fff';
+                const [dx, dy] = DIRS[dir];
+                const ex = hx * C + C / 2 + dx * 4, ey = hy * C + C / 2 + dy * 4;
+                ctx.beginPath(); ctx.arc(ex - dy * 4, ey - dx * 4, 2.2, 0, 7); ctx.arc(ex + dy * 4, ey + dx * 4, 2.2, 0, 7); ctx.fill();
+            }
+            function step() {
+                if (queue.length) dir = queue.shift();
+                const [dx, dy] = DIRS[dir];
+                const head = [snake[0][0] + dx, snake[0][1] + dy];
+                const hitWall = head[0] < 0 || head[1] < 0 || head[0] >= N || head[1] >= N;
+                const willEat = head[0] === food[0] && head[1] === food[1];
+                const body = willEat ? snake : snake.slice(0, -1);
+                if (hitWall || body.some(p => p[0] === head[0] && p[1] === head[1])) return die();
+                snake.unshift(head);
+                if (willEat) {
+                    score++; scoreEl.textContent = score;
+                    playFlappySound('score');
+                    if (snake.length === N * N) return die(true);
+                    placeFood();
+                } else snake.pop();
+                draw();
+            }
+            function die(won) {
+                stop(); over = true;
+                playFlappySound('hit');
+                if (score > best) { best = score; store.set('snake_best', best); bestEl.textContent = best; }
+                titleEl.textContent = won ? '🏆 You filled the map!' : 'Game Over';
+                subEl.textContent = `Score ${score} · Best ${best}`;
+                startBtn.textContent = 'Play Again';
+                overlay.classList.remove('hidden');
+            }
+            function start() {
+                if (over || !snake) reset();
+                overlay.classList.add('hidden');
+                running = true;
+                clearInterval(timer); timer = setInterval(step, speed);
+                draw();
+            }
+            function stop() { running = false; clearInterval(timer); timer = null; }
+            function pause() {
+                if (!running) return;
+                stop();
+                titleEl.textContent = 'Paused'; subEl.textContent = `Score ${score}`;
+                startBtn.textContent = 'Resume';
+                overlay.classList.remove('hidden');
+            }
+            function turn(d) {
+                if (!running) return;
+                const last = queue.length ? queue[queue.length - 1] : dir;
+                const opp = { up: 'down', down: 'up', left: 'right', right: 'left' };
+                if (d !== last && d !== opp[last] && queue.length < 3) queue.push(d);
+            }
+
+            startBtn.addEventListener('click', start);
+            document.querySelectorAll('.dpad button').forEach(b =>
+                b.addEventListener('pointerdown', e => { e.preventDefault(); turn(b.dataset.dir); }));
+
+            document.querySelectorAll('#snake-speed button').forEach(b => b.addEventListener('click', () => {
+                document.querySelectorAll('#snake-speed button').forEach(x => x.classList.toggle('on', x === b));
+                speed = parseInt(b.dataset.v);
+                if (running) { clearInterval(timer); timer = setInterval(step, speed); }
+            }));
+
+            const KEYS = { ArrowUp: 'up', KeyW: 'up', ArrowDown: 'down', KeyS: 'down', ArrowLeft: 'left', KeyA: 'left', ArrowRight: 'right', KeyD: 'right' };
+            window.addEventListener('keydown', e => {
+                if (!tab.classList.contains('active')) return;
+                if (['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName)) return;
+                if (KEYS[e.code]) { e.preventDefault(); turn(KEYS[e.code]); }
+                else if (e.code === 'Space') { e.preventDefault(); running ? pause() : start(); }
+            });
+
+            // swipe
+            let sx = 0, sy = 0;
+            cv.addEventListener('touchstart', e => { sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, { passive: true });
+            cv.addEventListener('touchend', e => {
+                const dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy;
+                if (Math.max(Math.abs(dx), Math.abs(dy)) < 20) return;
+                turn(Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? 'right' : 'left') : (dy > 0 ? 'down' : 'up'));
+            });
+
+            // auto-pause when leaving the tab
+            new MutationObserver(() => { if (!tab.classList.contains('active')) pause(); })
+                .observe(tab, { attributes: true, attributeFilter: ['class'] });
+            document.addEventListener('visibilitychange', () => { if (document.hidden) pause(); });
+
+            reset(); draw();
+            themeToggleBtn.addEventListener('click', () => setTimeout(draw, 0));
+        })();
+
+        // =====================================================================
+        //  MINESWEEPER
+        // =====================================================================
+        (function () {
+            const boardEl = document.getElementById('mines-board');
+            const leftEl = document.getElementById('mines-left');
+            const timeEl = document.getElementById('mines-time');
+            const msgEl = document.getElementById('mines-msg');
+            const DIFFS = { easy: [9, 9, 10], medium: [12, 12, 24], hard: [16, 16, 40] };
+            let diff = 'easy', W, H, M, cells, first, done, flags, opened, tick = null, secs = 0, flagMode = false;
+
+            function neighbors(i) {
+                const x = i % W, y = Math.floor(i / W), out = [];
+                for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) {
+                    if (!dx && !dy) continue;
+                    const nx = x + dx, ny = y + dy;
+                    if (nx >= 0 && ny >= 0 && nx < W && ny < H) out.push(ny * W + nx);
+                }
+                return out;
+            }
+
+            function newGame() {
+                [W, H, M] = DIFFS[diff];
+                cells = Array.from({ length: W * H }, () => ({ mine: false, open: false, flag: false, n: 0 }));
+                first = true; done = false; flags = 0; opened = 0; secs = 0;
+                clearInterval(tick); tick = null;
+                timeEl.textContent = 0; leftEl.textContent = M; msgEl.textContent = '';
+                boardEl.className = diff === 'hard' ? 'hard' : '';
+                boardEl.style.gridTemplateColumns = `repeat(${W}, auto)`;
+                boardEl.innerHTML = '';
+                cells.forEach((c, i) => {
+                    const b = document.createElement('button');
+                    b.type = 'button'; b.className = 'mcell'; b.dataset.i = i;
+                    c.el = b; boardEl.appendChild(b);
+                });
+            }
+
+            function layMines(safe) {
+                const banned = new Set([safe, ...neighbors(safe)]);
+                let placed = 0;
+                while (placed < M) {
+                    const i = Math.floor(Math.random() * W * H);
+                    if (banned.has(i) || cells[i].mine) continue;
+                    cells[i].mine = true; placed++;
+                }
+                cells.forEach((c, i) => { c.n = neighbors(i).filter(j => cells[j].mine).length; });
+            }
+
+            function reveal(i) {
+                const stack = [i];
+                while (stack.length) {
+                    const k = stack.pop(), c = cells[k];
+                    if (c.open || c.flag) continue;
+                    c.open = true; opened++;
+                    c.el.classList.add('open');
+                    if (c.n) { c.el.textContent = c.n; c.el.classList.add('n' + c.n); }
+                    else neighbors(k).forEach(j => { if (!cells[j].open) stack.push(j); });
+                }
+            }
+
+            function dig(i) {
+                const c = cells[i];
+                if (done || c.flag) return;
+                if (first) {
+                    layMines(i); first = false;
+                    tick = setInterval(() => { secs++; timeEl.textContent = secs; }, 1000);
+                }
+                if (c.open) { // chord: open neighbours if flags match
+                    const nb = neighbors(i);
+                    if (c.n && nb.filter(j => cells[j].flag).length === c.n)
+                        nb.forEach(j => { if (!cells[j].open && !cells[j].flag) { if (cells[j].mine) return lose(j); reveal(j); } });
+                } else {
+                    if (c.mine) return lose(i);
+                    reveal(i);
+                }
+                if (!done && opened === W * H - M) win();
+            }
+
+            function toggleFlag(i) {
+                const c = cells[i];
+                if (done || c.open) return;
+                c.flag = !c.flag; flags += c.flag ? 1 : -1;
+                c.el.textContent = c.flag ? '🚩' : '';
+                leftEl.textContent = M - flags;
+            }
+
+            function lose(i) {
+                done = true; clearInterval(tick);
+                cells.forEach(c => {
+                    if (c.mine && !c.flag) { c.el.textContent = '💣'; c.el.classList.add('open'); }
+                    if (!c.mine && c.flag) c.el.textContent = '❌';
+                });
+                cells[i].el.classList.add('boom');
+                playFlappySound('hit');
+                msgEl.textContent = '💥 You stepped on a landmine.';
+            }
+            function win() {
+                done = true; clearInterval(tick);
+                cells.forEach(c => { if (c.mine) c.el.textContent = '🚩'; });
+                leftEl.textContent = 0;
+                const key = 'mines_best_' + diff;
+                const prev = parseInt(store.get(key)) || 0;
+                const isBest = !prev || secs < prev;
+                if (isBest) store.set(key, secs);
+                playFlappySound('score');
+                msgEl.textContent = `🏆 Cleared in ${secs}s${isBest ? ' — new best!' : ` (best ${prev}s)`}`;
+            }
+
+            // Click / right-click / long-press
+            let pressTimer = null, longPressed = false;
+            boardEl.addEventListener('pointerdown', e => {
+                const b = e.target.closest('.mcell'); if (!b || e.button === 2) return;
+                longPressed = false;
+                if (e.pointerType !== 'mouse') {
+                    pressTimer = setTimeout(() => { longPressed = true; toggleFlag(+b.dataset.i); if (navigator.vibrate) navigator.vibrate(20); }, 380);
+                }
+            });
+            ['pointerup', 'pointerleave', 'pointercancel'].forEach(ev => boardEl.addEventListener(ev, () => clearTimeout(pressTimer)));
+            boardEl.addEventListener('click', e => {
+                const b = e.target.closest('.mcell'); if (!b) return;
+                if (longPressed) { longPressed = false; return; }
+                const i = +b.dataset.i;
+                flagMode ? toggleFlag(i) : dig(i);
+            });
+            boardEl.addEventListener('contextmenu', e => {
+                const b = e.target.closest('.mcell'); if (!b) return;
+                e.preventDefault(); toggleFlag(+b.dataset.i);
+            });
+
+            document.querySelectorAll('#mines-diff button').forEach(b => b.addEventListener('click', () => {
+                document.querySelectorAll('#mines-diff button').forEach(x => x.classList.toggle('on', x === b));
+                diff = b.dataset.d; newGame();
+            }));
+            document.querySelectorAll('#mines-mode button').forEach(b => b.addEventListener('click', () => {
+                document.querySelectorAll('#mines-mode button').forEach(x => x.classList.toggle('on', x === b));
+                flagMode = b.dataset.m === 'flag';
+            }));
+            document.getElementById('mines-new').addEventListener('click', newGame);
+            newGame();
+        })();
+
+        // =====================================================================
+        //  TIC-TAC-TOE
+        // =====================================================================
+        (function () {
+            const boardEl = document.getElementById('ttt-board');
+            const msgEl = document.getElementById('ttt-msg');
+            const LINES = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+            const SYM = { X: '✕', O: '◯' };
+            let board, turn, done, mode = 'hard', aiThinking = false;
+            let tally = { X: 0, O: 0, D: 0 };
+            try { tally = Object.assign(tally, JSON.parse(store.get('ttt_tally') || '{}')); } catch (e) {}
+
+            const cellsEl = [];
+            for (let i = 0; i < 9; i++) {
+                const b = document.createElement('button');
+                b.type = 'button'; b.className = 'tcell';
+                b.addEventListener('click', () => human(i));
+                boardEl.appendChild(b); cellsEl.push(b);
+            }
+
+            function winner(bd) {
+                for (const l of LINES) if (bd[l[0]] && bd[l[0]] === bd[l[1]] && bd[l[1]] === bd[l[2]]) return { p: bd[l[0]], line: l };
+                return bd.every(Boolean) ? { p: 'D' } : null;
+            }
+            function minimax(bd, player, depth) {
+                const w = winner(bd);
+                if (w) return { score: w.p === 'O' ? 10 - depth : w.p === 'X' ? depth - 10 : 0 };
+                let best = { score: player === 'O' ? -Infinity : Infinity, i: -1 };
+                bd.forEach((v, i) => {
+                    if (v) return;
+                    bd[i] = player;
+                    const r = minimax(bd, player === 'O' ? 'X' : 'O', depth + 1);
+                    bd[i] = null;
+                    if (player === 'O' ? r.score > best.score : r.score < best.score) best = { score: r.score, i };
+                });
+                return best;
+            }
+            function aiMove() {
+                const empty = board.map((v, i) => v ? -1 : i).filter(i => i >= 0);
+                if (mode === 'easy' && Math.random() < 0.65) return empty[Math.floor(Math.random() * empty.length)];
+                return minimax(board.slice(), 'O', 0).i;
+            }
+            function render(result) {
+                cellsEl.forEach((b, i) => {
+                    const v = board[i];
+                    b.className = 'tcell' + (v ? ' ' + v.toLowerCase() : '') + (result && result.line && result.line.includes(i) ? ' win' : '');
+                    if (v && !b.firstChild) { const s = document.createElement('span'); s.textContent = SYM[v]; b.appendChild(s); }
+                    if (!v) b.textContent = '';
+                });
+                document.getElementById('ttt-x').textContent = tally.X;
+                document.getElementById('ttt-o').textContent = tally.O;
+                document.getElementById('ttt-d').textContent = tally.D;
+            }
+            function place(i) {
+                board[i] = turn;
+                playFlappySound('flap');
+                const r = winner(board);
+                if (r) {
+                    done = true; tally[r.p]++;
+                    store.set('ttt_tally', JSON.stringify(tally));
+                    if (r.p === 'D') msgEl.textContent = "🤝 Draw.";
+                    else if (mode === 'pvp') msgEl.textContent = `🏆 ${SYM[r.p]} wins!`;
+                    else msgEl.textContent = r.p === 'X' ? '🏆 You win!' : '🤖 AI wins. Go farm sulfur.';
+                    playFlappySound(r.p === 'D' ? 'flap' : 'score');
+                    render(r); return;
+                }
+                turn = turn === 'X' ? 'O' : 'X';
+                msgEl.textContent = mode === 'pvp' ? `${SYM[turn]} to move` : (turn === 'X' ? "Your move" : "AI is thinking…");
+                render();
+            }
+            function human(i) {
+                if (done || board[i] || aiThinking) return;
+                if (mode !== 'pvp' && turn !== 'X') return;
+                place(i);
+                if (!done && mode !== 'pvp') {
+                    aiThinking = true;
+                    setTimeout(() => { aiThinking = false; if (!done) place(aiMove()); }, 350);
+                }
+            }
+            function newRound() {
+                board = Array(9).fill(null); turn = 'X'; done = false; aiThinking = false;
+                cellsEl.forEach(b => b.textContent = '');
+                msgEl.textContent = mode === 'pvp' ? `${SYM.X} to move` : "Your move — you're ✕";
+                render();
+            }
+            document.getElementById('ttt-new').addEventListener('click', newRound);
+            document.getElementById('ttt-reset').addEventListener('click', () => {
+                tally = { X: 0, O: 0, D: 0 }; store.set('ttt_tally', JSON.stringify(tally)); render();
+            });
+            document.querySelectorAll('#ttt-mode button').forEach(b => b.addEventListener('click', () => {
+                document.querySelectorAll('#ttt-mode button').forEach(x => x.classList.toggle('on', x === b));
+                mode = b.dataset.m; newRound();
+            }));
+            newRound();
+        })();
     </script>
 </body>
 </html>
