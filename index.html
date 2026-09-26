@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Rust Island Suite</title>
     <style>
         /* ===== Apple "Liquid Glass" theme ===== */
@@ -12,7 +12,7 @@
             --glass-border: rgba(255, 255, 255, 0.85);
             --glass-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.9), inset 0 0 0 0.5px rgba(255, 255, 255, 0.6);
             --glass-shadow: 0 8px 32px rgba(31, 38, 80, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
-            --glass-dropdown: rgba(255, 255, 255, 0.72);
+            --glass-dropdown: rgba(255, 255, 255, 0.86);
             --glass-blur: blur(28px) saturate(180%);
 
             --accent: #0071e3;
@@ -47,7 +47,7 @@
             --glass-border: rgba(255, 255, 255, 0.12);
             --glass-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.12), inset 0 0 0 0.5px rgba(255, 255, 255, 0.06);
             --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
-            --glass-dropdown: rgba(40, 40, 44, 0.7);
+            --glass-dropdown: rgba(40, 40, 44, 0.86);
 
             --accent: #0a84ff;
             --accent-hover: #409cff;
@@ -70,6 +70,13 @@
             --blob-3: rgba(191, 90, 242, 0.16);
         }
 
+        :root {
+            --sait: var(--discord-safe-area-inset-top, env(safe-area-inset-top, 0px));
+            --saib: var(--discord-safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));
+            --sail: var(--discord-safe-area-inset-left, env(safe-area-inset-left, 0px));
+            --sair: var(--discord-safe-area-inset-right, env(safe-area-inset-right, 0px));
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -89,6 +96,7 @@
             background-color: var(--bg-base);
             color: var(--text-main);
             height: 100vh;
+            height: 100dvh;
             display: flex;
             flex-direction: column;
             overflow: hidden;
@@ -187,6 +195,7 @@
             white-space: nowrap;
         }
 
+        .mi-ico, .mi-short { display: none; }
         .menu-btn:hover { background: rgba(128, 128, 128, 0.14); }
         .menu-item.open .menu-btn { background: rgba(128, 128, 128, 0.2); }
 
@@ -288,12 +297,40 @@
         }
 
         /* Narrow Discord windows / mobile */
+        /* ===== Phones / Discord mobile: iOS-style bottom tab bar =====
+           Discord mobile draws its own bar (activity name + Leave) over the top of the
+           iframe, which made the top nav untappable. So on small screens the nav moves
+           to the bottom and content is pushed below Discord's overlay. */
         @media (max-width: 760px) {
-            header.top-bar { padding: 0 12px; gap: 10px; }
-            .brand-text, .status-pill { display: none; }
-            .menu-btn { padding: 0 8px; font-size: 0.8rem; }
-            main { padding: 20px 16px !important; }
+            header.top-bar {
+                order: 2;
+                height: auto;
+                padding: 6px calc(8px + var(--sair)) calc(6px + var(--saib)) calc(8px + var(--sail));
+                gap: 4px;
+                border-bottom: none;
+                border-top: 1px solid var(--border-subtle);
+            }
+            .brand-logo, .status-pill { display: none; }
+            .menu-items { flex: 1; justify-content: space-around; height: auto; overflow: visible; }
+            .menu-item { height: auto; flex: 1; }
+            .menu-btn {
+                flex: 1; flex-direction: column; gap: 2px; height: 52px; padding: 4px 2px;
+                font-size: 0.68rem; font-weight: 600; border-radius: 12px; color: var(--text-muted);
+            }
+            .menu-item.open .menu-btn, .menu-btn.current { color: var(--accent); }
+            .mi-full { display: none; }
+            .mi-ico { display: block; font-size: 1.35rem; line-height: 1; }
+            .mi-short { display: block; }
+            .topbar-right { margin-left: 0; }
+            .theme-toggle-btn { width: 44px; height: 44px; }
+            .dropdown { min-width: 240px; }
+            .dropdown-item { padding: 13px 14px; font-size: 0.95rem; }
+            main {
+                order: 1;
+                padding: calc(max(var(--sait), 56px) + 8px) calc(16px + var(--sair)) 24px calc(16px + var(--sail)) !important;
+            }
             .grid, .tea-grid { grid-template-columns: 1fr !important; }
+            h2 { font-size: 1.55rem; }
         }
 
         /* --- MAIN CONTENT AREA --- */
@@ -665,7 +702,7 @@
 
         <nav class="menu-items">
             <div class="menu-item">
-                <button class="menu-btn" type="button">Combat & Raiding ▾</button>
+                <button class="menu-btn" type="button"><span class="mi-ico">⚔️</span><span class="mi-full">Combat & Raiding ▾</span><span class="mi-short">Combat</span></button>
                 <div class="dropdown">
                     <button class="dropdown-item" type="button" data-tab="raid">💥 Raid Calculator</button>
                     <button class="dropdown-item" type="button" data-tab="recycler">♻️ Recycler Yield</button>
@@ -673,7 +710,7 @@
             </div>
 
             <div class="menu-item">
-                <button class="menu-btn" type="button">Farming & Vehicles ▾</button>
+                <button class="menu-btn" type="button"><span class="mi-ico">🌿</span><span class="mi-full">Farming & Vehicles ▾</span><span class="mi-short">Farm</span></button>
                 <div class="dropdown">
                     <button class="dropdown-item" type="button" data-tab="tea">🌿 Tea & Farm Planner</button>
                     <button class="dropdown-item" type="button" data-tab="vehicles">🚗 Car & Boat Configurator</button>
@@ -681,7 +718,7 @@
             </div>
 
             <div class="menu-item">
-                <button class="menu-btn" type="button">Base & Monuments ▾</button>
+                <button class="menu-btn" type="button"><span class="mi-ico">🏠</span><span class="mi-full">Base & Monuments ▾</span><span class="mi-short">Base</span></button>
                 <div class="dropdown">
                     <button class="dropdown-item" type="button" data-tab="monuments">🗺️ Monument Keycard Guides</button>
                     <button class="dropdown-item" type="button" data-tab="timers">⏱️ Crate Timers</button>
@@ -691,7 +728,7 @@
             </div>
 
             <div class="menu-item">
-                <button class="menu-btn" type="button">Arcade ▾</button>
+                <button class="menu-btn" type="button"><span class="mi-ico">🎮</span><span class="mi-full">Arcade ▾</span><span class="mi-short">Arcade</span></button>
                 <div class="dropdown">
                     <button class="dropdown-item" type="button" data-tab="flappy">🐤 Flappy Bird</button>
                     <button class="dropdown-item" type="button" data-tab="snake">🐍 Snake</button>
@@ -1147,7 +1184,12 @@
             const maxLeft = window.innerWidth - ddWidth - 8;
             if (left > maxLeft) left = Math.max(8, maxLeft);
             dd.style.left = left + 'px';
-            dd.style.top = (r.bottom + 6) + 'px';
+            if (r.top > window.innerHeight / 2) {
+                // bottom tab bar (mobile): open upward
+                dd.style.top = Math.max(8, r.top - dd.offsetHeight - 8) + 'px';
+            } else {
+                dd.style.top = (r.bottom + 6) + 'px';
+            }
         }
 
         menuItems.forEach(item => {
@@ -1179,7 +1221,10 @@
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
             target.classList.add('active');
             document.querySelector('main').scrollTop = 0;
+            menuItems.forEach(mi => mi.querySelector('.menu-btn').classList.toggle('current',
+                !!mi.querySelector(`.dropdown-item[data-tab="${tabId}"]`)));
         }
+        switchTab('raid');
         document.querySelectorAll('[data-tab]').forEach(el => {
             el.addEventListener('click', () => switchTab(el.dataset.tab));
         });
